@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.mywork.stitchbe.mapper.AdminMapper">
+
+    <select id="findByEmail" parameterType="String" resultType="org.mywork.stitchbe.dto.AdminDto">
+        SELECT adminId, email, password, name, role, created_at, updated_at
+        FROM ADMIN
+        WHERE email = #{email}    </select>
+
+</mapper>

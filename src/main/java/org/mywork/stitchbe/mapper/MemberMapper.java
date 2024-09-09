@@ -9,7 +9,6 @@ import java.util.Optional;
 @Mapper
 public interface MemberMapper {
 
-    @Select("SELECT * FROM users WHERE email = #{email}")
     Optional<MemberDto> findByEmail(String email);
     void saveMember(MemberDto user);
     
