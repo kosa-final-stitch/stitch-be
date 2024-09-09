@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.mywork.stitchbe.dto.AdminDto;
 import org.mywork.stitchbe.mapper.AdminMapper;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,7 @@ import java.util.Collections;
 //작성자 : 박주희
 
 @Service
-public class AdminDetailsService {
+public class AdminDetailsService implements UserDetailsService {
 
     private final AdminMapper adminMapper;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -25,26 +27,27 @@ public class AdminDetailsService {
     }
 
     // 기존의 관리자 인증 메서드 유지
-    public AdminDto authenticateAdmin(String adminId, String password) {
-        AdminDto adminDto = adminMapper.findByAdminId(adminId)
-                .orElseThrow(() -> new IllegalArgumentException("Admin not found with admin_id: " + adminId));
+    public AdminDto authenticateAdmin(String email, String password) {
+        AdminDto adminDto = adminMapper.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Admin not found with email: " + email));
 
         if (!passwordEncoder.matches(password, adminDto.getPassword())) {
             throw new IllegalArgumentException("Invalid password");
         }
-
         return adminDto;
+
     }
 
-    // UserDetails 반환하는 메서드 추가
-    public UserDetails loadUserByAdminId(String adminId) {
-        AdminDto adminDto = adminMapper.findByAdminId(adminId)
-                .orElseThrow(() -> new UsernameNotFoundException("Admin not found with admin_id: " + adminId));
+    // UserDetailsService 인터페이스의 메서드 구현
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {;
+        AdminDto adminDto = adminMapper.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Admin not found with email: " + email));
 
         return new User(
-                adminDto.getAdmin_id().toString(),
+                adminDto.getEmail(), // Long을 String으로 변환
                 adminDto.getPassword(),
-                Collections.emptyList() // 권한 리스트 설정 (필요 시 추가)
+                Collections.singletonList(new SimpleGrantedAuthority(adminDto.getRole())) // 권한 리스트 설정 (필요 시 추가)
         );
     }
 }

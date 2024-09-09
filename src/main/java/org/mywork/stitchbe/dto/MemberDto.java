@@ -12,7 +12,8 @@ public class MemberDto {
     private String nickname;     // 닉네임
     private String address;      // 주소
     private Integer gender;      // 성별 (0 또는 1로 표현될 가능성 있음)
-    private Integer age;         // 나이
+    private Date birth;         // 나이
     private String phone;        // 전화번호
+    private String role;
     private Date signupdate;     // 가입일자
 }
