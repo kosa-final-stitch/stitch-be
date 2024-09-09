@@ -59,6 +59,8 @@ public class SecurityConfig{
     @Order(1)
     public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
         http
+        .cors(withDefaults())  // CORS 설정 추가
+        .csrf(csrf -> csrf.disable())  // CSRF 비활성화
                 .authorizeHttpRequests(authorize -> authorize //각 url 패턴에 대해 접근 권한 설정
                         .requestMatchers("/member/login", "/member/signup").permitAll()
                         .requestMatchers("/admin/login", "/admin/signup").permitAll()
