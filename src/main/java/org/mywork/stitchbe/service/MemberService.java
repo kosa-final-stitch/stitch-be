@@ -15,12 +15,27 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Long save(AddMemberRequest dto) {
+        if (memberMapper.findByEmail(dto.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email already exists");
+        }
         MemberDto memberDto = new MemberDto();
         memberDto.setEmail(dto.getEmail());
         memberDto.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
+        memberDto.setNickname(dto.getNickname());
+        memberDto.setName(dto.getName());
+        memberDto.setAddress(dto.getAddress());
+        memberDto.setGender(dto.getGender());
+        memberDto.setBirth(dto.getBirth());
+        memberDto.setPhone(dto.getPhone());
+        memberDto.setRole("ROLE_USER");
 
         // MemberDto를 저장하고 그 결과로 memberId를 반환
         memberMapper.saveMember(memberDto);
         return memberDto.getMemberId(); // MyBatis에서는 INSERT 후에 자동으로 생성된 ID를 가져올 수 있습니다.
+    }
+
+    // 회원 정보 조회
+    public MemberDto getMemberInfo(Long memberId) {
+        return memberMapper.getMemberById(memberId); // MyBatis mapper를 통해 DB에서 회원 정보를 가져옴
     }
 }
