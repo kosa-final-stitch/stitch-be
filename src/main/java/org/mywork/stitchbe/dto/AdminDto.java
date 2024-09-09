@@ -6,7 +6,8 @@ import java.util.Date;
 //작성자 : 박주희
 @Data
 public class AdminDto {
-    private Long admin_id;         // 관리자 id
+    private Long adminId;         // 관리자 id
+    private String email;        // 이메일
     private String password;       // 비밀번호
     private String name;           // 이름
     private String role;           // 역할
