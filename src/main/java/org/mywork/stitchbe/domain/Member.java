@@ -12,13 +12,13 @@ import java.util.stream.Collectors;
 @Data
 public class Member implements UserDetails {
 
-    private Long userId;
+    private Long memberId;
     private String email;
     private String password;
     private Set<String> role;  // 역할 필드 추가 (예: ROLE_USER, ROLE_ADMIN 등)
 
-    public Member(Long userId, String email, String password, Set<String> role) {
-        this.userId = userId;
+    public Member(Long memberId, String email, String password, Set<String> role) {
+        this.memberId = memberId;
         this.email = email;
         this.password = password;
         this.role = role;
@@ -27,6 +27,7 @@ public class Member implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.stream()
+                .map(role -> role.startsWith("ROLE_") ? role : "ROLE_" + role)  // ROLE_ 접두사 확인
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
