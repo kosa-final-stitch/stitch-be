@@ -59,13 +59,14 @@ public class SecurityConfig{
     @Order(1)
     public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(withDefaults())  // CORS 설정 추가
-                .csrf(csrf -> csrf.disable())  // CSRF 비활성화
-                .securityMatcher("/api/admin/**")
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // 모든 OPTIONS 요청 허용
-                        .requestMatchers("/api/admin/login", "/api/admin/signup").permitAll()
-                        .anyRequest().hasRole("ADMIN")
+        .cors(withDefaults())  // CORS 설정 추가
+        .csrf(csrf -> csrf.disable())  // CSRF 비활성화
+                .authorizeHttpRequests(authorize -> authorize //각 url 패턴에 대해 접근 권한 설정
+                        .requestMatchers("/member/login", "/member/signup").permitAll()
+                        .requestMatchers("/admin/login", "/admin/signup").permitAll()
+                        .requestMatchers("/member/**").hasRole("USER") //user 역할 가진 사용자만 접근 가능
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated() //나머지 모든 요청은 인증된 사용자만 접근 가능
                 )
                 .formLogin(form -> form
                         .loginPage("/api/admin/login")
@@ -93,6 +94,7 @@ public class SecurityConfig{
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // 모든 OPTIONS 요청 허용
                         .requestMatchers("/api/member/login","/api/member/signup").permitAll()
+                        .requestMatchers("/api/member/info/**").permitAll()//유은 일시삽입(데이터 가져오기용)
                         .anyRequest().hasRole("USER")
                 )
                 .formLogin(form -> form
