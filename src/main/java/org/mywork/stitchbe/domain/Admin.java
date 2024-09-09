@@ -28,6 +28,7 @@ public class Admin implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.stream()
+                .map(role -> role.startsWith("ROLE_") ? role : "ROLE_" + role)  // ROLE_ 접두사 확인
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
