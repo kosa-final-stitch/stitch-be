@@ -15,9 +15,19 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Long save(AddMemberRequest dto) {
+        if (memberMapper.findByEmail(dto.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email already exists");
+        }
         MemberDto memberDto = new MemberDto();
         memberDto.setEmail(dto.getEmail());
         memberDto.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
+        memberDto.setNickname(dto.getNickname());
+        memberDto.setName(dto.getName());
+        memberDto.setAddress(dto.getAddress());
+        memberDto.setGender(dto.getGender());
+        memberDto.setBirth(dto.getBirth());
+        memberDto.setPhone(dto.getPhone());
+        memberDto.setRole("ROLE_USER");
 
         // MemberDto를 저장하고 그 결과로 memberId를 반환
         memberMapper.saveMember(memberDto);
