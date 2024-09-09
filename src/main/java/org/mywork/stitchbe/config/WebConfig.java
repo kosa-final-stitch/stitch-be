@@ -31,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) { //클라이언트와 서버가 서로 다른 도메인에 있을 때, 클라이언트가 서버에 요청을 보낼 수 있도록 허용
         // CORS 설정
         registry.addMapping("/**") //모든 경로에 대해 CORS 설정 적용
-                .allowedOrigins("http://localhost:3000") //해당 경로에서 오는 요청만 허용
+                .allowedOrigins("http://localhost:8081") //해당 경로에서 오는 요청만 허용
                 .allowedMethods("GET", "POST", "PUT", "DELETE") //해당 메서드 허용
                 .allowCredentials(true); //자격 증명(쿠키, 인증 헤더...) 허용
     }
