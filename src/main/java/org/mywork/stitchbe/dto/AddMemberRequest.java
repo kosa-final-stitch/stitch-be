@@ -2,8 +2,9 @@ package org.mywork.stitchbe.dto;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.Date;
+
+//작성자 : 박주희
 
 @Data
 public class AddMemberRequest {

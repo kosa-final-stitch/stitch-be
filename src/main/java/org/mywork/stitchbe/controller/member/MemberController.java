@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+//작성자 : 박주희
+
 @RestController
 @RequestMapping("/api/member")
 public class MemberController {
@@ -24,14 +26,20 @@ public class MemberController {
 		this.memberService = memberService;
 	}
 
-	@GetMapping("/member/login")
+	@GetMapping("/login")
 	public String memberLoginPage() {
-		return "member/login";
+		return "로그인 페이지로 리다이렉트됩니다."; // 실제로는 프론트엔드에서 처리할 경로를 반환
 	}
 
-	@PostMapping("/api/member/signup")
+//	@GetMapping("/login")
+//	public ResponseEntity<String> memberLoginPage() {
+//		return ResponseEntity.ok("로그인 페이지 접근"); // 단순 메시지 반환
+//	}
+
+
+	// 회원가입 처리
+	@PostMapping("/signup")
 	public ResponseEntity<String> signup(@RequestBody AddMemberRequest addMemberRequest) {
-		// 인스턴스를 사용하여 메서드 호출
 		memberService.save(addMemberRequest);
 		return ResponseEntity.ok("회원가입이 완료되었습니다.");
 	}
