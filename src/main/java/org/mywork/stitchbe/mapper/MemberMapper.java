@@ -20,5 +20,7 @@ public interface MemberMapper {
 
     List<String> findAuthoritiesByEmail(String email);
 
+    boolean existsByEmail(String email);  // 이메일 중복 검사 메서드
 
+    boolean findByNickname(String nickname);
 }
