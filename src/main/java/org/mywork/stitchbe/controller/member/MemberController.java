@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 //작성자 : 박주희
 
 @RestController
-@RequestMapping("/api/member")
+@RequestMapping("/api")
 public class MemberController {
 
 	private final MemberService memberService;
@@ -43,6 +46,28 @@ public class MemberController {
 		memberService.save(addMemberRequest);
 		return ResponseEntity.ok("회원가입이 완료되었습니다.");
 	}
+
+	@PostMapping("/validate-email")
+	public ResponseEntity<?> validateEmail(@RequestBody Map<String, String> request) {
+		String email = request.get("email");
+		boolean isEmailValid = memberService.isEmailAvailable(email);
+		System.out.println("Email received: " + email);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("isValid", isEmailValid);
+		System.out.println("Email validation result: " + isEmailValid);
+		return ResponseEntity.ok(response);
+	}
+	@PostMapping("/validate-nickname")
+	public ResponseEntity<?> validateNickname(@RequestBody Map<String, String> request) {
+		String nickname = request.get("nickname");
+		System.out.println("Received nickname: " + nickname);  // 디버그용 로그
+		boolean isNicknameValid = memberService.isNicknameAvailable(nickname);
+		System.out.println("Nickname validation result: " + isNicknameValid);  // 결과 로그
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("isValid", isNicknameValid);
+		return ResponseEntity.ok(response);
+	}
+
 
 	// 특정 회원 정보 조회 API
 	@GetMapping("/info/{memberId}")

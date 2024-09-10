@@ -69,5 +69,16 @@ public class MemberService {
 
         return isPasswordMatch;
     }
+    // 이메일 중복 확인
+    public boolean isEmailAvailable(String email) {
+        return !memberMapper.existsByEmail(email);
+    }
+
+    // 닉네임 중복 여부 확인
+    public boolean isNicknameAvailable(String nickname) {
+        boolean result = memberMapper.findByNickname(nickname);
+        return !result;
+    }
+
 
 }
