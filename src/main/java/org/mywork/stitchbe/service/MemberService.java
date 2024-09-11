@@ -55,19 +55,19 @@ public class MemberService {
     }
 
     // 로그인 로직 추가
-    public boolean login(String email, String rawPassword) {
+    public boolean login(String email, String password) {
         MemberDto member = memberMapper.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Email not found"));
 
         // 입력된 비밀번호와 DB에 저장된 암호화된 비밀번호를 비교
-        boolean isPasswordMatch = bCryptPasswordEncoder.matches(rawPassword, member.getPassword());
+        boolean isPasswordMatch = bCryptPasswordEncoder.matches(password, member.getPassword());
 
         // 로그 출력
-        System.out.println("입력된 비밀번호: " + rawPassword);
+        System.out.println("입력된 비밀번호: " + password);
         System.out.println("DB에 저장된 암호화된 비밀번호: " + member.getPassword());
         System.out.println("비밀번호 비교 결과: " + isPasswordMatch);
 
-        return isPasswordMatch;
+        return login(email, password);
     }
     // 이메일 중복 확인
     public boolean isEmailAvailable(String email) {

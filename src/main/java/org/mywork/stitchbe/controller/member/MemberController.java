@@ -1,6 +1,9 @@
 package org.mywork.stitchbe.controller.member;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.mywork.stitchbe.dto.AddMemberRequest;
+import org.mywork.stitchbe.dto.LoginRequest;
 import org.mywork.stitchbe.dto.MemberDto;
 import org.mywork.stitchbe.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +34,20 @@ public class MemberController {
 
 	@GetMapping("/login")
 	public String memberLoginPage() {
-		return "로그인 페이지로 리다이렉트됩니다."; // 실제로는 프론트엔드에서 처리할 경로를 반환
+		return "/api/login"; // 실제로는 프론트엔드에서 처리할 경로를 반환
 	}
 
-//	@GetMapping("/login")
-//	public ResponseEntity<String> memberLoginPage() {
-//		return ResponseEntity.ok("로그인 페이지 접근"); // 단순 메시지 반환
-//	}
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+		System.out.println("Received login request: " + loginRequest.getUsername());
+		// 로그인 처리 로직 작성
+		if (loginRequest.getUsername() != null && loginRequest.getPassword() != null) {
+			return ResponseEntity.ok("로그인 성공");
+		} else {
+			return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body("로그인 실패");
+		}
+	}
+
 
 
 	// 회원가입 처리
