@@ -8,6 +8,11 @@ import org.mywork.stitchbe.dto.MemberDto;
 import org.mywork.stitchbe.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,11 +30,15 @@ import java.util.Map;
 public class MemberController {
 
 	private final MemberService memberService;
+	private final AuthenticationManager authenticationManager;  // 인증 매니저 추가
+
 
 	// 생성자를 통해 MemberService 주입
 	@Autowired
-	public MemberController(MemberService memberService) {
+	public MemberController(MemberService memberService, AuthenticationManager authenticationManager) {
 		this.memberService = memberService;
+		this.authenticationManager = authenticationManager;  // 인증 매니저 주입
+
 	}
 
 	@GetMapping("/login")
@@ -37,18 +46,27 @@ public class MemberController {
 		return "/api/login"; // 실제로는 프론트엔드에서 처리할 경로를 반환
 	}
 
+	// 로그인 처리
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-		System.out.println("Received login request: " + loginRequest.getUsername());
-		// 로그인 처리 로직 작성
-		if (loginRequest.getUsername() != null && loginRequest.getPassword() != null) {
+		try {
+			// 수동으로 사용자 인증을 처리하는 부분
+			Authentication authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+			);
+
+			// 인증된 사용자 정보를 SecurityContext에 저장
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+
+			System.out.println("현재 인증된 사용자: " + authentication.getName());
+
 			return ResponseEntity.ok("로그인 성공");
-		} else {
+		} catch (AuthenticationException e) {
+			// 인증 실패 시 처리
+			System.out.println("로그인 실패: " + e.getMessage());
 			return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body("로그인 실패");
 		}
 	}
-
-
 
 	// 회원가입 처리
 	@PostMapping("/signup")

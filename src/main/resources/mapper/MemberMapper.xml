@@ -3,7 +3,7 @@
 <mapper namespace="org.mywork.stitchbe.mapper.MemberMapper">
     <!--작성자 : 박주희-->
 
-    <select id="findByEmail" parameterType="String" resultType="org.mywork.stitchbe.dto.MemberDto">
+    <select id="findByEmail" parameterType="org.mywork.stitchbe.dto.MemberDto" resultType="org.mywork.stitchbe.dto.MemberDto">
         SELECT email, password
         FROM MEMBER
         WHERE email = #{email}
@@ -21,7 +21,7 @@
     </update>
 
     <!-- AUTH 테이블에서 권한 조회 -->
-    <select id="findAuthoritiesByEmail" parameterType="String" resultType="String">
+    <select id="findAuthoritiesByEmail" parameterType="org.mywork.stitchbe.dto.MemberDto" resultType="String">
         SELECT authority FROM auth WHERE email = #{email}
     </select>
 

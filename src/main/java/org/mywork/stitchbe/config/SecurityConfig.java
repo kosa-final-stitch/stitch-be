@@ -14,8 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.web.SecurityFilterChain;
-
-
 import static org.springframework.security.config.Customizer.withDefaults;
 
 
@@ -61,15 +59,15 @@ public class SecurityConfig{
                         // 그 외 모든 요청은 인증된 사용자만 접근 가능
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form
-                        .loginPage("/api/login")
-                        .loginProcessingUrl("/api/login")
-                        .usernameParameter("username")  // 이 값이 Vue에서 보내는 필드명과 일치해야 함
-                        .passwordParameter("password")  // 마찬가지로 password도 일치해야 함
-                        .defaultSuccessUrl("/api/home", true)
-                        .failureUrl("/api/login?error=true")
-                        .permitAll()
-                )
+//                .formLogin(form -> form
+//                        .loginPage("/api/login")
+//                        .loginProcessingUrl("/api/login")
+//                        .usernameParameter("username")  // 이 값이 Vue에서 보내는 필드명과 일치해야 함
+//                        .passwordParameter("password")  // 마찬가지로 password도 일치해야 함
+//                        .defaultSuccessUrl("/api/home", true)
+//                        .failureUrl("/api/login?error=true")
+//                        .permitAll()
+//                )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // 필요 시 세션 생성
                         .maximumSessions(1)  // 하나의 세션만 유지
