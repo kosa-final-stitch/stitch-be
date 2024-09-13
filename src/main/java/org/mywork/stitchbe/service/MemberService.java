@@ -6,6 +6,7 @@ import org.mywork.stitchbe.dto.MemberDto;
 import org.mywork.stitchbe.mapper.MemberMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 //작성작 : 박주희
 
@@ -16,6 +17,7 @@ public class MemberService {
     private final MemberMapper memberMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Transactional
     public Long save(AddMemberRequest dto) {
         if (memberMapper.findByEmail(dto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email already exists");
@@ -29,8 +31,13 @@ public class MemberService {
         memberDto.setName(dto.getName());
         memberDto.setAddress(dto.getAddress());
         memberDto.setGender(dto.getGender());
+        // 로그로 전달된 성별 확인
+        System.out.println("전달된 성별 값: " + dto.getGender());
+
         memberDto.setBirth(dto.getBirth());
         memberDto.setPhone(dto.getPhone());
+
+
 
         // 로그 추가: 회원 정보를 저장하기 전에 출력
         System.out.println("저장할 회원 정보: " + memberDto);
