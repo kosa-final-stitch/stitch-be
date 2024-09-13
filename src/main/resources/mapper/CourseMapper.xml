@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.mywork.stitchbe.mapper.CourseMapper">
+
+
+    <!-- 학원 ID와 코스 ID를 이용해 코스를 조회하는 SQL -->
+    <select id="getCourseById" resultType="org.mywork.stitchbe.dto.CourseDTO">
+        SELECT * 
+        FROM course
+        WHERE academy_id = #{academyId} AND course_id = #{courseId}
+        
+    </select>
+
+    <!-- 강의 ID에 따른 리뷰 목록을 조회하는 쿼리 -->
+    <select id="getReviewsByCourseId" parameterType="long" resultType="org.mywork.stitchbe.dto.ReviewDTO">
+        SELECT review_id, reviewer_name, content, rating
+        FROM reviews
+        WHERE course_id = #{courseId}
+    </select>
+    
+    <!-- 전체선택 -->
+    <select id="getAllCourses" resultType="org.mywork.stitchbe.dto.CourseDTO">
+    SELECT * FROM course
+    </select>
+
+    <!-- 강의 ID로 강의 조회 -->
+    <select id="getCourseByCourseId" resultType="org.mywork.stitchbe.dto.CourseDTO">
+        SELECT * 
+        FROM course
+        WHERE course_id = #{courseId}
+    </select>
+</mapper>

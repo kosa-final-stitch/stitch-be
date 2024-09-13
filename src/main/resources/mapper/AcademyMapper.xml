@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.mywork.stitchbe.mapper.AcademyMapper">
+
+  <!-- 학원 ID로 학원 정보 조회 -->
+  <select id="getAcademyById" resultType="org.mywork.stitchbe.dto.AcademyDTO" parameterType="Long">
+    SELECT * FROM academy WHERE academy_id = #{academyId}
+  </select>
+
+  <!-- 학원 ID로 해당 학원의 강의 목록 조회 -->
+  <select id="getCoursesByAcademyId" resultType="org.mywork.stitchbe.dto.CourseDTO" parameterType="Long">
+    SELECT * FROM course WHERE academy_id = #{academyId}
+  </select>
+
+  <!-- 전체 학원 목록 조회 -->
+  <select id="getAllAcademy" resultType="org.mywork.stitchbe.dto.AcademyDTO">
+    SELECT * FROM academy
+  </select>
+
+</mapper>
