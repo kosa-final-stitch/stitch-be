@@ -1,18 +1,17 @@
 package org.mywork.stitchbe.dto;
 
 import lombok.Data;
-
-import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 public class AcademyDTO {
-    private Long academyId;
-    private String academyName;
-    private String address;
-    private String phone;
-    private String email;
-    private String siteAddress;
-    private LocalDate regdate;
-    private LocalDate editdate;
-    private String apiAcademyId;
+	private Long academy_id;
+	private String academy_name;
+	private String address;
+	private String phone;
+	private String email;
+	private String site_address;
+	private Date regdate;
+	private String api_academy_id;
+
 }

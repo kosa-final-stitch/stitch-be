@@ -1,6 +1,9 @@
 package org.mywork.stitchbe.config;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.mywork.stitchbe.Util.JwtAuthenticationFilter;
+import org.mywork.stitchbe.Util.JwtUtil;
 import org.mywork.stitchbe.service.MemberDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,11 +11,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.web.SecurityFilterChain;
-
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -27,10 +34,16 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig{
 
     private final  MemberDetailsService memberDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtUtil jwtUtil;
 
     @Autowired
-    public SecurityConfig(@Lazy MemberDetailsService memberDetailsService) {
+    public SecurityConfig(@Lazy MemberDetailsService memberDetailsService,
+                          JwtAuthenticationFilter jwtAuthenticationFilter,
+                          JwtUtil jwtUtil) {
         this.memberDetailsService = memberDetailsService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.jwtUtil = jwtUtil;
     }
 
     @Bean
@@ -38,43 +51,38 @@ public class SecurityConfig{
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() { //특정 요청 경로를 보안 필터링에서 제외
-//        return (web) -> web.ignoring()
-//                .requestMatchers("/static/**");
-//    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(withDefaults())  // CORS 설정 추가
-                .csrf(csrf -> csrf.disable())  // CSRF 비활성화
+                .csrf(AbstractHttpConfigurer::disable)  // CSRF 비활성화
                 .authorizeHttpRequests(authorize -> authorize //각 url 패턴에 대해 접근 권한 설정
                         // 로그인, 회원가입 페이지는 모든 사용자 접근 허용
-                        .requestMatchers("/api/login", "/api/signup","/api/loginProcess","/api/validate-email", "/api/validate-nickname").permitAll()
+                        .requestMatchers("/api/login", "/api/signup","/api/validate-email", "/api/validate-nickname").permitAll()
                         // ROLE_ADMIN 권한을 가진 사용자만 admin 경로에 접근 허용
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         // ROLE_USER 권한을 가진 사용자만 member 경로에 접근 허용
-                        .requestMatchers("/api/member/**").hasRole("USER")
+//                        .requestMatchers("/api/member/**").hasRole("USER")
+                        .requestMatchers("/api/member/community/**").permitAll()
                         // 그 외 모든 요청은 인증된 사용자만 접근 가능
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form
-                        .loginPage("/api/login")
-                        .loginProcessingUrl("/api/loginProcess")
-//                        .successHandler((request, response, authentication) -> {
-//                            // 로그인 성공 시 JSON 응답
-//                            response.setStatus(HttpServletResponse.SC_OK);
-//                            response.getWriter().write("{\"message\": \"로그인 성공\"}");
-//                        })//연결 후 지울것
-//                        .failureHandler((request, response, exception) -> {
-//                            // 로그인 실패 시 JSON 응답
-//                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//                            response.getWriter().write("{\"error\": \"로그인 실패\"}");
-//                        })//연결 후 지울 것
-                        .defaultSuccessUrl("/api/login", true)
-                        .failureUrl("/api/login?error=true")
-                )
+                // JWT 필터 추가
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+
+//                .formLogin(form -> form
+//                        .loginPage("/api/login")
+//                        .loginProcessingUrl("/api/login")
+//                        .usernameParameter("username")  // 이 값이 Vue에서 보내는 필드명과 일치해야 함
+//                        .passwordParameter("password")  // 마찬가지로 password도 일치해야 함
+//                        .defaultSuccessUrl("/api/home", true)
+//                        .failureUrl("/api/login?error=true")
+//                        .permitAll()
+//                )
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // 필요 시 세션 생성
+//                        .maximumSessions(1)  // 하나의 세션만 유지
+//                )
                 .logout(logout -> logout
                         .logoutUrl("/api/logout")
                         .logoutSuccessUrl("/api/login")
@@ -82,6 +90,8 @@ public class SecurityConfig{
                 .userDetailsService(memberDetailsService);
         return http.build();
     }
+
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
