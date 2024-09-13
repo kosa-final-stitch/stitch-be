@@ -31,6 +31,7 @@ public class Member implements UserDetails {
     @Override
     public String getUsername() {
         return email;  // 이메일을 사용자 이름으로 사용
+        
     }
 
     @Override

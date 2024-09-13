@@ -59,6 +59,7 @@ public class MemberService {
 
     // 회원 정보 조회
     public MemberDto getMemberInfo(Long memberId) {
+    	System.out.println("서비스의 memberID"+memberId);
         return memberMapper.getMemberById(memberId); // MyBatis mapper를 통해 DB에서 회원 정보를 가져옴
     }
 
