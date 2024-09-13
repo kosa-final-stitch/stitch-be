@@ -9,10 +9,14 @@
         WHERE email = #{email}
     </select>
 
-    <insert id="saveMember" parameterType="org.mywork.stitchbe.dto.MemberDto" useGeneratedKeys="true" keyProperty="memberId">
-        INSERT INTO member (email, password,oldPassword, name, nickname, address, gender, birth, phone, signupdate)
-        VALUES (#{email}, #{password}, #{oldPassword, jdbcType=VARCHAR}, #{name}, #{nickname}, #{address, jdbcType=VARCHAR}, #{gender, jdbcType=INTEGER}, #{birth, jdbcType=DATE}, #{phone, jdbcType=VARCHAR}, sysdate)
+    <insert id="saveMember" parameterType="org.mywork.stitchbe.dto.MemberDto">
+        <selectKey keyProperty="memberId" resultType="long" order="BEFORE">
+            SELECT member_seq.NEXTVAL FROM dual
+        </selectKey>
+        INSERT INTO member (member_id, email, password, oldpassword, nickname, name, address, gender, birth, phone)
+        VALUES (#{memberId}, #{email}, #{password}, #{oldPassword}, #{nickname}, #{name}, #{address}, #{gender}, #{birth}, #{phone})
     </insert>
+
 
     <update id="updateMemberPassword" parameterType="org.mywork.stitchbe.dto.MemberDto">
         UPDATE MEMBER
@@ -26,7 +30,7 @@
     </select>
 
     <insert id="saveUserRole">
-        INSERT INTO auth (email, authority) VALUES (#{email}, #{authority})
+        INSERT INTO AUTH (email, authority) VALUES (#{email}, #{authority})
     </insert>
 
     <select id="existsByEmail" resultType="boolean">
@@ -40,5 +44,6 @@
         FROM member
         WHERE nickname = #{nickname}
     </select>
+
 
 </mapper>
