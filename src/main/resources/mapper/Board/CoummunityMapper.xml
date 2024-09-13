@@ -1,6 +1,6 @@
 <mapper namespace="org.mywork.stitchbe.mapper.board.CoummunityMapper">
     <!-- 게시글 생성 -->
-    <insert id="createPost" parameterType="CommunityDto">
+    <insert id="createPost" parameterType="org.mywork.stitchbe.dto.CommunityDto">
         INSERT INTO community (member_id, title, content, category, tag, regdate, views, use_yn)
         VALUES (#{memberId}, #{title}, #{content}, #{category}, #{tag, jdbcType=VARCHAR}, SYSDATE, 0, 'Y')
     </insert>

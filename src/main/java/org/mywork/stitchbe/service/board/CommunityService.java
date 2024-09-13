@@ -5,6 +5,7 @@ import org.mywork.stitchbe.mapper.board.CommunityMapper;
 import org.mywork.stitchbe.dto.Board.CommunityDto;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommunityService {
@@ -13,7 +14,7 @@ public class CommunityService {
 
     // 게시글 생성
     public void createPost(CommunityDto communityDto) {
-        communityMapper.createPost(communityDto);
+        communityMapper.createPost(Optional.ofNullable(communityDto));
     }
 
     // 게시글 상세 조회
