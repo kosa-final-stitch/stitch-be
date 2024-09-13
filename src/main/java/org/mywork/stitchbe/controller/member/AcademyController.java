@@ -21,10 +21,18 @@ public class AcademyController {
         this.academyService = academyService;
     }
 
+    // 전체 학원 정보 반환
+    @GetMapping("/academy")
+    public ResponseEntity<List<AcademyDTO>> getAllAcademy() {
+    	List<AcademyDTO> academy = academyService.getAllAcademy();
+    	System.out.println("AcademyController: getAllAcademyById 호출됨");
+    	return ResponseEntity.ok(academy);
+    }
     // 학원 ID에 따른 학원 정보 반환
-    @GetMapping("/academy/{id}")
-    public ResponseEntity<AcademyDTO> getAcademyById(@PathVariable("id") Long academyId) {
+    @GetMapping("/academy/{academyId}")
+    public ResponseEntity<AcademyDTO> getAcademyById(@PathVariable("academyId") Long academyId) {
         AcademyDTO academy = academyService.getAcademyById(academyId);
+        System.out.println("AcademyController: getAcademyById 호출됨. ID: " + academyId);
         return ResponseEntity.ok(academy);
     }
 

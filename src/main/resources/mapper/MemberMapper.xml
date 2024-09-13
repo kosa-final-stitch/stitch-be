@@ -1,16 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.mywork.stitchbe.mapper.MemberMapper">
+    <!--작성자 : 박주희-->
 
-    <select id="findByEmail" parameterType="String" resultType="org.mywork.stitchbe.dto.MemberDto">
-        SELECT MEMBER_ID, email, password, name, nickname, address, gender, BIRTH, phone, role, signupdate
+    <select id="findByEmail" parameterType="org.mywork.stitchbe.dto.MemberDto" resultType="org.mywork.stitchbe.dto.MemberDto">
+        SELECT email, password
         FROM MEMBER
         WHERE email = #{email}
     </select>
 
     <insert id="saveMember" parameterType="org.mywork.stitchbe.dto.MemberDto" useGeneratedKeys="true" keyProperty="memberId">
-        INSERT INTO member (email, password, name, nickname, address, gender, birth, phone, role, signupdate)
-        VALUES (#{email}, #{password}, #{name}, #{nickname}, #{address}, #{gender}, #{birth}, #{phone}, #{role}, sysdate)
+        INSERT INTO member (email, password,oldPassword, name, nickname, address, gender, birth, phone, signupdate)
+        VALUES (#{email}, #{password}, #{oldPassword, jdbcType=VARCHAR}, #{name}, #{nickname}, #{address, jdbcType=VARCHAR}, #{gender, jdbcType=INTEGER}, #{birth, jdbcType=DATE}, #{phone, jdbcType=VARCHAR}, sysdate)
     </insert>
+
+    <update id="updateMemberPassword" parameterType="org.mywork.stitchbe.dto.MemberDto">
+        UPDATE MEMBER
+        SET password = #{password}, oldPassword = #{oldPassword}, editdate = sysdate
+        WHERE member_id = #{memberId}
+    </update>
+
+    <!-- AUTH 테이블에서 권한 조회 -->
+    <select id="findAuthoritiesByEmail" parameterType="org.mywork.stitchbe.dto.MemberDto" resultType="String">
+        SELECT authority FROM auth WHERE email = #{email}
+    </select>
+
+    <insert id="saveUserRole">
+        INSERT INTO auth (email, authority) VALUES (#{email}, #{authority})
+    </insert>
+
+    <select id="existsByEmail" resultType="boolean">
+        SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+        FROM member
+        WHERE email = #{email}
+    </select>
+
+    <select id="findByNickname" resultType="boolean">
+        SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+        FROM member
+        WHERE nickname = #{nickname}
+    </select>
 
 </mapper>

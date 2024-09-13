@@ -1,20 +1,22 @@
 package org.mywork.stitchbe.controller;
 
 import org.mywork.stitchbe.Util.PasswordEncoderUtil;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
+//작성자 : 박주희
 
 @RestController
+@RequestMapping("/api")
 public class PasswordController {
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    @GetMapping("/encode")
-    public String encodePassword(@RequestParam String password) {
-        return PasswordEncoderUtil.encodePassword(password);
+    public PasswordController(BCryptPasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping("/match")
-    public boolean matchPasswords(@RequestParam String rawPassword, @RequestParam String encodedPassword) {
-        return PasswordEncoderUtil.matches(rawPassword, encodedPassword);
+    @PostMapping("/encode")
+    public String encodePassword(@RequestBody String password) {
+        return passwordEncoder.encode(password);
     }
 }
