@@ -1,20 +1,17 @@
 package org.mywork.stitchbe.dto;
 
 import lombok.Data;
-
-import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 public class CourseDTO {
-    private Long courseId;
-    private Long academyId;  // 외래키로 academy_id 참조
-    private String courseName;
-    private String titleLink;
-    private String lector;
-    private LocalDate regdate;
-    private LocalDate editdate;
-    private String apiCourseId;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private Integer sessionNumber;
+	private Long course_id;
+	private Long academy_id;
+	private String course_name;
+	private String title_link;
+	private String lector;
+	private Date start_date;
+	private Date end_date;
+	private int session_number;
+
 }

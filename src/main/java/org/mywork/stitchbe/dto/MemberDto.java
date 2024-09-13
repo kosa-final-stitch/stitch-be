@@ -1,6 +1,8 @@
 package org.mywork.stitchbe.dto;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 //작성자 : 박주희
@@ -14,8 +16,9 @@ public class MemberDto {
     private String name;         // 이름
     private String nickname;     // 닉네임
     private String address;      // 주소
-    private Integer gender;      // 성별 (0 또는 1로 표현될 가능성 있음)
-    private Date birth;         // 나이
+    private String gender;// 성별
+    @DateTimeFormat(pattern = "yyyy-MM-dd")  // 프론트엔드에서 전달된 yyyy-MM-dd 형식의 데이터를 매핑
+    private Date birth;
     private String phone;        // 전화번호
     private Date signupdate;     // 가입일자
     private Date editdate;        // 수정일자
