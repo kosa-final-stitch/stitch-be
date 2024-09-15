@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.mywork.stitchbe.mapper.board.CommunityMapper">
+    <!-- 게시글 목록 조회 -->
+    <select id="getAllPosts" resultType="org.mywork.stitchbe.dto.board.CommunityDto">
+        SELECT c.*, m.nickname AS nickname
+        FROM community c
+                 JOIN member m ON c.MEMBER_ID = m.MEMBER_ID
+    </select>
+
+
+    <!-- 게시글 생성 -->
+    <insert id="createPost" parameterType="org.mywork.stitchbe.dto.board.CommunityDto">
+        INSERT INTO community (member_id, title, content, category, tag, regdate, views, use_yn)
+        VALUES (#{memberId}, #{title}, #{content}, #{category}, #{tag, jdbcType=VARCHAR}, SYSDATE, 0, 'Y')
+    </insert>
+
+    <!-- 게시글 조회 -->
+    <select id="getPostById" parameterType="long" resultType="org.mywork.stitchbe.dto.board.CommunityDto">
+        SELECT * FROM community WHERE board_id = #{board_id}
+    </select>
+
+    <!-- 게시글 수정 -->
+    <update id="updatePost" parameterType="org.mywork.stitchbe.dto.board.CommunityDto">
+        UPDATE community
+        SET title = #{title}, content = #{content}, category = #{category}, tag = #{tag}, views = #{views}, editdate = SYSDATE
+        WHERE board_id = #{board_id}
+    </update>
+
+    <!-- 게시글 삭제 -->
+    <delete id="deletePost" parameterType="long">
+        DELETE FROM community WHERE board_id = #{board_id}
+    </delete>
+</mapper>

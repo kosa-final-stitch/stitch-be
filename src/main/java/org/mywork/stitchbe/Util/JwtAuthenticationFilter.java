@@ -34,7 +34,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
 
         // 로그인 및 회원가입 요청은 JWT 인증을 건너뜀
-        if (requestURI.equals("/api/login") || requestURI.equals("/api/signup")) {
+        if (requestURI.equals("/api/login") ||
+                requestURI.equals("/api/signup") ||
+                requestURI.equals("/api/board/community/all")) { // 괄호 수정
+            logger.info("Skipping JWT validation for this request");
             chain.doFilter(request, response);
             return;
         }
@@ -43,6 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String jwtToken = authorizationHeader.substring(7); // "Bearer " 제거
+            logger.info("JWT Token found: " + jwtToken);
             try {
                 String username = Jwts.parserBuilder()
                         .setSigningKey(jwtSecret)
@@ -52,16 +56,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         .getSubject();
 
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    logger.info("JWT Token valid, setting security context for user: " + username);
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                     var authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             } catch (JwtException e) {
+                logger.error("Invalid JWT token", e);
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
                 return;
             }
+        } else {
+            logger.info("No JWT Token found in the request");
         }
-
         chain.doFilter(request, response);
     }
 }
