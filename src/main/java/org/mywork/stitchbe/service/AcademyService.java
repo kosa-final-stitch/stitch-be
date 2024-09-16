@@ -1,9 +1,14 @@
+/*
+ 2024.9.16. 박요한 | getTopRatedAcademies 추가
+ */
+
 package org.mywork.stitchbe.service;
 
 import java.util.List;
 
 import org.mywork.stitchbe.dto.AcademyDTO;
 import org.mywork.stitchbe.dto.CourseDTO;
+import org.mywork.stitchbe.dto.home.AcademyReviewDTO;
 import org.mywork.stitchbe.mapper.AcademyMapper;
 import org.springframework.stereotype.Service;
 
@@ -29,4 +34,9 @@ public class AcademyService {
 	public List<AcademyDTO> getAllAcademy() {
 		 return academyMapper.getAllAcademy();
 	}
+
+    //홈: 고평점 학원
+    public List<AcademyReviewDTO> getTopRatedAcademies() {
+        return academyMapper.getTopRatedAcademies();
+    }
 }
