@@ -33,8 +33,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String requestURI = request.getRequestURI();
 
-        // 로그인 및 회원가입 요청은 JWT 인증을 건너뜀
-        if (requestURI.equals("/api/login") || requestURI.equals("/api/signup")) {
+     // 로그인 및 회원가입 요청은 JWT 인증을 건너뜀
+        if (requestURI.equals("/api/login") ||
+                requestURI.equals("/api/signup") ||
+                requestURI.equals("/api/board/community/all") ||
+                requestURI.equals("/api/academies")) { // 새로운 경로 추가(유은)
+            logger.info("Skipping JWT validation for this request");
             chain.doFilter(request, response);
             return;
         }
