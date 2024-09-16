@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.mywork.stitchbe.mapper.ReviewMapper">
+
+    <!-- 리뷰 삽입 -->
+    <insert id="insertReview" parameterType="org.mywork.stitchbe.dto.ReviewDTO">
+        INSERT INTO REVIEW (
+            review_id, member_id, course_id, education, education_rating,
+            instructor, instructor_rating, facility, facility_rating,
+            atmosphere, atmosphere_rating, management, management_rating,
+            later, later_rating, education_spec, employment_status, reg_date, edit_date
+        ) VALUES (
+            #{reviewId}, #{memberId}, #{courseId}, #{education}, #{educationRating},
+            #{instructor}, #{instructorRating}, #{facility}, #{facilityRating},
+            #{atmosphere}, #{atmosphereRating}, #{management}, #{managementRating},
+            #{later}, #{laterRating}, #{educationSpec}, #{employmentStatus}, #{regDate}, #{editDate}
+        )
+    </insert>
+
+    <!-- 모든 리뷰를 가져오는 메서드 (선택적) -->
+    <select id="getAllReviews" resultType="org.mywork.stitchbe.dto.ReviewDTO">
+        SELECT * FROM REVIEW
+    </select>
+
+    <!-- 특정 강의의 리뷰를 가져오는 메서드 (선택적) -->
+    <select id="getReviewsByCourseId" resultType="org.mywork.stitchbe.dto.ReviewDTO">
+        SELECT * FROM REVIEW WHERE course_id = #{courseId}
+    </select>
+
+</mapper>
