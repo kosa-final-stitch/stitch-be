@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ 2024.9.16 박요한 | getTopRatedAcademies 추가
+-->
+
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -18,6 +22,27 @@
   <!-- 전체 학원 목록 조회 -->
   <select id="getAllAcademy" resultType="org.mywork.stitchbe.dto.AcademyDTO">
     SELECT * FROM academy
+  </select>
+
+  <!-- 홈: 학원과 리뷰 데이터를 조인해서 6개 항목별 평균 평점을 가져오는 쿼리 -->
+  <select id="getTopRatedAcademies" resultType="org.mywork.stitchbe.dto.home.AcademyReviewDTO">
+    SELECT a.academy_id,
+           a.academy_name,
+           a.address,
+           a.phone,
+           AVG((r.education_rating + r.instructor_rating + r.facility_rating +
+                r.atmosphere_rating + r.management_rating + r.later_rating) / 6) AS average_rating,
+           AVG(r.education_rating) AS education_rating,
+           AVG(r.instructor_rating) AS instructor_rating,
+           AVG(r.facility_rating) AS facility_rating,
+           AVG(r.atmosphere_rating) AS atmosphere_rating,
+           AVG(r.management_rating) AS management_rating,
+           AVG(r.later_rating) AS later_rating
+    FROM academy a
+           LEFT JOIN review r ON a.academy_id = r.academy_id
+    GROUP BY a.academy_id, a.academy_name, a.address, a.phone
+    ORDER BY average_rating DESC
+      FETCH FIRST 5 ROWS ONLY
   </select>
 
 </mapper>

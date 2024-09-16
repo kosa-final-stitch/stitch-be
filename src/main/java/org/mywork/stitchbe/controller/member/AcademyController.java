@@ -1,9 +1,14 @@
+/*
+ 2024.9.16 박요한 | getTopRatedAcademies 추가 
+*/
+
 package org.mywork.stitchbe.controller.member;
 
 import java.util.List;
 
 import org.mywork.stitchbe.dto.AcademyDTO;
 import org.mywork.stitchbe.dto.CourseDTO;
+import org.mywork.stitchbe.dto.home.AcademyReviewDTO;
 import org.mywork.stitchbe.service.AcademyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,5 +46,11 @@ public class AcademyController {
     public ResponseEntity<List<CourseDTO>> getCoursesByAcademyId(@PathVariable("academyId") Long academyId) {
         List<CourseDTO> courses = academyService.getCoursesByAcademyId(academyId);
         return ResponseEntity.ok(courses);
+    }
+
+    // 홈: 고평점 학원 목록 반환
+    @GetMapping("/top")
+    public List<AcademyReviewDTO> getTopRatedAcademies() {
+        return academyService.getTopRatedAcademies();
     }
 }
