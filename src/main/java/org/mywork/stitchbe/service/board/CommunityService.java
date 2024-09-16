@@ -19,10 +19,15 @@ public class CommunityService {
     @Autowired
     private CommunityMapper communityMapper;
 
-    // 게시글 생성
+//     게시글 생성
     public void createPost(CommunityDto communityDto) {
-        communityMapper.createPost(Optional.ofNullable(communityDto));
+        if (communityDto != null) {
+            communityMapper.createPost(communityDto);  // Optional 없이 바로 전달
+        } else {
+            throw new IllegalArgumentException("CommunityDto cannot be null");
+        }
     }
+
 
     // 게시글 상세 조회
     public CommunityDto getPostById(Long boardId) {

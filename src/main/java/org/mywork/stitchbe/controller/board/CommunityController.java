@@ -1,7 +1,12 @@
 package org.mywork.stitchbe.controller.board;
 
+import org.mywork.stitchbe.dto.MemberDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.mywork.stitchbe.dto.board.CommunityDto;
 import org.mywork.stitchbe.service.board.CommunityService;
@@ -27,9 +32,17 @@ public class CommunityController {
     // 게시글 생성
     @PostMapping("/member/board/community/create")
     public ResponseEntity<String> createPost(@RequestBody CommunityDto communityDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.getPrincipal() instanceof MemberDto) {
+            MemberDto member = (MemberDto) authentication.getPrincipal();
+            communityDto.setMemberId(member.getMemberId()); // 게시글에 memberId 추가
+        }
+
         communityService.createPost(communityDto);
         return ResponseEntity.ok("Post created successfully");
     }
+
 
     // 게시글 상세 조회
     @GetMapping("/{boardId}")
@@ -56,7 +69,7 @@ public class CommunityController {
     // 게시글 수정
     @PutMapping("/update/{boardId}")
     public ResponseEntity<String> updatePost(@PathVariable Long boardId, @RequestBody CommunityDto communityDto) {
-        communityDto.setBoard_id(boardId);
+        communityDto.setBoardId(boardId);
         communityService.updatePost(communityDto);
         return ResponseEntity.ok("Post updated successfully");
     }
