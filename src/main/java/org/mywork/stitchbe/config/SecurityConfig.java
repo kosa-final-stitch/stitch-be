@@ -58,12 +58,11 @@ public class SecurityConfig{
                 .csrf(AbstractHttpConfigurer::disable)  // CSRF 비활성화
                 .authorizeHttpRequests(authorize -> authorize //각 url 패턴에 대해 접근 권한 설정
                         // 로그인, 회원가입 페이지는 모든 사용자 접근 허용
-                        .requestMatchers("/api/login", "/api/signup","/api/validate-email", "/api/validate-nickname").permitAll()
+                        .requestMatchers("/api/login", "/api/signup","/api/validate-email", "/api/validate-nickname", "/api/board/community/all", "/api/academies/academy").permitAll()
                         // ROLE_ADMIN 권한을 가진 사용자만 admin 경로에 접근 허용
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         // ROLE_USER 권한을 가진 사용자만 member 경로에 접근 허용
-//                        .requestMatchers("/api/member/**").hasRole("USER")
-                        .requestMatchers("/api/member/community/**").permitAll()
+                        .requestMatchers("/api/member/**").hasRole("USER")
                         // 그 외 모든 요청은 인증된 사용자만 접근 가능
                         .anyRequest().authenticated()
                 )
