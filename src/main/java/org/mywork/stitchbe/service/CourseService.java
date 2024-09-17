@@ -1,9 +1,14 @@
+/*
+ 2024.9.17. 박요한 | getTopRatedCourses 추가
+ */
+
 package org.mywork.stitchbe.service;
 
 import java.util.List;
 
 import org.mywork.stitchbe.dto.CourseDTO;
 import org.mywork.stitchbe.dto.ReviewDTO;
+import org.mywork.stitchbe.dto.home.CourseReviewDTO;
 import org.mywork.stitchbe.mapper.CourseMapper;
 import org.springframework.stereotype.Service;
 
@@ -38,4 +43,9 @@ public class CourseService {
 		System.out.println("코스서비스 getCourseByCourseId");
         return courseMapper.getCourseByCourseId(courseId);
 	}
+
+    // 홈: 평점이 높은 교육 과정을 가져오는 메서드
+    public List<CourseReviewDTO> getTopRatedCourses() {
+        return courseMapper.getTopRatedCourses();
+    }
 }
