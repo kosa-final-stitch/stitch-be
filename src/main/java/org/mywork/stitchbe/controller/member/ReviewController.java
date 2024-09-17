@@ -1,9 +1,15 @@
+/*
+ 2024.9.17. 박요한 | getTopLikedReviews 추가
+*/
+
 package org.mywork.stitchbe.controller.member;
 
 import java.util.List;
 
 import org.mywork.stitchbe.dto.ReviewDTO;
+import org.mywork.stitchbe.dto.home.ReviewLikesDTO;
 import org.mywork.stitchbe.service.ReviewService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,4 +46,10 @@ public class ReviewController {
 		return reviewService.getReviewsByCourseId(courseId);
 	}
 
+	// 홈: 좋아요 수가 많은 상위 리뷰를 가져오는 API 엔드포인트
+	@GetMapping("/top")
+	public ResponseEntity<List<ReviewLikesDTO>> getTopLikedReviews() {
+		List<ReviewLikesDTO> topLikedReviews = reviewService.getTopLikedReviews();
+		return ResponseEntity.ok(topLikedReviews);
+	}
 }

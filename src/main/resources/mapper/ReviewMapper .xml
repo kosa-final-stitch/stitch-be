@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ 2024.9.17 박요한 | getTopLikedReviews 추가
+-->
+
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -28,6 +32,33 @@
     <!-- 특정 강의의 리뷰를 가져오는 메서드 (선택적) -->
     <select id="getReviewsByCourseId" resultType="org.mywork.stitchbe.dto.ReviewDTO">
         SELECT * FROM REVIEW WHERE course_id = #{courseId}
+    </select>
+
+    <!-- 홈: 인기 리뷰 가져오는 메서드  -->
+    <select id="getTopLikedReviews" resultType="org.mywork.stitchbe.dto.home.ReviewLikesDTO">
+        SELECT
+            r.review_id AS reviewId,
+            r.course_id AS courseId,
+            r.member_id AS memberId,
+            r.education AS educationReview,
+            r.instructor AS instructorReview,
+            r.facility AS facilityReview,
+            r.atmosphere AS atmosphereReview,
+            r.management AS managementReview,
+            r.later AS laterReview,
+
+            -- 전체 평균 별점
+            (r.education_rating + r.instructor_rating + r.facility_rating +
+             r.atmosphere_rating + r.management_rating + r.later_rating) / 6 AS averageRating,
+
+            COUNT(l.like_id) AS likeCount  -- 좋아요 수 계산
+
+        FROM review r
+                 LEFT JOIN likes l ON r.review_id = l.review_id  -- 리뷰와 좋아요 조인
+        GROUP BY r.review_id, r.course_id, r.member_id, r.education, r.instructor, r.facility,
+                 r.atmosphere, r.management, r.later,
+        ORDER BY likeCount DESC NULLS LAST  -- 좋아요 수로 정렬 및 NULL 값을 마지막에 배치
+            FETCH FIRST 5 ROWS ONLY  -- 상위 5개의 리뷰만 가져오기
     </select>
 
 </mapper>
