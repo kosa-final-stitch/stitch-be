@@ -4,8 +4,14 @@
     <!--작성자 : 박주희-->
 
     <select id="findByEmail" parameterType="org.mywork.stitchbe.dto.MemberDto" resultType="org.mywork.stitchbe.dto.MemberDto">
-        SELECT email, password
+        SELECT member_id, EMAIL, password, NICKNAME
         FROM MEMBER
+        WHERE email = #{email}
+    </select>
+
+    <select id="findMemberIdByEmail" resultType="Long">
+        SELECT member_id
+        FROM member
         WHERE email = #{email}
     </select>
 
