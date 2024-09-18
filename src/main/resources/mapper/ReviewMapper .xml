@@ -39,6 +39,7 @@
         SELECT
             r.review_id AS reviewId,
             r.course_id AS courseId,
+            c.academy_id AS academyId,
             r.member_id AS memberId,
             r.education AS educationReview,
             r.instructor AS instructorReview,
@@ -54,13 +55,18 @@
             COUNT(l.like_id) AS likeCount  -- 좋아요 수 계산
 
         FROM review r
-                 LEFT JOIN likes l ON r.review_id = l.review_id  -- 리뷰와 좋아요 조인
-        GROUP BY r.review_id, r.course_id, r.member_id, r.education, r.instructor, r.facility,
-                 r.atmosphere, r.management, r.later,
-                 r.education_rating, r.instructor_rating, r.facility_rating,
-                 r.atmosphere_rating, r.management_rating, r.later_rating
-        ORDER BY likeCount DESC NULLS LAST  -- 좋아요 수로 정렬 및 NULL 값을 마지막에 배치
-            FETCH FIRST 5 ROWS ONLY  -- 상위 5개의 리뷰만 가져오기
+                 LEFT JOIN course c ON r.course_id = c.course_id  -- course만 조인
+                 LEFT JOIN likes l ON r.review_id = l.review_id  -- 좋아요와 조인
+        GROUP BY
+            r.review_id, r.course_id, c.academy_id,  -- course에서 academy_id 사용
+            r.member_id, r.education, r.instructor, r.facility,
+            r.atmosphere, r.management, r.later, r.regdate,
+            r.education_rating, r.instructor_rating, r.facility_rating,
+            r.atmosphere_rating, r.management_rating, r.later_rating
+        ORDER BY
+            likeCount DESC NULLS LAST,  -- 좋아요 순으로 정렬하고 NULL 값을 마지막으로
+            r.regdate DESC NULLS LAST   -- 최신 리뷰 순 정렬하고 NULL 값을 마지막으로
+            FETCH FIRST 5 ROWS ONLY
     </select>
 
 </mapper>
