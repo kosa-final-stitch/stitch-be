@@ -27,7 +27,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 /**
  * @Author 박주희
  *
- * 2024.9.17. 박요한 | "/api/courses/**" permitAll 추가
+ * 2024.9.17. 박요한 | "/api/courses/**", "/api/reviews/top" permitAll 추가
  *  */
 
 @Configuration //spring에서 빈을 정의하고 설정할 수 있는 클래스임을 의미
@@ -59,7 +59,7 @@ public class SecurityConfig{
                 .csrf(AbstractHttpConfigurer::disable)  // CSRF 비활성화
                 .authorizeHttpRequests(authorize -> authorize //각 url 패턴에 대해 접근 권한 설정
                         // 로그인, 회원가입 페이지는 모든 사용자 접근 허용
-                        .requestMatchers("/api/login", "/api/signup","/api/validate-email", "/api/validate-nickname", "/api/board/community/all", "/api/academies/**", "/api/courses/**").permitAll()
+                        .requestMatchers("/api/login", "/api/signup","/api/validate-email", "/api/validate-nickname", "/api/board/community/all", "/api/academies/**", "/api/courses/**", "/api/reviews/top").permitAll()
                         // ROLE_ADMIN 권한을 가진 사용자만 admin 경로에 접근 허용
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         // ROLE_USER 권한을 가진 사용자만 member 경로에 접근 허용
