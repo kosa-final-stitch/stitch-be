@@ -14,6 +14,7 @@ import lombok.Data;
 public class ReviewLikesDTO {
     private Long reviewId;           // 리뷰 ID
     private Long courseId;           // 강좌 ID
+    private Long academyId;          // 학원 ID
     private Long memberId;           // 작성자(회원) ID
     private String educationReview;  // 교육에 대한 리뷰
     private String instructorReview; // 강사에 대한 리뷰
