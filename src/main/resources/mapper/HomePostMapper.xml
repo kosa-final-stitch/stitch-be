@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ 담당자: 박요한
+ 시작 일자: 2024.09.18
+ 설명 : 홈페이지 용 게시글 mapper.
+ _____________________
+ 2024.9.18 박요한 | 생성.
+-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.mywork.stitchbe.mapper.board.HomePostMapper">
+    <!-- 정보 공유 게시판 인기 게시글 -->
+    <select id="getTopInfoSharePost" resultType="org.mywork.stitchbe.dto.home.HomePostDTO">
+        SELECT board_id, title, views
+        FROM info
+        ORDER BY views DESC
+            FETCH FIRST 1 ROWS ONLY
+    </select>
+
+    <!-- 자유 게시판 인기 게시글 -->
+    <select id="getTopFreeCommunityPost" resultType="org.mywork.stitchbe.dto.home.HomePostDTO">
+        SELECT board_id, title, views
+        FROM community
+        ORDER BY views DESC
+            FETCH FIRST 1 ROWS ONLY
+    </select>
+
+    <!-- Q&A 게시판 인기 게시글 -->
+    <select id="getTopQnAPost" resultType="org.mywork.stitchbe.dto.home.HomePostDTO">
+        SELECT board_id, title, views
+        FROM qna
+        ORDER BY views DESC
+            FETCH FIRST 1 ROWS ONLY
+    </select>
+</mapper>
