@@ -57,6 +57,8 @@
                  LEFT JOIN likes l ON r.review_id = l.review_id  -- 리뷰와 좋아요 조인
         GROUP BY r.review_id, r.course_id, r.member_id, r.education, r.instructor, r.facility,
                  r.atmosphere, r.management, r.later,
+                 r.education_rating, r.instructor_rating, r.facility_rating,
+                 r.atmosphere_rating, r.management_rating, r.later_rating
         ORDER BY likeCount DESC NULLS LAST  -- 좋아요 수로 정렬 및 NULL 값을 마지막에 배치
             FETCH FIRST 5 ROWS ONLY  -- 상위 5개의 리뷰만 가져오기
     </select>
