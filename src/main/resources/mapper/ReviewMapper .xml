@@ -39,6 +39,7 @@
         SELECT
             r.review_id AS reviewId,
             r.course_id AS courseId,
+            c.course_name AS courseName,
             c.academy_id AS academyId,
             r.member_id AS memberId,
             r.education AS educationReview,
@@ -55,10 +56,10 @@
             COUNT(l.like_id) AS likeCount  -- 좋아요 수 계산
 
         FROM review r
-                 LEFT JOIN course c ON r.course_id = c.course_id  -- course만 조인
+                 LEFT JOIN course c ON r.course_id = c.course_id  -- course 조인
                  LEFT JOIN likes l ON r.review_id = l.review_id  -- 좋아요와 조인
         GROUP BY
-            r.review_id, r.course_id, c.academy_id,  -- course에서 academy_id 사용
+            r.review_id, r.course_id, c.course_name, c.academy_id,
             r.member_id, r.education, r.instructor, r.facility,
             r.atmosphere, r.management, r.later, r.regdate,
             r.education_rating, r.instructor_rating, r.facility_rating,
@@ -66,7 +67,7 @@
         ORDER BY
             likeCount DESC NULLS LAST,  -- 좋아요 순으로 정렬하고 NULL 값을 마지막으로
             r.regdate DESC NULLS LAST   -- 최신 리뷰 순 정렬하고 NULL 값을 마지막으로
-            FETCH FIRST 5 ROWS ONLY
+            FETCH FIRST 3 ROWS ONLY
     </select>
 
 </mapper>
