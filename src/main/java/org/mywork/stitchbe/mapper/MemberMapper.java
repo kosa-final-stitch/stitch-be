@@ -23,4 +23,14 @@ public interface MemberMapper {
     boolean existsByEmail(String email);  // 이메일 중복 검사 메서드
 
     boolean findByNickname(String nickname);
+
+    //유은작성 코드
+    
+    //마이페이지 사용자
+    MemberDto getMemberByEmail(String email);
+	
+    //내 정보 업데이트
+    void updateMemberInfo(MemberDto memberDto);
+    
+
 }
