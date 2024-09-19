@@ -24,6 +24,9 @@ public interface MemberMapper {
 
     boolean findByNickname(String nickname);
 
+    // 이메일로 memberId 조회
+    Long findMemberIdByEmail(String email);
+
     //유은작성 코드
     
     //마이페이지 사용자

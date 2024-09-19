@@ -3,27 +3,25 @@
 <mapper namespace="org.mywork.stitchbe.mapper.MemberMapper">
 	<!--작성자 : 박주희 -->
 
-	<select id="findByEmail"
-		parameterType="org.mywork.stitchbe.dto.MemberDto"
-		resultType="org.mywork.stitchbe.dto.MemberDto">
-		SELECT email, password
-		FROM MEMBER
-		WHERE email = #{email}
-	</select>
+    <select id="findByEmail" parameterType="org.mywork.stitchbe.dto.MemberDto" resultType="org.mywork.stitchbe.dto.MemberDto">
+        SELECT member_id, EMAIL, password, NICKNAME
+        FROM MEMBER
+        WHERE email = #{email}
+    </select>
 
-	<insert id="saveMember"
-		parameterType="org.mywork.stitchbe.dto.MemberDto">
-		<selectKey keyProperty="memberId" resultType="long"
-			order="BEFORE">
-			SELECT member_seq.NEXTVAL FROM dual
-		</selectKey>
-		INSERT INTO member (member_id, email, password, oldpassword, nickname,
-		name, address, gender, birth, phone)
-		VALUES (#{memberId}, #{email},
-		#{password}, #{oldPassword}, #{nickname},
-		#{name}, #{address},
-		#{gender}, #{birth}, #{phone})
-	</insert>
+    <select id="findMemberIdByEmail" resultType="Long">
+        SELECT member_id
+        FROM member
+        WHERE email = #{email}
+    </select>
+
+    <insert id="saveMember" parameterType="org.mywork.stitchbe.dto.MemberDto">
+        <selectKey keyProperty="memberId" resultType="long" order="BEFORE">
+            SELECT member_seq.NEXTVAL FROM dual
+        </selectKey>
+        INSERT INTO member (member_id, email, password, oldpassword, nickname, name, address, gender, birth, phone)
+        VALUES (#{memberId}, #{email}, #{password}, #{oldPassword}, #{nickname}, #{name}, #{address}, #{gender}, #{birth}, #{phone})
+    </insert>
 
 
 	<update id="updateMemberPassword"
@@ -92,9 +90,6 @@
 		address = #{address}
 		WHERE email = #{email}
 	</update>
-
-
-
 
 
 </mapper>
