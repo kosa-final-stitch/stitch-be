@@ -28,7 +28,6 @@ public class CommunityService {
         }
     }
 
-
     // 게시글 상세 조회
     public CommunityDto getPostById(Long boardId) {
         return communityMapper.getPostById(boardId);
