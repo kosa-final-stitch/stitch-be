@@ -32,7 +32,7 @@
 		SELECT *
 		FROM course
 		WHERE academy_id = #{academyId}
-		AND end_date <![CDATA[ < ]]> SYSDATE 
+		AND end_date <![CDATA[ < ]]> SYSDATE
 		ORDER BY end_date DESC
 	</select>
 
@@ -65,27 +65,25 @@
 		WHERE academy_id = #{academyId}
 	</select>
 
-
-	<!-- 홈: 학원과 리뷰 데이터를 조인해서 6개 항목별 평균 평점을 가져오는 쿼리 -->
-<!-- 	<select id="getTopRatedAcademies"
-		resultType="org.mywork.stitchbe.dto.home.AcademyReviewDTO">
-		SELECT a.academy_id,
-		a.academy_name,
-		a.address,
-		a.phone,
-		AVG((r.education_rating + r.instructor_rating + r.facility_rating +
-		r.atmosphere_rating + r.management_rating + r.later_rating) / 6) AS average_rating,
-		AVG(r.education_rating) AS education_rating,
-		AVG(r.instructor_rating) AS instructor_rating,
-		AVG(r.facility_rating) AS facility_rating,
-		AVG(r.atmosphere_rating) AS atmosphere_rating,
-		AVG(r.management_rating) AS management_rating,
-		AVG(r.later_rating) AS later_rating
-		FROM academy a
-		LEFT JOIN review r ON a.academy_id = r.academy_id
-		GROUP BY a.academy_id, a.academy_name, a.address, a.phone
-		ORDER BY average_rating DESC
-		FETCH FIRST 5 ROWS ONLY
-	</select> -->
+  <!-- 홈: 학원과 리뷰 데이터를 조인해서 6개 항목별 평균 평점을 가져오는 쿼리 -->
+  <select id="getTopRatedAcademies" resultType="org.mywork.stitchbe.dto.home.AcademyReviewDTO">
+    SELECT
+        a.academy_id as academyId, a.academy_name as academyName, a.address, a.phone,
+        (SUM(r.education_rating) + SUM(r.instructor_rating) + SUM(r.facility_rating) +
+         SUM(r.atmosphere_rating) + SUM(r.management_rating) + SUM(r.later_rating))
+            / (COUNT(r.review_id) * 6) AS averageRating,
+        AVG(r.education_rating) AS educationRating,
+        AVG(r.instructor_rating) AS instructorRating,
+        AVG(r.facility_rating) AS facilityRating,
+        AVG(r.atmosphere_rating) AS atmosphereRating,
+        AVG(r.management_rating) AS managementRating,
+        AVG(r.later_rating) AS laterRating
+    FROM academy a
+             LEFT JOIN course c ON a.academy_id = c.academy_id
+             LEFT JOIN review r ON c.course_id = r.course_id
+    GROUP BY a.academy_id, a.academy_name, a.address, a.phone
+    ORDER BY averageRating DESC NULLS LAST
+        FETCH FIRST 5 ROWS ONLY
+  </select>
 
 </mapper>

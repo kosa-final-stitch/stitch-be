@@ -1,3 +1,7 @@
+/*
+ 2024.9.17. 박요한 | getTopRatedCourses 추가
+*/
+
 package org.mywork.stitchbe.mapper;
 
 import java.util.List;
@@ -6,6 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.mywork.stitchbe.dto.CourseDTO;
 import org.mywork.stitchbe.dto.ReviewDTO;
+import org.mywork.stitchbe.dto.home.CourseReviewDTO;
 
 
 @Mapper // MyBatis 매퍼 인터페이스로서 설정
@@ -22,5 +27,8 @@ public interface CourseMapper {
 
     // 특정 강의 선택
     CourseDTO getCourseByCourseId(@Param("courseId") Long courseId);
+
+    //홈: 고평점 강의 정보
+    List<CourseReviewDTO> getTopRatedCourses();
 
 }

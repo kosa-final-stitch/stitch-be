@@ -1,5 +1,5 @@
 /*
- 2024.9.16 박요한 | getTopRatedAcademies 추가 
+ 2024.9.16 박요한 | getTopRatedAcademies 추가
 */
 
 package org.mywork.stitchbe.controller.member;
@@ -82,7 +82,8 @@ public class AcademyController {
    
     // 홈: 고평점 학원 목록 반환
     @GetMapping("/top")
-    public List<AcademyReviewDTO> getTopRatedAcademies() {
-        return academyService.getTopRatedAcademies();
+    public ResponseEntity<List<AcademyReviewDTO>> getTopRatedAcademies() {
+        List<AcademyReviewDTO> academy = academyService.getTopRatedAcademies();
+        return ResponseEntity.ok(academy);
     }
 }
