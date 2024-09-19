@@ -1,27 +1,23 @@
 package org.mywork.stitchbe.config;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import org.mywork.stitchbe.Util.JwtAuthenticationFilter;
 import org.mywork.stitchbe.Util.JwtUtil;
 import org.mywork.stitchbe.service.MemberDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 
 /**
@@ -65,7 +61,13 @@ public class SecurityConfig{
                         .requestMatchers("/api/member/**").hasRole("USER")
                         .requestMatchers("/api/member/community/**").permitAll()
                         // 리뷰 작성은 인증된 사용자만 가능하도록 설정(유은)
-                        .requestMatchers("/api/reviews/**").authenticated()
+//                        .requestMatchers("/api/member/reviews/**").hasRole("USER")
+//                        // 리뷰 조회는 모든 사용자에게 허용(유은)
+                        .requestMatchers(HttpMethod.GET, "/api/member/reviews/**").permitAll()
+                        // 리뷰 작성은 인증된 사용자만 허용(유은)
+                        .requestMatchers(HttpMethod.POST, "/api/member/reviews/**").hasRole("USER")
+//                         내 정보 받아오는건 인증된 사용자만 받아오도록
+//                        .requestMatchers("/api/member/info").authenticated()
                         // 그 외 모든 요청은 인증된 사용자만 접근 가능
                         .anyRequest().authenticated()
                 )

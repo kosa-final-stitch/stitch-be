@@ -1,33 +1,29 @@
 package org.mywork.stitchbe.controller.member;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.mywork.stitchbe.Util.JwtUtil;
 import org.mywork.stitchbe.dto.AddMemberRequest;
 import org.mywork.stitchbe.dto.LoginRequest;
 import org.mywork.stitchbe.dto.MemberDto;
 import org.mywork.stitchbe.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-
-import java.util.HashMap;
-import java.util.Map;
+import jakarta.servlet.http.HttpServletResponse;
 
 //작성자 : 박주희
 
@@ -109,13 +105,6 @@ public class MemberController {
       return ResponseEntity.ok(response);
    }
 
-
-   // 특정 회원 정보 조회 API
-   @GetMapping("/info/{memberId}")
-   public MemberDto getMemberInfo(@PathVariable Long memberId) {
-      return memberService.getMemberInfo(memberId); // MemberService를 통해 회원 정보 가져옴
-   }
-
    @PostMapping("/api/check-session")
    public ResponseEntity<?> checkSession() {
       // 현재 세션에서 인증 정보 가져오기
@@ -138,4 +127,39 @@ public class MemberController {
          return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body("인증되지 않음");
       }
    }
+   
+//   유은 작성 코드
+
+   // 특정 회원 정보 조회 API
+//   @GetMapping("/info/{memberId}")
+//   public MemberDto getMemberInfo(@PathVariable Long memberId) {
+//      return memberService.getMemberInfo(memberId); // MemberService를 통해 회원 정보 가져옴
+//   }
+   
+   @GetMapping("/member/info")
+   public ResponseEntity<MemberDto> getCurrentMemberInfo() {
+       // 현재 인증된 사용자 가져오기
+       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+       System.out.println("현재 인증된 사용자 멤버인포가져오기" + authentication);
+       // 인증 객체에서 사용자 이름(이메일) 가져오기
+       if (authentication != null && authentication.isAuthenticated()) {
+           String email = authentication.getName(); // 사용자의 이메일을 가져옴
+
+           // 이메일로 회원 정보 조회
+           MemberDto memberDto = memberService.getMemberInfoByEmail(email); // 이메일로 회원 정보 조회
+           return ResponseEntity.ok(memberDto); // 회원 정보를 반환
+       } else {
+           return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body(null);
+       }
+   }//getCurrentMemberInfo
+   
+   // 회원 정보 업데이트
+   @PutMapping("/member/info")
+   public ResponseEntity<String> updateMemberInfo(@RequestBody MemberDto memberDto, Authentication authentication) {
+       String email = authentication.getName();  // 인증된 사용자의 이메일을 가져옴
+       memberService.updateMemberInfo(email, memberDto);
+       return ResponseEntity.ok("회원 정보가 업데이트되었습니다.");
+   }
+   
+
 }
