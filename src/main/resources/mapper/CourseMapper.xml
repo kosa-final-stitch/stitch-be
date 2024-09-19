@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ 2024.9.17 박요한 | getTopRatedCourses 추가
+-->
+
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -32,4 +36,33 @@
         FROM course
         WHERE course_id = #{courseId}
     </select>
+
+    <!-- 홈: 강의와 리뷰 데이터를 조인해서 6개 항목별 평균 평점을 가져오는 쿼리 -->
+    <select id="getTopRatedCourses" resultType="org.mywork.stitchbe.dto.home.CourseReviewDTO">
+        SELECT
+            c.course_id AS courseId, c.course_name AS courseName, c.SESSION_NUMBER AS sessionNumber,
+            TO_CHAR(c.start_date, 'YYYY. MM. DD') AS startDate, TO_CHAR(c.end_date, 'YYYY. MM. DD') AS endDate,
+            c.academy_id AS academyId, a.ACADEMY_NAME as academyName,
+
+            -- 전체 평점 합 / 전체 리뷰 수
+            SUM(r.education_rating + r.instructor_rating + r.facility_rating +
+                r.atmosphere_rating + r.management_rating + r.later_rating) /
+            (COUNT(r.review_id) * 6) AS averageRating,
+
+            -- 각 항목별 평균
+            AVG(r.education_rating) AS educationRating,
+            AVG(r.instructor_rating) AS instructorRating,
+            AVG(r.facility_rating) AS facilityRating,
+            AVG(r.atmosphere_rating) AS atmosphereRating,
+            AVG(r.management_rating) AS managementRating,
+            AVG(r.later_rating) AS laterRating
+
+        FROM course c
+                 LEFT JOIN review r ON c.course_id = r.course_id
+                 LEFT JOIN academy a ON c.academy_id = a.academy_id
+        GROUP BY c.course_id, c.course_name, c.session_number, c.start_date, c.end_date, c.academy_id, a.ACADEMY_NAME
+        ORDER BY averageRating DESC NULLS LAST
+            FETCH FIRST 5 ROWS ONLY
+    </select>
+
 </mapper>

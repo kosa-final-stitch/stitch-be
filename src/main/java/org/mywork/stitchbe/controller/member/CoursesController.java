@@ -1,3 +1,7 @@
+/*
+ 2024.9.17. 박요한 | getTopRatedCourses 추가
+ */
+
 package org.mywork.stitchbe.controller.member;
 
 import java.util.List;
@@ -5,6 +9,7 @@ import java.util.List;
 import org.mywork.stitchbe.dto.AcademyDTO;
 import org.mywork.stitchbe.dto.CourseDTO;
 import org.mywork.stitchbe.dto.ReviewDTO;
+import org.mywork.stitchbe.dto.home.CourseReviewDTO;
 import org.mywork.stitchbe.service.CourseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,5 +56,12 @@ public class CoursesController {
         List<ReviewDTO> reviews = courseService.getReviewsByCourseId(courseId);
     	System.out.println("course컨트롤러 reviews"+reviews);
         return ResponseEntity.ok(reviews);
+    }
+
+    // 홈: 평점이 높은 교육 과정을 반환하는 API 엔드포인트
+    @GetMapping("/courses/top")
+    public ResponseEntity<List<CourseReviewDTO>> getTopRatedCourses() {
+        List<CourseReviewDTO> courses = courseService.getTopRatedCourses();
+        return ResponseEntity.ok(courses);
     }
 }
