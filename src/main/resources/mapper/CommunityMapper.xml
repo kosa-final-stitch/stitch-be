@@ -25,6 +25,7 @@
         WHERE board_id = #{boardId}
     </select>
 
+
     <!-- 게시글 수정 -->
     <update id="updatePost" parameterType="org.mywork.stitchbe.dto.board.CommunityDto">
         UPDATE community
