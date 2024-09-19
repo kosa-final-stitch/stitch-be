@@ -30,7 +30,14 @@ public class MemberDto implements UserDetails, Serializable {
     private Date birth;          // 생일
     private String phone;        // 전화번호
     private Date signupdate;     // 가입일자
-    private Date editdate;       // 수정일자
+    private Date editdate;        // 수정일자
+    
+ // 비밀번호 변경을 위한 필드
+    private String currentPassword;  // 현재 비밀번호
+    private String newPassword;      // 새 비밀번호
+    private String confirmPassword;  // 새 비밀번호 확인
+
+
 
     private List<GrantedAuthority> authorities; // 타입을 SimpleGrantedAuthority 대신 GrantedAuthority로 변경
 
