@@ -8,21 +8,23 @@
                  JOIN member m ON c.MEMBER_ID = m.MEMBER_ID
     </select>
 
-
     <!-- 게시글 생성 -->
     <insert id="createPost" parameterType="org.mywork.stitchbe.dto.board.CommunityDto">
         <selectKey keyProperty="boardId" resultType="long" order="BEFORE">
             SELECT community_seq.NEXTVAL FROM dual
         </selectKey>
-        INSERT INTO community (board_id, member_id, title, content, category, tag, regdate, views, use_yn)
-        VALUES (#{boardId}, #{memberId}, #{title}, #{content}, #{category}, #{tag}, SYSDATE, 0, 'Y')
+        INSERT INTO community (board_id, member_id, title, content, category, tag, regdate, views, use_yn, nickname)
+        VALUES (#{boardId}, #{memberId}, #{title}, #{content}, #{category},
+        #{tag,jdbcType=VARCHAR}, SYSDATE, 0, 'Y', #{nickname})
     </insert>
-
 
     <!-- 게시글 조회 -->
     <select id="getPostById" parameterType="long" resultType="org.mywork.stitchbe.dto.board.CommunityDto">
-        SELECT * FROM community WHERE board_id = #{boardId}
+        SELECT board_id, member_id, title, content, category, tag, regdate, views, use_yn
+        FROM community
+        WHERE board_id = #{boardId}
     </select>
+
 
     <!-- 게시글 수정 -->
     <update id="updatePost" parameterType="org.mywork.stitchbe.dto.board.CommunityDto">

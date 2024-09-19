@@ -23,4 +23,6 @@ public interface MemberMapper {
     boolean existsByEmail(String email);  // 이메일 중복 검사 메서드
 
     boolean findByNickname(String nickname);
+    // 이메일로 memberId 조회
+    Long findMemberIdByEmail(String email);
 }
