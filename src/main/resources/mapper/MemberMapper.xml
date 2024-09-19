@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.mywork.stitchbe.mapper.MemberMapper">
-    <!--작성자 : 박주희-->
+	<!--작성자 : 박주희 -->
 
     <select id="findByEmail" parameterType="org.mywork.stitchbe.dto.MemberDto" resultType="org.mywork.stitchbe.dto.MemberDto">
-        SELECT email, password
+        SELECT member_id, EMAIL, password, NICKNAME
         FROM MEMBER
+        WHERE email = #{email}
+    </select>
+
+    <select id="findMemberIdByEmail" resultType="Long">
+        SELECT member_id
+        FROM member
         WHERE email = #{email}
     </select>
 
@@ -18,32 +24,72 @@
     </insert>
 
 
-    <update id="updateMemberPassword" parameterType="org.mywork.stitchbe.dto.MemberDto">
-        UPDATE MEMBER
-        SET password = #{password}, oldPassword = #{oldPassword}, editdate = sysdate
-        WHERE member_id = #{memberId}
-    </update>
+	<update id="updateMemberPassword"
+		parameterType="org.mywork.stitchbe.dto.MemberDto">
+		UPDATE MEMBER
+		SET password = #{password}, oldPassword =
+		#{oldPassword}, editdate =
+		sysdate
+		WHERE member_id = #{memberId}
+	</update>
 
-    <!-- AUTH 테이블에서 권한 조회 -->
-    <select id="findAuthoritiesByEmail" parameterType="org.mywork.stitchbe.dto.MemberDto" resultType="String">
-        SELECT authority FROM auth WHERE email = #{email}
-    </select>
+	<!-- AUTH 테이블에서 권한 조회 -->
+	<select id="findAuthoritiesByEmail"
+		parameterType="org.mywork.stitchbe.dto.MemberDto" resultType="String">
+		SELECT
+		authority FROM auth WHERE email = #{email}
+	</select>
 
-    <insert id="saveUserRole">
-        INSERT INTO AUTH (email, authority) VALUES (#{email}, #{authority})
-    </insert>
+	<insert id="saveUserRole">
+		INSERT INTO AUTH (email, authority) VALUES (#{email},
+		#{authority})
+	</insert>
 
-    <select id="existsByEmail" resultType="boolean">
-        SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
-        FROM member
-        WHERE email = #{email}
-    </select>
+	<select id="existsByEmail" resultType="boolean">
+		SELECT CASE WHEN COUNT(*)
+		> 0 THEN 1 ELSE 0 END
+		FROM member
+		WHERE email = #{email}
+	</select>
 
-    <select id="findByNickname" resultType="boolean">
-        SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
-        FROM member
-        WHERE nickname = #{nickname}
-    </select>
+	<select id="findByNickname" resultType="boolean">
+		SELECT CASE WHEN COUNT(*)
+		> 0 THEN 1 ELSE 0 END
+		FROM member
+		WHERE nickname = #{nickname}
+	</select>
+
+	<!-- 유은 -->
+	<!-- 이메일로 회원 정보 조회 -->
+	<select id="getMemberByEmail" parameterType="String"
+		resultType="org.mywork.stitchbe.dto.MemberDto">
+		SELECT member_id AS memberId, email, nickname, name, address, gender,
+		birth, phone
+		FROM member
+		WHERE email = #{email}
+	</select>
+
+	<!-- 유은 -->
+	<select id="getMemberById" parameterType="long"
+		resultType="org.mywork.stitchbe.dto.MemberDto">
+		SELECT member_id, email, nickname, name, address, gender,
+		birth, phone
+		FROM member
+		WHERE member_id = #{memberId}
+	</select>
+
+	 <!-- 회원 정보 업데이트 -->
+	<update id="updateMemberInfo"
+		parameterType="org.mywork.stitchbe.dto.MemberDto">
+		UPDATE MEMBER
+		SET
+		name = #{name},
+		nickname = #{nickname},
+		gender = #{gender},
+		phone = #{phone},
+		address = #{address}
+		WHERE email = #{email}
+	</update>
 
 
 </mapper>
