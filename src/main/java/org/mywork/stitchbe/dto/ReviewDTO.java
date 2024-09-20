@@ -3,185 +3,178 @@ package org.mywork.stitchbe.dto;
 import java.util.Date;
 
 public class ReviewDTO {
+    private Long reviewId;             // 리뷰 ID
+    private Long memberId;             // 회원 ID
+    private Long courseId;             // 강좌 ID
+    private String education;          // 강의 내용
+    private int educationRating;       // 교육에 대한 별점 (1~5)
+    private String instructor;         // 강사에 대한 리뷰
+    private int instructorRating;      // 강사에 대한 별점 (1~5)
+    private String facility;           // 시설에 대한 리뷰
+    private int facilityRating;        // 시설에 대한 별점 (1~5)
+    private String atmosphere;         // 분위기에 대한 리뷰
+    private int atmosphereRating;      // 분위기에 대한 별점 (1~5)
+    private String management;         // 행정 처리에 대한 리뷰
+    private int managementRating;      // 행정에 대한 별점 (1~5)
+    private String later;              // 사후 관리에 대한 리뷰
+    private int laterRating;           // 사후 관리에 대한 별점 (1~5)
+    
+    private String educationSpec;      // 정보 (전공/비전공/유사 전공) (선택)
+    private String employmentStatus;   // 취업 여부 ('Y' = 취업, 'N' = 미취업)
+    private Date regDate;         // 리뷰 작성일
+    private Date editDate;        // 리뷰 수정일
 
-	private Long reviewId; // 리뷰 ID
-	private Long memberId; // 작성자 (회원) ID
-	private Long courseId; // 강의 ID
+    // Getters and Setters
+    public Long getReviewId() {
+        return reviewId;
+    }
 
-	private String education; // 교육 내용
-	private Double educationRating; // 교육 평가 (평점)
+    public void setReviewId(Long reviewId) {
+        this.reviewId = reviewId;
+    }
 
-	private String instructor; // 강사
-	private Double instructorRating;// 강사 평가 (평점)
+    public Long getMemberId() {
+        return memberId;
+    }
 
-	private String facility; // 시설
-	private Double facilityRating; // 시설 평가 (평점)
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
+    }
 
-	private String atmosphere; // 분위기
-	private Double atmosphereRating;// 분위기 평가 (평점)
+    public Long getCourseId() {
+        return courseId;
+    }
 
-	private String management; // 운영 관리
-	private Double managementRating;// 운영 관리 평가 (평점)
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
 
-	private String later; // 향후 계획
-	private Double laterRating; // 향후 계획에 대한 평가 (평점)
+    public String getEducation() {
+        return education;
+    }
 
-	private String educationSpec; // 교육 특이 사항
-	private String employmentStatus;// 고용 상태
+    public void setEducation(String education) {
+        this.education = education;
+    }
 
-	private Date regDate; // 등록일
-	private Date editDate; // 수정일
+    public int getEducationRating() {
+        return educationRating;
+    }
 
-	// Getter와 Setter 메서드들
-	public Long getReviewId() {
-		return reviewId;
-	}
+    public void setEducationRating(int educationRating) {
+        this.educationRating = educationRating;
+    }
 
-	public void setReviewId(Long reviewId) {
-		this.reviewId = reviewId;
-	}
+    public String getInstructor() {
+        return instructor;
+    }
 
-	public Long getMemberId() {
-		return memberId;
-	}
+    public void setInstructor(String instructor) {
+        this.instructor = instructor;
+    }
 
-	public void setMemberId(Long memberId) {
-		this.memberId = memberId;
-	}
+    public int getInstructorRating() {
+        return instructorRating;
+    }
 
-	public Long getCourseId() {
-		return courseId;
-	}
+    public void setInstructorRating(int instructorRating) {
+        this.instructorRating = instructorRating;
+    }
 
-	public void setCourseId(Long courseId) {
-		this.courseId = courseId;
-	}
+    public String getFacility() {
+        return facility;
+    }
 
-	public String getEducation() {
-		return education;
-	}
+    public void setFacility(String facility) {
+        this.facility = facility;
+    }
 
-	public void setEducation(String education) {
-		this.education = education;
-	}
+    public int getFacilityRating() {
+        return facilityRating;
+    }
 
-	public Double getEducationRating() {
-		return educationRating;
-	}
+    public void setFacilityRating(int facilityRating) {
+        this.facilityRating = facilityRating;
+    }
 
-	public void setEducationRating(Double educationRating) {
-		this.educationRating = educationRating;
-	}
+    public String getAtmosphere() {
+        return atmosphere;
+    }
 
-	public String getInstructor() {
-		return instructor;
-	}
+    public void setAtmosphere(String atmosphere) {
+        this.atmosphere = atmosphere;
+    }
 
-	public void setInstructor(String instructor) {
-		this.instructor = instructor;
-	}
+    public int getAtmosphereRating() {
+        return atmosphereRating;
+    }
 
-	public Double getInstructorRating() {
-		return instructorRating;
-	}
+    public void setAtmosphereRating(int atmosphereRating) {
+        this.atmosphereRating = atmosphereRating;
+    }
 
-	public void setInstructorRating(Double instructorRating) {
-		this.instructorRating = instructorRating;
-	}
+    public String getManagement() {
+        return management;
+    }
 
-	public String getFacility() {
-		return facility;
-	}
+    public void setManagement(String management) {
+        this.management = management;
+    }
 
-	public void setFacility(String facility) {
-		this.facility = facility;
-	}
+    public int getManagementRating() {
+        return managementRating;
+    }
 
-	public Double getFacilityRating() {
-		return facilityRating;
-	}
+    public void setManagementRating(int managementRating) {
+        this.managementRating = managementRating;
+    }
 
-	public void setFacilityRating(Double facilityRating) {
-		this.facilityRating = facilityRating;
-	}
+    public String getLater() {
+        return later;
+    }
 
-	public String getAtmosphere() {
-		return atmosphere;
-	}
+    public void setLater(String later) {
+        this.later = later;
+    }
 
-	public void setAtmosphere(String atmosphere) {
-		this.atmosphere = atmosphere;
-	}
+    public int getLaterRating() {
+        return laterRating;
+    }
 
-	public Double getAtmosphereRating() {
-		return atmosphereRating;
-	}
+    public void setLaterRating(int laterRating) {
+        this.laterRating = laterRating;
+    }
 
-	public void setAtmosphereRating(Double atmosphereRating) {
-		this.atmosphereRating = atmosphereRating;
-	}
+    public String getEducationSpec() { 
+        return educationSpec; 
+    }
 
-	public String getManagement() {
-		return management;
-	}
+    public void setEducationSpec(String educationSpec) { 
+        this.educationSpec = educationSpec; 
+    }
 
-	public void setManagement(String management) {
-		this.management = management;
-	}
+    
+    public String getEmploymentStatus() {
+        return employmentStatus;
+    }
 
-	public Double getManagementRating() {
-		return managementRating;
-	}
+    public void setEmploymentStatus(String employmentStatus) {
+        this.employmentStatus = employmentStatus;
+    }
 
-	public void setManagementRating(Double managementRating) {
-		this.managementRating = managementRating;
-	}
+    public Date getRegDate() {
+        return regDate;
+    }
 
-	public String getLater() {
-		return later;
-	}
+    public void setRegDate(Date regDate) {
+        this.regDate = regDate;
+    }
 
-	public void setLater(String later) {
-		this.later = later;
-	}
+    public Date getEditDate() {
+        return editDate;
+    }
 
-	public Double getLaterRating() {
-		return laterRating;
-	}
-
-	public void setLaterRating(Double laterRating) {
-		this.laterRating = laterRating;
-	}
-
-	public String getEducationSpec() {
-		return educationSpec;
-	}
-
-	public void setEducationSpec(String educationSpec) {
-		this.educationSpec = educationSpec;
-	}
-
-	public String getEmploymentStatus() {
-		return employmentStatus;
-	}
-
-	public void setEmploymentStatus(String employmentStatus) {
-		this.employmentStatus = employmentStatus;
-	}
-
-	public Date getRegDate() {
-		return regDate;
-	}
-
-	public void setRegDate(Date regDate) {
-		this.regDate = regDate;
-	}
-
-	public Date getEditDate() {
-		return editDate;
-	}
-
-	public void setEditDate(Date editDate) {
-		this.editDate = editDate;
-	}
+    public void setEditDate(Date editDate) {
+        this.editDate = editDate;
+    }
 }
