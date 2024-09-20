@@ -12,7 +12,7 @@ public class CommunityDto {
     private String content;
     private String category;
     private String tag;
-    private int views;
+    private Integer views;
     private Date regdate;
     private Date editdate;
     private String use_yn;

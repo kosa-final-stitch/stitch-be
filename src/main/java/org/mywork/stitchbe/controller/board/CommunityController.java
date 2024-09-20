@@ -107,7 +107,7 @@ public class CommunityController {
 //    }
 
     // 게시글 수정
-    @PutMapping("/update/{boardId}")
+    @PutMapping("board/post/update/{boardId}")
     public ResponseEntity<String> updatePost(@PathVariable Long boardId, @RequestBody CommunityDto communityDto) {
         communityDto.setBoardId(boardId);
         communityService.updatePost(communityDto);
