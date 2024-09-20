@@ -30,7 +30,13 @@ public class CommunityService {
 
     // 게시글 상세 조회
     public CommunityDto getPostById(Long boardId) {
-        return communityMapper.getPostById(boardId);
+        System.out.println("Fetching community board with boardId: " + boardId);
+        CommunityDto community = communityMapper.getPostById(boardId);
+
+        // 조회 결과 확인
+        System.out.println("Fetched community: " + community);
+
+        return community;
     }
 
 //    // 게시글 목록 조회
