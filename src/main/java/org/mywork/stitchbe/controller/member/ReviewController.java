@@ -11,7 +11,6 @@ import org.mywork.stitchbe.dto.home.ReviewLikesDTO;
 import org.mywork.stitchbe.service.ReviewService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,18 +46,22 @@ public class ReviewController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 저장 중 오류가 발생했습니다.");
 		}
 	}
+	
+	// 특정 강의에 대한 리뷰를 가져오는 엔드포인트 
+    @GetMapping("/courses/{courseId}")
+		public List<ReviewDTO> getReviewsByCourseId(@PathVariable Long courseId) {
+			System.out.println("특정강의에 대한 리뷰를 가져오는 컨트롤러 호출");
+			return reviewService.getReviewsByCourseId(courseId);
+		}
+	
 
 	// 모든 리뷰를 가져오는 엔드포인트 (선택적)
-	@GetMapping
-	public List<ReviewDTO> getAllReviews() {
-		return reviewService.getAllReviews();
-	}
+//	@GetMapping
+//	public List<ReviewDTO> getAllReviews() {
+//		return reviewService.getAllReviews();
+//	}
 
-	// 특정 강의에 대한 리뷰를 가져오는 엔드포인트 (선택적)
-	@GetMapping("/course/{courseId}")
-	public List<ReviewDTO> getReviewsByCourseId(@PathVariable Long courseId) {
-		return reviewService.getReviewsByCourseId(courseId);
-	}
+	
 
 	// 홈: 좋아요 수가 많은 상위 리뷰를 가져오는 API 엔드포인트
 	@GetMapping("/top")
