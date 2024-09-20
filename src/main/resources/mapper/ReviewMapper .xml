@@ -10,31 +10,46 @@
 <mapper namespace="org.mywork.stitchbe.mapper.ReviewMapper">
 
 	<!-- 리뷰 삽입 -->
-	 <insert id="insertReview" parameterType="org.mywork.stitchbe.dto.ReviewDTO"> 
-		INSERT INTO REVIEW ( review_id, member_id, course_id, education, education_rating, 
-		instructor, instructor_rating, facility, facility_rating, atmosphere, atmosphere_rating, 
-		management, management_rating, later, later_rating, education_spec, employment_status, 
-		reg_date, edit_date )
-		 VALUES 
-		 (REVIEW_SEQ.NEXTVAL, #{memberId}, #{courseId}, #{education}, 
-		#{educationRating}, #{instructor}, #{instructorRating}, #{facility}, #{facilityRating}, 
-		#{atmosphere}, #{atmosphereRating}, #{management}, #{managementRating}, #{later}, 
-		#{laterRating}, #{educationSpec}, #{employmentStatus}, #{regDate}, #{editDate} 
-		) 
-		</insert> 
+	<insert id="insertReview"
+		parameterType="org.mywork.stitchbe.dto.ReviewDTO">
+		INSERT INTO REVIEW (
+		review_id, member_id, course_id, education, education_rating, instructor,
+		instructor_rating,
+		facility, facility_rating, atmosphere, atmosphere_rating, management,
+		management_rating,
+		later, later_rating, regdate, editdate
+		) VALUES (
+		REVIEW_SEQ.NEXTVAL,
+		#{memberId, jdbcType=VARCHAR},
+		#{courseId, jdbcType=NUMERIC},
+		#{education, jdbcType=VARCHAR},
+		#{educationRating, jdbcType=NUMERIC},
+		#{instructor, jdbcType=VARCHAR},
+		#{instructorRating, jdbcType=NUMERIC},
+		#{facility, jdbcType=VARCHAR},
+		#{facilityRating, jdbcType=NUMERIC},
+		#{atmosphere, jdbcType=VARCHAR},
+		#{atmosphereRating, jdbcType=NUMERIC},
+		#{management, jdbcType=VARCHAR},
+		#{managementRating, jdbcType=NUMERIC},
+		#{later, jdbcType=VARCHAR},
+		#{laterRating, jdbcType=NUMERIC},
+		#{regDate, jdbcType=TIMESTAMP},
+		#{editDate, jdbcType=TIMESTAMP}
+		)
+	</insert>
 
-
-	<!-- 모든 리뷰를 가져오는 메서드 (선택적) -->
-	<select id="getAllReviews"
-		resultType="org.mywork.stitchbe.dto.ReviewDTO">
-		SELECT * FROM REVIEW
-	</select>
-
-	<!-- 특정 강의의 리뷰를 가져오는 메서드 (선택적) -->
+	<!-- 특정 강의의 리뷰를 가져오는 메서드 -->
 	<select id="getReviewsByCourseId"
 		resultType="org.mywork.stitchbe.dto.ReviewDTO">
 		SELECT * FROM REVIEW WHERE course_id = #{courseId}
 	</select>
+
+
+	<!-- 모든 리뷰를 가져오는 메서드 -->
+	<!-- <select id="getAllReviews" resultType="org.mywork.stitchbe.dto.ReviewDTO"> 
+		SELECT * FROM REVIEW </select> -->
+
 
     <!-- 홈: 인기 리뷰 가져오는 메서드  -->
     <select id="getTopLikedReviews" resultType="org.mywork.stitchbe.dto.home.ReviewLikesDTO">
@@ -71,5 +86,6 @@
             r.regdate DESC NULLS LAST   -- 최신 리뷰 순 정렬하고 NULL 값을 마지막으로
             FETCH FIRST 3 ROWS ONLY
     </select>
+
 
 </mapper>
