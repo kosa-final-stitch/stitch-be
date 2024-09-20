@@ -46,7 +46,7 @@
     <!-- 게시글 수정 -->
     <update id="updatePost" parameterType="org.mywork.stitchbe.dto.board.CommunityDto">
         UPDATE community
-        SET title = #{title}, content = #{content}, category = #{category}, tag = #{tag}, views = #{views}, editdate = SYSDATE
+        SET title = #{title}, content = #{content}, editdate = SYSDATE
         WHERE board_id = #{boardId}
     </update>
 
