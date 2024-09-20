@@ -75,6 +75,7 @@ public class CommunityController {
     // 게시글 상세 조회
     @GetMapping("/board/post/{boardId}")
     public ResponseEntity<CommunityDto> getPostById(@PathVariable Long boardId) {
+        System.out.println("Controller method called");
         // boardId 값 확인을 위한 로그 추가
         log.debug("Received boardId: {}", boardId);
         // 유효성 검사 (필요 시)
@@ -92,8 +93,6 @@ public class CommunityController {
         }
     }
 
-
-
 //    @GetMapping("/all")
 //    public String getAllPosts() {
 ////        List<CommunityDto> posts = communityService.getAllPosts();
@@ -108,7 +107,7 @@ public class CommunityController {
 //    }
 
     // 게시글 수정
-    @PutMapping("/update/{boardId}")
+    @PutMapping("board/post/update/{boardId}")
     public ResponseEntity<String> updatePost(@PathVariable Long boardId, @RequestBody CommunityDto communityDto) {
         communityDto.setBoardId(boardId);
         communityService.updatePost(communityDto);
@@ -116,7 +115,7 @@ public class CommunityController {
     }
 
     // 게시글 삭제
-    @DeleteMapping("/delete/{boardId}")
+    @DeleteMapping("board/post/delete/{boardId}")
     public ResponseEntity<String> deletePost(@PathVariable Long boardId) {
         communityService.deletePost(boardId);
         return ResponseEntity.ok("Post deleted successfully");

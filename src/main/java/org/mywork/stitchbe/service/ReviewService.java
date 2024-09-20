@@ -29,16 +29,31 @@ public class ReviewService {
 		}
 		System.out.println("리뷰서비스 호출 및 : "+reviews);
 	}
+	
+	// 특정 강의에 대한 리뷰를 가져오는 메서드
+	public List<ReviewDTO> getReviewsByCourseId(Long courseId) {
+		 List<ReviewDTO> reviews = reviewMapper.getReviewsByCourseId(courseId);
+		 System.out.println(" 특정 강의에 리뷰리스트 : "+reviews);
+		 for (ReviewDTO review : reviews) {
+			    System.out.println("리뷰 작성자: " 
+		 +" 리뷰 getAtmosphere : " + review.getAtmosphere()
+		 +" 리뷰 getAtmosphereRating : "+ review.getAtmosphereRating()
+		 +" 리뷰 getManagementRating : "	 + review.getManagementRating()
+		 +" 리뷰 getCourseId : "	 + review.getCourseId()
+		 +" 리뷰 getMemberId : "	 + review.getMemberId()
+		 +" 리뷰 getReviewId : " + review.getReviewId()
+		 +" 리뷰 getRegDate : "	 + review.getRegDate());
+			}
+		return reviews;
+	}
+
+	
 
 	// 모든 리뷰 데이터를 가져오는 메서드 (선택적)
-	public List<ReviewDTO> getAllReviews() {
-		return reviewMapper.getAllReviews();
-	}
+//	public List<ReviewDTO> getAllReviews() {
+//		return reviewMapper.getAllReviews();
+//	}
 
-	// 특정 강의에 대한 리뷰를 가져오는 메서드 (선택적)
-	public List<ReviewDTO> getReviewsByCourseId(Long courseId) {
-		return reviewMapper.getReviewsByCourseId(courseId);
-	}
 
 	// 홈: 좋아요 수가 많은 상위 리뷰를 가져오는 서비스 메서드
 	public List<ReviewLikesDTO> getTopLikedReviews() {
