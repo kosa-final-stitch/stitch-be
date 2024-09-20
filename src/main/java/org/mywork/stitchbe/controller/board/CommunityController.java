@@ -75,6 +75,7 @@ public class CommunityController {
     // 게시글 상세 조회
     @GetMapping("/board/post/{boardId}")
     public ResponseEntity<CommunityDto> getPostById(@PathVariable Long boardId) {
+        System.out.println("Controller method called");
         // boardId 값 확인을 위한 로그 추가
         log.debug("Received boardId: {}", boardId);
         // 유효성 검사 (필요 시)
@@ -91,8 +92,6 @@ public class CommunityController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
-
-
 
 //    @GetMapping("/all")
 //    public String getAllPosts() {

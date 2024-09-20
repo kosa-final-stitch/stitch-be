@@ -3,9 +3,20 @@
 <mapper namespace="org.mywork.stitchbe.mapper.board.CommunityMapper">
     <!-- 게시글 목록 조회 -->
     <select id="getAllPosts" resultType="org.mywork.stitchbe.dto.board.CommunityDto">
-        SELECT c.*, m.nickname AS nickname
+        SELECT
+            c.board_id AS boardId,
+            c.member_id AS memberId,
+            c.title,
+            c.content,
+            c.category,
+            c.tag,
+            c.views,
+            c.regdate,
+            c.editdate,
+            c.use_yn AS useYn,
+            m.nickname
         FROM community c
-                 JOIN member m ON c.MEMBER_ID = m.MEMBER_ID
+                 JOIN member m ON c.member_id = m.member_id
     </select>
 
     <!-- 게시글 생성 -->
