@@ -115,7 +115,7 @@ public class CommunityController {
     }
 
     // 게시글 삭제
-    @DeleteMapping("/delete/{boardId}")
+    @DeleteMapping("board/post/delete/{boardId}")
     public ResponseEntity<String> deletePost(@PathVariable Long boardId) {
         communityService.deletePost(boardId);
         return ResponseEntity.ok("Post deleted successfully");
