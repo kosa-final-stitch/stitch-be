@@ -54,4 +54,11 @@
     <delete id="deletePost" parameterType="long">
         DELETE FROM community WHERE board_id = #{boardId}
     </delete>
+
+    <!--조회수-->
+    <update id="incrementViewCount">
+        UPDATE COMMUNITY
+        SET views = views + 1
+        WHERE board_id = #{boardId}
+    </update>
 </mapper>

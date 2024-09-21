@@ -19,7 +19,7 @@ public class CommunityService {
     @Autowired
     private CommunityMapper communityMapper;
 
-//     게시글 생성
+    //게시글 생성
     public void createPost(CommunityDto communityDto) {
         if (communityDto != null) {
             communityMapper.createPost(communityDto);  // Optional 없이 바로 전달
@@ -64,5 +64,11 @@ public class CommunityService {
     // 게시글 삭제
     public void deletePost(Long boardId) {
         communityMapper.deletePost(boardId);
+    }
+
+    //조회수
+    public void incrementViewCount(Long boardId) {
+        // CommunityMapper의 인스턴스 메서드를 호출하여 조회수를 증가시킴
+        communityMapper.incrementViewCount(boardId);
     }
 }
