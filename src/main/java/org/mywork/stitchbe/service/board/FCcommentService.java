@@ -21,6 +21,23 @@ public class FCcommentService {
 
     // 댓글 작성
     public void createComment(FCcommentDto commentDto) {
+        if (commentDto == null) {
+            throw new IllegalArgumentException("CommentDto cannot be null");
+        }
+
+        if (commentDto.getContent() == null || commentDto.getContent().trim().isEmpty()) {
+            throw new IllegalArgumentException("Comment content cannot be null or empty");
+        }
+
+        if (commentDto.getMemberId() == null) {
+            throw new IllegalArgumentException("Member ID cannot be null");
+        }
+
+        if (commentDto.getBoardId() == null) {
+            throw new IllegalArgumentException("Board ID cannot be null");
+        }
+
+        // 댓글 작성 처리
         commentMapper.createComment(commentDto);
     }
 

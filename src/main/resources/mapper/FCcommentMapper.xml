@@ -23,27 +23,11 @@
 
     <!-- 댓글 작성 -->
     <insert id="createComment" parameterType="org.mywork.stitchbe.dto.board.FCcommentDto">
-        INSERT INTO community_comment (
-            comment_id,
-            board_id,
-            member_id,
-            nickname,  -- 닉네임 추가
-            content,
-            regdate,
-            like_count,
-            editdate,
-            parent_comment_id
-        ) VALUES (
-                     community_comment_seq.NEXTVAL,
-                     #{boardId},
-                     #{memberId},
-                     #{nickname},  -- 닉네임 저장
-                     #{content},
-                     SYSDATE,
-                     #{likeCount},
-                     #{editdate},
-                     #{parentCommentId}
-                 )
+        <selectKey keyProperty="commentId" resultType="long" order="BEFORE">
+            SELECT community_comment_seq.NEXTVAL FROM dual
+        </selectKey>
+        INSERT INTO community_comment (comment_id, board_id, member_id, nickname, content, regdate)
+        VALUES (#{commentId}, #{boardId},#{memberId}, #{nickname}, #{content}, SYSDATE)
     </insert>
 
     <!-- 댓글 수정 -->

@@ -120,4 +120,15 @@ public class CommunityController {
         communityService.deletePost(boardId);
         return ResponseEntity.ok("Post deleted successfully");
     }
+
+    //조회수
+    @PostMapping("/board/post/increment-views/{boardId}")
+    public ResponseEntity<?> incrementViews(@PathVariable Long boardId) {
+        try {
+            communityService.incrementViewCount(boardId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to increment view count");
+        }
+    }
 }
