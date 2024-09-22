@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/info")
 public class InfoCommentController {
     private static final Logger log = LoggerFactory.getLogger(FCcommentController.class);
 
