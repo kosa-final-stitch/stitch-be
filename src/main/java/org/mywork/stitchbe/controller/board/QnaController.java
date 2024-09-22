@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/qna")
 public class QnaController {
     private static final Logger log = LoggerFactory.getLogger(CommunityController.class);
 

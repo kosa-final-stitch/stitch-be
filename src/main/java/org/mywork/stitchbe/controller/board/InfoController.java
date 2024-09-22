@@ -18,7 +18,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/info")
 public class InfoController {
     private static final Logger log = LoggerFactory.getLogger(CommunityController.class);
 
