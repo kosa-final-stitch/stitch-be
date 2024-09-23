@@ -35,9 +35,8 @@
 
 	<!-- AUTH 테이블에서 권한 조회 -->
 	<select id="findAuthoritiesByEmail"
-		parameterType="org.mywork.stitchbe.dto.MemberDto" resultType="String">
-		SELECT
-		authority FROM auth WHERE email = #{email}
+			parameterType="String" resultType="String">
+		SELECT authority FROM auth WHERE email = #{email}
 	</select>
 
 	<insert id="saveUserRole">

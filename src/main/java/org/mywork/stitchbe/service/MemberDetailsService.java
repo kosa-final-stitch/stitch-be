@@ -40,7 +40,15 @@ public class MemberDetailsService implements UserDetailsService {
 
         // AUTH 테이블에서 권한을 조회 (MemberMapper에 메서드 추가)
         List<String> authorities = memberMapper.findAuthoritiesByEmail(email);
-//        authorities.forEach(authority -> System.out.println("Authority: " + authority));  // 권한 로그 출력
+        authorities.forEach(authority -> System.out.println("불러온 권한: " + authority));
+        if (authorities.contains("ROLE_ADMIN")) {
+            // 관리자 권한이 있는 사용자 처리
+            System.out.println("관리자 권한 있음");
+        } else {
+            // 일반 사용자 처리
+            System.out.println("관리자 권한 없음");
+        }
+       authorities.forEach(authority -> System.out.println("Authority: " + authority));  // 권한 로그 출력
 
 
         // 권한을 SimpleGrantedAuthority로 변환
