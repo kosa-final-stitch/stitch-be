@@ -52,7 +52,6 @@ public class AcademyService {
         return academyMapper.findAcademyRating(academyId);
     }
 	
-	//유은
     //홈: 고평점 학원
     public List<AcademyReviewDTO> getTopRatedAcademies() {
         return academyMapper.getTopRatedAcademies();
