@@ -14,13 +14,13 @@
     <select id="searchAcademyOrCourse" resultType="org.mywork.stitchbe.dto.SearchDTO">
         SELECT 'academy' AS type, a.academy_id AS academyId, 000 AS courseId, a.academy_name AS name
         FROM academy a
-        WHERE a.academy_name LIKE '%' || #{keyword} || '%'
+        WHERE UPPER(a.academy_name) LIKE '%' || UPPER(#{keyword}) || '%'
 
         UNION
 
         SELECT 'course' AS type, c.academy_id AS academyId, c.course_id AS courseId, c.course_name AS name
         FROM course c
-        WHERE c.course_name LIKE '%' || #{keyword} || '%'
+        WHERE UPPER(c.course_name) LIKE '%' || UPPER(#{keyword}) || '%'
 
         ORDER BY type ASC, name ASC
     </select>
