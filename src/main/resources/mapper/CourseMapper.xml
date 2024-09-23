@@ -19,9 +19,25 @@
     </select>
 
     <!-- 강의 ID에 따른 리뷰 목록을 조회하는 쿼리 -->
-    <select id="getReviewsByCourseId" parameterType="long" resultType="org.mywork.stitchbe.dto.ReviewDTO">
-        SELECT review_id, reviewer_name, content, rating
-        FROM reviews
+    <select id="getReviewsByCourseId" resultType="org.mywork.stitchbe.dto.ReviewDTO">
+ SELECT review_id AS reviewId, 
+               member_id AS memberId, 
+               course_id AS courseId, 
+               education, 
+               education_rating AS educationRating, 
+               instructor, 
+               instructor_rating AS instructorRating,
+               facility, 
+               facility_rating AS facilityRating, 
+               atmosphere, 
+               atmosphere_rating AS atmosphereRating, 
+               management, 
+               management_rating AS managementRating, 
+               later, 
+               later_rating AS laterRating, 
+               regdate AS regDate, 
+               editdate AS editDate
+        FROM REVIEW
         WHERE course_id = #{courseId}
     </select>
     
