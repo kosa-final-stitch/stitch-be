@@ -57,9 +57,9 @@ public class SecurityConfig{
                         // 로그인, 회원가입 페이지는 모든 사용자 접근 허용
                         .requestMatchers("/api/login", "/api/signup","/api/validate-email", "/api/validate-nickname", "/api/board/community/all", "/api/academies/**", "/api/courses/**", "/api/member/reviews/top", "/api/home/**", "/api/search/**", "/api/comments/**").permitAll()
                         // ROLE_ADMIN 권한을 가진 사용자만 admin 경로에 접근 허용
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         // ROLE_USER 권한을 가진 사용자만 member 경로에 접근 허용
-                        .requestMatchers("/api/member/**").hasRole("USER")
+                                .requestMatchers("/api/member/**").hasRole("USER")
                         .requestMatchers("/api/member/community/**").permitAll()
                         // 리뷰 작성은 인증된 사용자만 가능하도록 설정(유은)
 //                        .requestMatchers("/api/member/reviews/**").hasRole("USER")
