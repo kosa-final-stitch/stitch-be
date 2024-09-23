@@ -29,8 +29,18 @@ public class CourseService {
 
     // 강의 ID에 따른 리뷰 목록을 가져오는 메서드
     public List<ReviewDTO> getReviewsByCourseId(Long courseId) {
-    	System.out.println("코스서비스 리뷰목록호출");
-        return courseMapper.getReviewsByCourseId(courseId); // 매퍼를 통해 리뷰 데이터를 가져옴
+   	 List<ReviewDTO> reviews = courseMapper.getReviewsByCourseId(courseId);
+	 System.out.println(" 특정 강의에 리뷰리스트 : "+reviews);
+	 for (ReviewDTO review : reviews) {
+		    System.out.println("리뷰 작성자: " + review.getMemberId()
+	 +" 코스리뷰 getAtmosphere : " + review.getAtmosphere()
+	 +" 코스리뷰 getAtmosphereRating : "+ review.getAtmosphereRating()
+	 +" 코스리뷰 getManagementRating : "	 + review.getManagementRating()
+	 +" 코스리뷰 getCourseId : "	 + review.getCourseId()
+	 +" 코스리뷰 getReviewId : " + review.getReviewId()
+	 +" 코스리뷰 getRegDate : "	 + review.getRegDate());
+		}
+        return reviews; // 매퍼를 통해 리뷰 데이터를 가져옴
     }
 
     //전체 강의
