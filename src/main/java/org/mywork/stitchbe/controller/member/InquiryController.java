@@ -4,14 +4,17 @@
 설명 : 문의사항 controller.
 _____________________
 2024.9.23 박요한 | 생성.
+2024.9.23 박요한 | submitInquiry - memberId 조회 후 setter.
 */
 
 package org.mywork.stitchbe.controller.member;
 
 import org.mywork.stitchbe.dto.InquiryDTO;
 import org.mywork.stitchbe.service.InquiryService;
+import org.mywork.stitchbe.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,17 +26,27 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor  // Lombok을 사용한 생성자 주입
 public class InquiryController {
     private final InquiryService inquiryService;
+    private final MemberService memberService;
 
     // 사용자 문의 등록 API
     @PostMapping
-    public ResponseEntity<String> submitInquiry(@RequestBody InquiryDTO inquiry) {
-        try {
-            inquiryService.registerInquiry(inquiry);
-            return ResponseEntity.ok("문의가 성공적으로 등록되었습니다.");  // 성공 시 200 OK 응답
-        } catch (Exception e) {
-            // 예외 발생 시 500 Internal Server Error 응답
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("문의 등록에 실패했습니다.");
-        }
+    public ResponseEntity<String> submitInquiry(@RequestBody InquiryDTO inquiry, Authentication authentication) {try {
+        // 로그인한 사용자의 이메일을 가져옴
+        String email = authentication.getName();
+
+        // MemberService를 통해 이메일로 memberId 조회
+        Long memberId = memberService.findMemberIdByEmail(email);
+
+        // inquiry 객체에 memberId 설정
+        inquiry.setMemberId(memberId);
+
+        // 문의 등록 처리
+        inquiryService.registerInquiry(inquiry);
+
+        return ResponseEntity.ok("문의가 성공적으로 등록되었습니다.");
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("문의 등록에 실패했습니다.");
+    }
     }
 }
 
