@@ -1,16 +1,18 @@
 package org.mywork.stitchbe.service.board;
 
+import org.mywork.stitchbe.dto.board.CommunityDto;
 import org.mywork.stitchbe.dto.board.FCcommentDto;
+import org.mywork.stitchbe.mapper.board.CommunityMapper;
 import org.mywork.stitchbe.mapper.board.FCcommentMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-//작성자 : 박주희
-
 @Service
-public class FCcommentService {
+public class QnaCommentService {
     @Autowired
     private FCcommentMapper commentMapper;
 

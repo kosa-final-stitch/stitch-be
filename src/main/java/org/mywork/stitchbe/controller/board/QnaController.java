@@ -1,7 +1,11 @@
 package org.mywork.stitchbe.controller.board;
 
-import org.mywork.stitchbe.dto.MemberDto;
+
+import org.mywork.stitchbe.dto.board.CommunityDto;
 import org.mywork.stitchbe.mapper.MemberMapper;
+import org.mywork.stitchbe.service.board.CommunityService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,17 +13,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import org.mywork.stitchbe.dto.board.CommunityDto;
-import org.mywork.stitchbe.service.board.CommunityService;
-import java.util.List;
-import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api")
-public class CommunityController {
+@RequestMapping("/api/qna")
+public class QnaController {
     private static final Logger log = LoggerFactory.getLogger(CommunityController.class);
 
     @Autowired
