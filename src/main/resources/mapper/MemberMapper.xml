@@ -90,5 +90,11 @@
 		WHERE email = #{email}
 	</update>
 
+	<!-- 호영 -->
+	<select id="getAllMembers" resultType="org.mywork.stitchbe.dto.MemberDto">
+		SELECT member_id, email, name, nickname, address, gender, birth, phone, editdate, signupdate
+		FROM MEMBER
+	</select>
+
 
 </mapper>

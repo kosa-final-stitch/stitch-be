@@ -13,6 +13,7 @@ import org.mywork.stitchbe.dto.MemberDto;
 import org.mywork.stitchbe.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -132,14 +133,14 @@ public class MemberController {
          return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body("인증되지 않음");
       }
    }
-   
-//   유은 작성 코드
 
-   // 특정 회원 정보 조회 API
-//   @GetMapping("/info/{memberId}")
-//   public MemberDto getMemberInfo(@PathVariable Long memberId) {
-//      return memberService.getMemberInfo(memberId); // MemberService를 통해 회원 정보 가져옴
-//   }
+   //   유은 작성 코드
+
+      // 특정 회원 정보 조회 API
+   //   @GetMapping("/info/{memberId}")
+   //   public MemberDto getMemberInfo(@PathVariable Long memberId) {
+   //      return memberService.getMemberInfo(memberId); // MemberService를 통해 회원 정보 가져옴
+   //   }
 
    @GetMapping("/member/info")
    public ResponseEntity<MemberDto> getCurrentMemberInfo() {
@@ -172,6 +173,14 @@ public class MemberController {
        String email = authentication.getName();  // 인증된 사용자의 이메일을 가져옴
        memberService.updateMemberInfo(email, memberDto);
        return ResponseEntity.ok("회원 정보가 업데이트되었습니다.");
+   }
+
+   // 모든 회원 조회 (호영)
+   @PreAuthorize("hasRole('ROLE_ADMIN')")// admin 인 관리자만 볼 수 있게
+   @GetMapping("/members")
+   public ResponseEntity<List<MemberDto>> getAllMembers() {
+      List<MemberDto> members = memberService.getAllMembers(); // Service에서 호출
+      return ResponseEntity.ok(members);  // 조회한 모든 회원 정보를 반환
    }
    
 
