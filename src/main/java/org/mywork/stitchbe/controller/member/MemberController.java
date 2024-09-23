@@ -1,7 +1,10 @@
 package org.mywork.stitchbe.controller.member;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.mywork.stitchbe.Util.JwtUtil;
 import org.mywork.stitchbe.dto.AddMemberRequest;
@@ -14,6 +17,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -135,22 +140,30 @@ public class MemberController {
 //   public MemberDto getMemberInfo(@PathVariable Long memberId) {
 //      return memberService.getMemberInfo(memberId); // MemberService를 통해 회원 정보 가져옴
 //   }
-   
+
    @GetMapping("/member/info")
    public ResponseEntity<MemberDto> getCurrentMemberInfo() {
-       // 현재 인증된 사용자 가져오기
-       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-       System.out.println("현재 인증된 사용자 멤버인포가져오기" + authentication);
-       // 인증 객체에서 사용자 이름(이메일) 가져오기
-       if (authentication != null && authentication.isAuthenticated()) {
-           String email = authentication.getName(); // 사용자의 이메일을 가져옴
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      System.out.println("현재 인증된 사용자 멤버인포가져오기" + authentication);
 
-           // 이메일로 회원 정보 조회
-           MemberDto memberDto = memberService.getMemberInfoByEmail(email); // 이메일로 회원 정보 조회
-           return ResponseEntity.ok(memberDto); // 회원 정보를 반환
-       } else {
-           return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body(null);
-       }
+      if (authentication != null && authentication.isAuthenticated()) {
+         String email = authentication.getName();  // 인증된 사용자 이메일을 가져옴
+
+         // 이메일로 회원 정보 조회
+         MemberDto memberDto = memberService.getMemberInfoByEmail(email);
+
+         // 권한 정보를 가져와 SimpleGrantedAuthority로 변환하여 DTO에 설정
+         List<GrantedAuthority> grantedAuthorities = authentication.getAuthorities()
+                 .stream()
+                 .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))  // 권한 변환
+                 .collect(Collectors.toList());
+
+         memberDto.setAuthorities(grantedAuthorities);  // 권한 정보를 DTO에 설정
+
+         return ResponseEntity.ok(memberDto);  // 회원 정보를 반환
+      } else {
+         return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body(null);
+      }
    }//getCurrentMemberInfo
    
    // 회원 정보 업데이트

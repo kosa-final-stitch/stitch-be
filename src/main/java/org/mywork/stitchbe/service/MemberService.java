@@ -96,8 +96,8 @@ public class MemberService {
 		System.out.println("이메일로 회원 정보 조회: " + email);
 		return memberMapper.getMemberByEmail(email); // MyBatis Mapper를 통해 DB에서 회원 정보를 가져옴
 	}
-	
-//	회원 정보 업데이트
+
+	//	회원 정보 업데이트
 	public void updateMemberInfo(String email, MemberDto memberDto) {
 		memberDto.setEmail(email); // 이메일은 수정하지 않으므로 그대로 설정
 		memberMapper.updateMemberInfo(memberDto);
