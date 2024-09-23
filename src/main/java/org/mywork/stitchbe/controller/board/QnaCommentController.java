@@ -1,7 +1,5 @@
 package org.mywork.stitchbe.controller.board;
 
-import org.mywork.stitchbe.domain.Member;
-import org.mywork.stitchbe.dto.board.CommunityDto;
 import org.mywork.stitchbe.dto.board.FCcommentDto;
 import org.mywork.stitchbe.mapper.MemberMapper;
 import org.mywork.stitchbe.service.board.FCcommentService;
@@ -17,14 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
-
-//작성자 : 박주희
-
 @RestController
-@RequestMapping("/api")
-public class FCcommentController {
-
+@RequestMapping("/api/qna")
+public class QnaCommentController {
     private static final Logger log = LoggerFactory.getLogger(FCcommentController.class);
 
     @Autowired
@@ -90,5 +83,4 @@ public class FCcommentController {
         commentService.deleteComment(commentId);
         return ResponseEntity.ok("댓글이 성공적으로 삭제되었습니다.");
     }
-
 }
