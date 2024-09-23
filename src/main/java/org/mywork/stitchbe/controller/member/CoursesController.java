@@ -51,10 +51,10 @@ public class CoursesController {
     }
 
     // 강의 ID에 따른 리뷰 목록 반환
-    @GetMapping("/academies/{courseId}/reviews")
+    @GetMapping("courses/{courseId}/reviews")
     public ResponseEntity<List<ReviewDTO>> getReviewsByCourseId(@PathVariable("courseId") Long courseId) {
         List<ReviewDTO> reviews = courseService.getReviewsByCourseId(courseId);
-    	System.out.println("course컨트롤러 reviews"+reviews);
+    	System.out.println("강의 ID에 따른 리뷰 목록 반환"+reviews);
         return ResponseEntity.ok(reviews);
     }
 
