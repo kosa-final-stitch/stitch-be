@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 //작성작 : 박주희
 
 @RequiredArgsConstructor
@@ -103,5 +105,8 @@ public class MemberService {
 		memberMapper.updateMemberInfo(memberDto);
 	}
 
-
+	// 모든 회원 조회 (호영)
+	public List<MemberDto> getAllMembers() {
+		return memberMapper.getAllMembers();
+	}
 }
