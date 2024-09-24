@@ -104,9 +104,16 @@ public class MemberService {
 		memberDto.setEmail(email); // 이메일은 수정하지 않으므로 그대로 설정
 		memberMapper.updateMemberInfo(memberDto);
 	}
+	
+	// 호영 작성 코드
 
 	// 모든 회원 조회 (호영)
 	public List<MemberDto> getAllMembers() {
 		return memberMapper.getAllMembers();
+	}
+
+	// 사용자 정보 삭제(호영)
+	public void deleteByEmail(String email) {
+		memberMapper.deleteMemberByEmail(email);
 	}
 }

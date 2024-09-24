@@ -12,6 +12,7 @@ import org.mywork.stitchbe.dto.LoginRequest;
 import org.mywork.stitchbe.dto.MemberDto;
 import org.mywork.stitchbe.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,12 +22,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -175,13 +171,31 @@ public class MemberController {
        return ResponseEntity.ok("회원 정보가 업데이트되었습니다.");
    }
 
-   // 모든 회원 조회 (호영)
+
+   //----------- 호영 작성 코드 -----------//
+
+   ///----- 모든 회원 조회 관리자 전용(호영) -----///
    @PreAuthorize("hasRole('ROLE_ADMIN')")// admin 인 관리자만 볼 수 있게
    @GetMapping("/members")
    public ResponseEntity<List<MemberDto>> getAllMembers() {
       List<MemberDto> members = memberService.getAllMembers(); // Service에서 호출
       return ResponseEntity.ok(members);  // 조회한 모든 회원 정보를 반환
    }
-   
+   //----- 회원 정보 삭제 관리자 전용(호영) -----//
+   @DeleteMapping("/members/{email}")
+   public ResponseEntity<String> deleteMember(@PathVariable String email) {
+      try {
+         // 해당 이메일의 회원이 있는지 확인
+         MemberDto member = memberService.getMemberInfoByEmail(email);
+         if (member == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원이 존재하지 않습니다.");
+         }
 
+         // 회원 삭제 처리
+         memberService.deleteByEmail(email);
+         return ResponseEntity.ok("회원이 성공적으로 삭제되었습니다.");
+      } catch (Exception e) {
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 삭제 중 오류가 발생했습니다.");
+      }
+   }
 }
