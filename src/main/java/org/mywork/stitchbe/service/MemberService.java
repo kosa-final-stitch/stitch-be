@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 //작성작 : 박주희
+// 24.09.23 박요한 | findMemberIdByEmail 추가
 
 @RequiredArgsConstructor
 @Service
@@ -104,7 +105,15 @@ public class MemberService {
 		memberDto.setEmail(email); // 이메일은 수정하지 않으므로 그대로 설정
 		memberMapper.updateMemberInfo(memberDto);
 	}
-	
+
+
+
+	// 이메일을 통해 memberId를 조회하는 메서드 (요한)
+	public Long findMemberIdByEmail(String email) {
+		return memberMapper.findMemberIdByEmail(email);
+
+	}
+
 	// 호영 작성 코드
 
 	// 모든 회원 조회 (호영)
@@ -112,8 +121,9 @@ public class MemberService {
 		return memberMapper.getAllMembers();
 	}
 
-	// 사용자 정보 삭제(호영)
-	public void deleteByEmail(String email) {
-		memberMapper.deleteMemberByEmail(email);
-	}
+		// 사용자 정보 삭제(호영)
+		public void deleteByEmail (String email){
+			memberMapper.deleteMemberByEmail(email);
+		}
+
 }
