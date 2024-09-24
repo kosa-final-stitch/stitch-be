@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 //작성작 : 박주희
+// 24.09.23 박요한 | findMemberIdByEmail 추가
 
 @RequiredArgsConstructor
 @Service
@@ -103,5 +104,9 @@ public class MemberService {
 		memberMapper.updateMemberInfo(memberDto);
 	}
 
+	// 이메일을 통해 memberId를 조회하는 메서드
+	public Long findMemberIdByEmail(String email) {
+		return memberMapper.findMemberIdByEmail(email);
+	}
 
 }

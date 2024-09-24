@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ 담당자: 박요한
+ 시작 일자: 2024.09.24
+ 설명 : 결제 mapper.
+ _____________________
+ 2024.9.24 박요한 | 생성.
+-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.mywork.stitchbe.mapper.PaymentMapper">
+    <!-- 결제 완료 정보 추가 -->
+    <insert id="insertPayment" parameterType="org.mywork.stitchbe.dto.PaymentDTO">
+        INSERT INTO payment
+            (member_id, amount, method, category, status, paydate)
+        VALUES
+            (#{memberId}, #{amount}, #{method}, #{category}, #{status}, SYSDATE)
+    </insert>
+
+</mapper>
