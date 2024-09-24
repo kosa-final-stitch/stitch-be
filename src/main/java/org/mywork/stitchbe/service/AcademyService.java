@@ -48,12 +48,21 @@ public class AcademyService {
     }
 
     // 학원의 별점 및 레이더 차트 데이터 가져오기 (정수로 반환)
-    public Map<String, Integer> getAcademyRating(Long academyId) {
-        return academyMapper.findAcademyRating(academyId);
+//    public Map<String, Integer> getAcademyRating(Long academyId) {
+//        return academyMapper.findAcademyRating(academyId);
+//    }
+    
+    // 학원 ID로 해당 학원의 평균 별점을 정수로 계산
+    public int getAcademyAverageRating(Long academyId) {
+        Integer averageRating = academyMapper.findAcademyAverageRating(academyId);
+        return (averageRating != null) ? averageRating : 0;
     }
 	
     //홈: 고평점 학원
     public List<AcademyReviewDTO> getTopRatedAcademies() {
         return academyMapper.getTopRatedAcademies();
     }
+    
+    
+
 }

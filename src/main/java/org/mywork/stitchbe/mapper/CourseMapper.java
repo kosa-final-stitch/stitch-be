@@ -31,4 +31,6 @@ public interface CourseMapper {
     //홈: 고평점 강의 정보
     List<CourseReviewDTO> getTopRatedCourses();
 
+	List<CourseReviewDTO> getCoursesByAcademyId(Long academyId);
+
 }

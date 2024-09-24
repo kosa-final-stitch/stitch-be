@@ -57,6 +57,14 @@ public class CoursesController {
     	System.out.println("강의 ID에 따른 리뷰 목록 반환"+reviews);
         return ResponseEntity.ok(reviews);
     }
+    
+ // 특정 강의의 항목별 평균 평점 반환
+    @GetMapping("/courses/{courseId}/rating")
+    public ResponseEntity<CourseReviewDTO> getCourseRatingByCourseId(@PathVariable Long courseId) {
+        CourseReviewDTO courseReview = courseService.getCourseReviewByCourseId(courseId);
+        return ResponseEntity.ok(courseReview);
+    }
+
 
     // 홈: 평점이 높은 교육 과정을 반환하는 API 엔드포인트
     @GetMapping("/courses/top")
