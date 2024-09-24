@@ -48,6 +48,10 @@ public class ReviewService {
 	}
 
 	
+	// 로그인한 사용자의 리뷰를 가져오는 메서드
+	public List<ReviewDTO> getReviewsByUserId(Long userId) {
+	    return reviewMapper.getReviewsByUserId(userId);
+	}
 
 	// 모든 리뷰 데이터를 가져오는 메서드 (선택적)
 //	public List<ReviewDTO> getAllReviews() {

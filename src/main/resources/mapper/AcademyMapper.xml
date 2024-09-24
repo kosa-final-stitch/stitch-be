@@ -64,6 +64,19 @@
 		FROM reviews
 		WHERE academy_id = #{academyId}
 	</select>
+	
+	
+	    <!-- 학원 ID로 평균 별점 조회 (정수로 반환) -->
+    <select id="findAcademyAverageRating" resultType="Integer">
+        SELECT 
+            ROUND(AVG((r.education_rating + r.instructor_rating + r.facility_rating + 
+                      r.atmosphere_rating + r.management_rating + r.later_rating) / 6)) 
+        FROM review r
+        JOIN course c ON r.course_id = c.course_id
+        WHERE c.academy_id = #{academyId}
+    </select>
+	
+	
 
   <!-- 홈: 학원과 리뷰 데이터를 조인해서 6개 항목별 평균 평점을 가져오는 쿼리 -->
   <select id="getTopRatedAcademies" resultType="org.mywork.stitchbe.dto.home.AcademyReviewDTO">
