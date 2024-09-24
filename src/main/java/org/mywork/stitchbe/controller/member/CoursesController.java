@@ -26,14 +26,14 @@ public class CoursesController {
     public CoursesController(CourseService courseService) {
         this.courseService = courseService;
     }
- // 전체 강의 정보 반환
+    // 전체 강의 정보 반환
     @GetMapping("/academies/courses")
     public ResponseEntity<List<CourseDTO>> getAllCourses() {
-    	List<CourseDTO> course = courseService.getAllCourses();
-    	System.out.println("CoursesController: getAllCourses 호출됨");
-    	return ResponseEntity.ok(course);
+        List<CourseDTO> course = courseService.getAllCourses();
+        System.out.println("CoursesController: getAllCourses 호출됨");
+        return ResponseEntity.ok(course);
     }
-    
+
     // 강의 ID로만 강의 정보 반환
     @GetMapping("/courses/{courseId}")
     public ResponseEntity<CourseDTO> getCourseByCourseId(@PathVariable("courseId") Long courseId) {
@@ -54,16 +54,10 @@ public class CoursesController {
     @GetMapping("courses/{courseId}/reviews")
     public ResponseEntity<List<ReviewDTO>> getReviewsByCourseId(@PathVariable("courseId") Long courseId) {
         List<ReviewDTO> reviews = courseService.getReviewsByCourseId(courseId);
-    	System.out.println("강의 ID에 따른 리뷰 목록 반환"+reviews);
+        System.out.println("강의 ID에 따른 리뷰 목록 반환"+reviews);
         return ResponseEntity.ok(reviews);
     }
-    
- // 특정 강의의 항목별 평균 평점 반환
-    @GetMapping("/courses/{courseId}/rating")
-    public ResponseEntity<CourseReviewDTO> getCourseRatingByCourseId(@PathVariable Long courseId) {
-        CourseReviewDTO courseReview = courseService.getCourseReviewByCourseId(courseId);
-        return ResponseEntity.ok(courseReview);
-    }
+
 
 
     // 홈: 평점이 높은 교육 과정을 반환하는 API 엔드포인트
