@@ -131,4 +131,17 @@ public class CommunityController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to increment view count");
         }
     }
+    
+ // 특정 사용자의 게시글 목록 조회(유은)
+    @GetMapping("/board/community/{userId}")
+    public ResponseEntity<List<CommunityDto>> getPostsByUserId(@PathVariable Long userId) {
+        List<CommunityDto> posts = communityService.getPostsByUserId(userId);
+        if (posts.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(posts);
+    }
+
+    
+    
 }
