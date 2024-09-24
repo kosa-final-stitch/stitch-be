@@ -2,52 +2,62 @@
 <!--
  2024.9.17 박요한 | getTopLikedReviews 추가
 -->
+
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.mywork.stitchbe.mapper.ReviewMapper">
 
-	<!-- 리뷰 삽입 -->
-	<insert id="insertReview"
-		parameterType="org.mywork.stitchbe.dto.ReviewDTO">
-		INSERT INTO REVIEW (
-		review_id, member_id, course_id, education, education_rating, instructor,
-		instructor_rating,
-		facility, facility_rating, atmosphere, atmosphere_rating, management,
-		management_rating,
-		later, later_rating, regdate, editdate
-		) VALUES (
-		REVIEW_SEQ.NEXTVAL,
-		#{memberId, jdbcType=VARCHAR},
-		#{courseId, jdbcType=NUMERIC},
-		#{education, jdbcType=VARCHAR},
-		#{educationRating, jdbcType=NUMERIC},
-		#{instructor, jdbcType=VARCHAR},
-		#{instructorRating, jdbcType=NUMERIC},
-		#{facility, jdbcType=VARCHAR},
-		#{facilityRating, jdbcType=NUMERIC},
-		#{atmosphere, jdbcType=VARCHAR},
-		#{atmosphereRating, jdbcType=NUMERIC},
-		#{management, jdbcType=VARCHAR},
-		#{managementRating, jdbcType=NUMERIC},
-		#{later, jdbcType=VARCHAR},
-		#{laterRating, jdbcType=NUMERIC},
-		#{regDate, jdbcType=TIMESTAMP},
-		#{editDate, jdbcType=TIMESTAMP}
-		)
-	</insert>
+   <!-- 리뷰 삽입 -->
+   <insert id="insertReview"
+      parameterType="org.mywork.stitchbe.dto.ReviewDTO">
+      INSERT INTO REVIEW (
+      review_id, member_id, course_id, education, education_rating, instructor,
+      instructor_rating,
+      facility, facility_rating, atmosphere, atmosphere_rating, management,
+      management_rating,
+      later, later_rating, regdate, editdate
+      ) VALUES (
+      REVIEW_SEQ.NEXTVAL,
+      #{memberId, jdbcType=VARCHAR},
+      #{courseId, jdbcType=NUMERIC},
+      #{education, jdbcType=VARCHAR},
+      #{educationRating, jdbcType=NUMERIC},
+      #{instructor, jdbcType=VARCHAR},
+      #{instructorRating, jdbcType=NUMERIC},
+      #{facility, jdbcType=VARCHAR},
+      #{facilityRating, jdbcType=NUMERIC},
+      #{atmosphere, jdbcType=VARCHAR},
+      #{atmosphereRating, jdbcType=NUMERIC},
+      #{management, jdbcType=VARCHAR},
+      #{managementRating, jdbcType=NUMERIC},
+      #{later, jdbcType=VARCHAR},
+      #{laterRating, jdbcType=NUMERIC},
+      #{regDate, jdbcType=TIMESTAMP},
+      #{editDate, jdbcType=TIMESTAMP}
+      )
+   </insert>
 
-	<!-- 특정 강의의 리뷰를 가져오는 메서드 -->
-	<select id="getReviewsByCourseId"
-		resultType="org.mywork.stitchbe.dto.ReviewDTO">
-		SELECT * FROM REVIEW WHERE course_id = #{courseId}
-	</select>
+   <!-- 특정 강의의 리뷰를 가져오는 메서드 -->
+   <select id="getReviewsByCourseId"
+      resultType="org.mywork.stitchbe.dto.ReviewDTO">
+    SELECT review_id, education_rating, instructor_rating, facility_rating, 
+           atmosphere_rating, management_rating, later_rating
+    FROM reviews
+    WHERE course_id = #{courseId}
+   </select>
 
 
-	<!-- 모든 리뷰를 가져오는 메서드 -->
-	<!-- <select id="getAllReviews" resultType="org.mywork.stitchbe.dto.ReviewDTO"> 
-		SELECT * FROM REVIEW </select> -->
+   <!-- 모든 리뷰를 가져오는 메서드 -->
+   <select id="getAllReviews" resultType="org.mywork.stitchbe.dto.ReviewDTO"> 
+      SELECT * FROM REVIEW 
+      </select> 
+
+<!-- 로그인한 사용자의 리뷰를 가져오는 메서드 -->
+<select id="getReviewsByUserId" resultType="org.mywork.stitchbe.dto.ReviewDTO">
+    SELECT * FROM REVIEW WHERE member_id = #{userId}
+</select>
 
 
     <!-- 홈: 인기 리뷰 가져오는 메서드  -->

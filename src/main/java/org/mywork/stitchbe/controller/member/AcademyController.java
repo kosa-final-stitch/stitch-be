@@ -68,16 +68,20 @@ public class AcademyController {
     }
 
     // 학원의 별점 및 레이더 차트 데이터 가져오기
+//    @GetMapping("/academy/{academyId}/rating")
+//    public ResponseEntity<Map<String, Integer>> getAcademyRating(@PathVariable Long academyId) {
+//        Map<String, Integer> ratingData = academyService.getAcademyRating(academyId);
+//        return ResponseEntity.ok(ratingData);
+//    }
+    
+    // 학원 ID에 따른 평균 별점 반환
     @GetMapping("/academy/{academyId}/rating")
-    public ResponseEntity<Map<String, Integer>> getAcademyRating(@PathVariable Long academyId) {
-        Map<String, Integer> ratingData = academyService.getAcademyRating(academyId);
-        return ResponseEntity.ok(ratingData);
+    public ResponseEntity<Integer> getAcademyAverageRating(@PathVariable Long academyId) {
+        int averageRating = academyService.getAcademyAverageRating(academyId);
+        return ResponseEntity.ok(averageRating);
     }
-    
-    
-    
-    
-    
+
+     
     //요한
    
     // 홈: 고평점 학원 목록 반환
