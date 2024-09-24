@@ -39,4 +39,7 @@ public interface MemberMapper {
 
     // 모든 회원 조회 (호영)
     List<MemberDto> getAllMembers();
+
+    // 회원 삭제 (호영)
+    void deleteMemberByEmail(String email);
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.mywork.stitchbe.mapper.board.NoticeMapper">
+
+    <!--
+     담당자: 김호영
+     시작 일자: 2024.09.24
+     설명 : admin 공지사항 페이지 기능 구현
+     2024.09.24 김호영 | 공지사항 작성,조회,수정,삭제,상태변경.
+     -->
+
+    <!-- 공지사항 작성 -->
+    <insert id="insertNotice" parameterType="org.mywork.stitchbe.dto.board.NoticeDto">
+        INSERT INTO notice (notice_id, member_id, title, content, views, regdate, editdate, status)
+        VALUES (notice_seq.NEXTVAL, #{memberId, jdbcType=INTEGER}, #{title}, #{content}, 0, SYSDATE, NULL, NVL(#{status, jdbcType=VARCHAR}, 'public'))
+    </insert>
+
+    <!-- 모든 공지사항 조회 -->
+    <select id="getAllNotices" resultType="org.mywork.stitchbe.dto.board.NoticeDto">
+        SELECT notice_id, member_id, title, content, views, regdate, editdate, status
+        FROM notice
+    </select>
+
+    <!-- 공지사항 수정 -->
+    <update id="updateNotice" parameterType="org.mywork.stitchbe.dto.board.NoticeDto">
+        UPDATE notice
+        SET title = #{title}, content = #{content}, editdate = SYSDATE
+        WHERE notice_id = #{noticeId}
+    </update>
+
+    <!-- 공지사항 삭제 -->
+    <delete id="deleteNotice" parameterType="long">
+        DELETE FROM notice WHERE notice_id = #{noticeId}
+    </delete>
+
+    <!-- 공지사항 상태 변경 -->
+    <update id="updateNoticeStatus" parameterType="org.mywork.stitchbe.dto.board.NoticeDto">
+        UPDATE notice
+        SET status = #{status}, editdate = SYSDATE
+        WHERE notice_id = #{noticeId}
+    </update>
+
+
+</mapper>

@@ -91,10 +91,17 @@
 	</update>
 
 	<!-- 호영 -->
+
+	<!-- 사용자 정보 조회 -->
 	<select id="getAllMembers" resultType="org.mywork.stitchbe.dto.MemberDto">
 		SELECT member_id, email, name, nickname, address, gender, birth, phone, editdate, signupdate
 		FROM MEMBER
 	</select>
 
+	<!-- 사용자 정보 삭제 -->
+	<delete id="deleteMemberByEmail" parameterType="String">
+		DELETE FROM MEMBER
+		WHERE email = #{email}
+	</delete>
 
 </mapper>
