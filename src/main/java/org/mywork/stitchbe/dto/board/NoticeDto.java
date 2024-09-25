@@ -16,12 +16,14 @@ import java.util.Date;
 @Data
 public class NoticeDto {
     private Long noticeId;
-    private Long MemberId;
+    private Long memberId;
     private String title;
     private String content;
     private int views;
     private Date regdate;
     private Date editdate;
     private String status;
+    private String adminName;
+
 }
 
