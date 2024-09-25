@@ -4,6 +4,7 @@
 설명 : 결제 용 dto.
 ---------------------
 2024.09.24 박요한 | dto 생성.
+2024.09.25 김호영 | 결제한 사용자 join
 */
 
 package org.mywork.stitchbe.dto;
@@ -21,4 +22,5 @@ public class PaymentDTO {
     private String status;      // 결제 상태 (예: completed, refunded)
     private Date payDate;       // 결제 일시
     private Date editDate;      // 상태 변경 일시 (null 허용)
+    private String memberName; // 결제 이용한 사용자 이름, join
 }
