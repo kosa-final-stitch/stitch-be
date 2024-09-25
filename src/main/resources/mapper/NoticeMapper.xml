@@ -17,8 +17,18 @@
 
     <!-- 모든 공지사항 조회 -->
     <select id="getAllNotices" resultType="org.mywork.stitchbe.dto.board.NoticeDto">
-        SELECT notice_id, member_id, title, content, views, regdate, editdate, status
-        FROM notice
+        SELECT
+        n.notice_id AS noticeId,
+        n.member_id AS memberId,
+        n.title,
+        n.content,
+        n.views,
+        n.regdate AS regDate,
+        n.editdate AS editDate,
+        n.status,
+        m.nickname AS adminName  -- 조인하여 관리자 이름 가져오기
+        FROM notice n
+        LEFT JOIN member m ON n.member_id = m.member_id  -- member 테이블과 조인
     </select>
 
     <!-- 공지사항 수정 -->

@@ -33,23 +33,31 @@
 
     <!-- 호영 작성 -->
 
-    <!-- 문의사항 조회 -->
-
     <!-- 문의 사항 답변 등록 -->
     <update id="updateInquiryAnswer">
         UPDATE inquiry
-        SET admin_id = #{adminId}, answer = #{answer}, ansdate = SYSDATE, status = '답변완료'
+        SET admin_id = #{adminId}, answer = #{answer}, ansdate = SYSDATE, status = 'answered'
         WHERE inquiry_id = #{inquiryId}
     </update>
 
     <!-- 사용자 문의사항 조회 -->
     <select id="findInquiriesByMemberId" resultType="org.mywork.stitchbe.dto.InquiryDTO">
-        SELECT i.inquiry_id, i.member_id, i.category, i.title, i.content, i.answer, i.status,
-        i.regdate, i.ansdate, m.nickname AS memberName, a.nickname AS adminName
+        SELECT i.inquiry_id AS inquiryId,
+        i.member_id AS memberId,
+        i.category,
+        i.title,
+        i.content,
+        i.answer,
+        i.status,
+        i.regdate AS regDate,
+        i.ansdate AS ansDate,
+        m.nickname AS memberName,
+        a.nickname AS adminName
         FROM inquiry i
         LEFT JOIN member m ON i.member_id = m.member_id
         LEFT JOIN member a ON i.admin_id = a.member_id
         WHERE i.member_id = #{memberId}
     </select>
+
 
 </mapper>
