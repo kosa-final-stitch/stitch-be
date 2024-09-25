@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!-- 2024. 9.25. 박요한 | 댓글 insert 에 like_count 0 추가 -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.mywork.stitchbe.mapper.board.FCcommentMapper">
 <!--작성자 : 박주희-->
@@ -26,8 +28,8 @@
         <selectKey keyProperty="commentId" resultType="long" order="BEFORE">
             SELECT community_comment_seq.NEXTVAL FROM dual
         </selectKey>
-        INSERT INTO community_comment (comment_id, board_id, member_id, nickname, content, regdate)
-        VALUES (#{commentId}, #{boardId},#{memberId}, #{nickname}, #{content}, SYSDATE)
+        INSERT INTO community_comment (comment_id, board_id, member_id, nickname, content, regdate, like_count)
+        VALUES (#{commentId}, #{boardId},#{memberId}, #{nickname}, #{content}, SYSDATE, 0)
     </insert>
 
     <!-- 댓글 수정 -->
