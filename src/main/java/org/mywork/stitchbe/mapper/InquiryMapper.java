@@ -20,7 +20,7 @@ public interface InquiryMapper {
     void insertInquiry(InquiryDTO inquiry);
 
     // 모든 문의사항 조회 (호영)
-    List<InquiryDTO> findInquiriesByMemberId(Long memberId);
+    List<InquiryDTO> findAllInquiries();
 
     // 문의 사항 답변 등록 (호영)
     void updateInquiryAnswer(Long inquiryId, Long adminId, String answer);

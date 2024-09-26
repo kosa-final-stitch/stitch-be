@@ -52,15 +52,9 @@ public class InquiryController {
 
     // 사용자 문의사항 조회 API (member만 접근 가능) (호영)
     @GetMapping
-    public ResponseEntity<List<InquiryDTO>> getMemberInquiries(Authentication authentication) {
+    public ResponseEntity<List<InquiryDTO>> getAllInquiries() {
         try {
-            // 로그인한 사용자의 이메일을 통해 memberId를 조회
-            String email = authentication.getName();
-            Long memberId = memberService.findMemberIdByEmail(email);
-
-            // 해당 사용자가 작성한 모든 문의사항 조회
-            List<InquiryDTO> inquiries = inquiryService.getInquiriesByMemberId(memberId);
-
+            List<InquiryDTO> inquiries = inquiryService.getAllInquiries(); // 모든 문의사항 조회
             return ResponseEntity.ok(inquiries);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
