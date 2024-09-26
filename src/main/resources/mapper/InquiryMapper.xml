@@ -40,8 +40,8 @@
         WHERE inquiry_id = #{inquiryId}
     </update>
 
-    <!-- 사용자 문의사항 조회 -->
-    <select id="findInquiriesByMemberId" resultType="org.mywork.stitchbe.dto.InquiryDTO">
+    <!-- 모든 문의사항 조회 -->
+    <select id="findAllInquiries" resultType="org.mywork.stitchbe.dto.InquiryDTO">
         SELECT i.inquiry_id AS inquiryId,
         i.member_id AS memberId,
         i.category,
@@ -56,7 +56,6 @@
         FROM inquiry i
         LEFT JOIN member m ON i.member_id = m.member_id
         LEFT JOIN member a ON i.admin_id = a.member_id
-        WHERE i.member_id = #{memberId}
     </select>
 
 
