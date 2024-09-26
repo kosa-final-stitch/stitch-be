@@ -31,9 +31,9 @@ public class InquiryService {
         }
     }
 
-    // 해당 사용자가 작성한 모든 문의사항 조회(호영)
-    public List<InquiryDTO> getInquiriesByMemberId(Long memberId) {
-        return inquiryMapper.findInquiriesByMemberId(memberId);
+    // 모든 사용자의 문의사항 조회
+    public List<InquiryDTO> getAllInquiries() {
+        return inquiryMapper.findAllInquiries();  // 모든 문의사항 조회
     }
     // 문의사항 답변 등록 (호영)
     public void submitAnswer(Long inquiryId, Long adminId, String answer) {
