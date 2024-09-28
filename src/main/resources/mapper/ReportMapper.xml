@@ -9,49 +9,20 @@
     <insert id="insertReport" parameterType="org.mywork.stitchbe.dto.board.ReportDto">
         INSERT INTO report (
             member_id,
-            post_or_comment,
-            board_table,
             board_id,
             comment_id,
             type,
-            reason,
             content,
             regdate
         ) VALUES (
                      #{memberId},
-                     #{postOrComment},
-                     #{boardTable},
-                     #{boardId},
-                     #{commentId},
+                     #{boardId, jdbcType=NUMERIC},
+                     #{commentId, jdbcType=NUMERIC},
                      #{type},
-                     #{reason},
                      #{content},
                      SYSDATE
                  )
     </insert>
 
-<!--    &lt;!&ndash; 특정 신고 데이터 조회 (필요 시) &ndash;&gt;-->
-<!--    <select id="selectReportById" parameterType="Long" resultType="org.mywork.stitchbe.dto.board.ReportDto">-->
-<!--        SELECT *-->
-<!--        FROM report-->
-<!--        WHERE report_id = #{reportId}-->
-<!--    </select>-->
-
-<!--    &lt;!&ndash; 신고 데이터 업데이트 (필요 시) &ndash;&gt;-->
-<!--    <update id="updateReport" parameterType="org.mywork.stitchbe.dto.board.ReportDto">-->
-<!--        UPDATE report-->
-<!--        SET-->
-<!--            type = #{type},-->
-<!--            reason = #{reason},-->
-<!--            content = #{content},-->
-<!--            regdate = SYSDATE-->
-<!--        WHERE report_id = #{reportId}-->
-<!--    </update>-->
-
-<!--    &lt;!&ndash; 신고 데이터 삭제 (필요 시) &ndash;&gt;-->
-<!--    <delete id="deleteReport" parameterType="Long">-->
-<!--        DELETE FROM report-->
-<!--        WHERE report_id = #{reportId}-->
-<!--    </delete>-->
 
 </mapper>
