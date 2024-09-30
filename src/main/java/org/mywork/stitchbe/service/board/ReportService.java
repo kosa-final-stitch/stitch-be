@@ -1,9 +1,10 @@
 /*
- 담당자:
- 시작 일자: 2024.09.24
+ 담당자:김호영
+ 시작 일자: 2024.09.29
  설명 : 신고 구현 개발
  ---------------------
  2024.09.29 김호영 | 신고목록 조회 기능 추가.
+ 2024.09.30 김호영 | 신고한 게시물, 댓글 내용 및 작성자 정보 API 구현.
  */
 
 package org.mywork.stitchbe.service.board;
@@ -24,15 +25,12 @@ public class ReportService {
         this.reportMapper = reportMapper;
     }
 
+    // 신고 등록 로직
     public void createReport(ReportDto reportDto) {
-        // 게시글인지 댓글인지에 따라 분기 처리
+        // 게시글 신고 처리 로직
         if ("POST".equals(reportDto.getPostOrComment())) {
-            // 게시글 신고 처리 로직이 필요한 경우 여기에 추가
-            // 예: 게시글의 상태를 변경하거나, 신고 카운트를 증가시키는 로직 등
             System.out.println("게시글 신고 처리 로직 실행");
         } else if ("COMMENT".equals(reportDto.getPostOrComment())) {
-            // 댓글 신고 처리 로직이 필요한 경우 여기에 추가
-            // 예: 댓글의 상태를 변경하거나, 신고 카운트를 증가시키는 로직 등
             System.out.println("댓글 신고 처리 로직 실행");
         }
 
@@ -40,9 +38,30 @@ public class ReportService {
         reportMapper.insertReport(reportDto);
     }
 
-
-    // 신고 목록 조회 (호영)
+    // 신고 목록 조회
     public List<ReportDto> getReports() {
         return reportMapper.selectReports();
+    }
+
+    // 신고된 게시물/댓글의 작성자 닉네임 가져오기
+    public String getReportWriter(Long reportId) {
+        ReportDto report = reportMapper.selectReportById(reportId);
+        if ("POST".equals(report.getPostOrComment())) {
+            return reportMapper.getPostWriter(report.getBoardId());
+        } else if ("COMMENT".equals(report.getPostOrComment())) {
+            return reportMapper.getCommentWriter(report.getCommentId());
+        }
+        return null;
+    }
+
+    // 신고된 게시물/댓글 내용 가져오기
+    public String getReportContent(Long reportId) {
+        ReportDto report = reportMapper.selectReportById(reportId);
+        if ("POST".equals(report.getPostOrComment())) {
+            return reportMapper.getPostContent(report.getBoardId());
+        } else if ("COMMENT".equals(report.getPostOrComment())) {
+            return reportMapper.getCommentContent(report.getCommentId());
+        }
+        return null;
     }
 }
