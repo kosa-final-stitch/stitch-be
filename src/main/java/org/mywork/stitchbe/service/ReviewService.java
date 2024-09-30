@@ -53,10 +53,6 @@ public class ReviewService {
 	    return reviewMapper.getReviewsByUserId(userId);
 	}
 
-	// 모든 리뷰 데이터를 가져오는 메서드 (선택적)
-//	public List<ReviewDTO> getAllReviews() {
-//		return reviewMapper.getAllReviews();
-//	}
 
 
 	// 홈: 좋아요 수가 많은 상위 리뷰를 가져오는 서비스 메서드
