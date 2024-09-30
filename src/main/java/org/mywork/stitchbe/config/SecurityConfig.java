@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+<<<<<<< HEAD
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
@@ -27,6 +28,11 @@ import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 
 import java.util.Collections;
 import java.util.Map;
+=======
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+>>>>>>> 1933334939ac4b7a886e1e0104675b60e38c2132
 
 
 /**
@@ -86,6 +92,7 @@ public class SecurityConfig{
                 // JWT 필터 추가
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 
+<<<<<<< HEAD
                 // OAuth2 로그인 설정 추가
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/api/login/oauth2/code/google?state=PR7lPnYjh42F7GgmiNnv2jKvDoK7JOTxC7Bw_NkHAe0%3D&code=4%2F0AQlEd8ycbeu4XP_6IUyRjBYpBSXuyQvsto5Lf6Ojn1rOuGdtuV0zmJlnN_coqyRK5owFhw&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=none")
@@ -95,6 +102,21 @@ public class SecurityConfig{
                                 .oidcUserService(oidcUserService()) // OIDC를 위한 OidcUserService 설정
                         )
                 )
+=======
+//                .formLogin(form -> form
+//                        .loginPage("/api/login")
+//                        .loginProcessingUrl("/api/login")
+//                        .usernameParameter("username")  // 이 값이 Vue에서 보내는 필드명과 일치해야 함
+//                        .passwordParameter("password")  // 마찬가지로 password도 일치해야 함
+//                        .defaultSuccessUrl("/api/home", true)
+//                        .failureUrl("/api/login?error=true")
+//                        .permitAll()
+//                )
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // 필요 시 세션 생성
+//                        .maximumSessions(1)  // 하나의 세션만 유지
+//                )
+>>>>>>> 1933334939ac4b7a886e1e0104675b60e38c2132
                 .logout(logout -> logout
                         .logoutUrl("/api/logout")
                         .logoutSuccessUrl("/api/login")
@@ -103,6 +125,7 @@ public class SecurityConfig{
         return http.build();
     }
 
+<<<<<<< HEAD
     // OIDC 사용자 정보를 처리하는 OidcUserService 정의
     @Bean
     public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
@@ -125,6 +148,8 @@ public class SecurityConfig{
             );
         };
     }
+=======
+>>>>>>> 1933334939ac4b7a886e1e0104675b60e38c2132
 
 
     @Bean

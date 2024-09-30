@@ -24,7 +24,10 @@ public class NoticeDto {
     private Date editdate;
     private String status;
     private String adminName;
+<<<<<<< HEAD
     private Boolean isPinned;
+=======
+>>>>>>> 1933334939ac4b7a886e1e0104675b60e38c2132
 
 }
 

@@ -8,7 +8,7 @@
         <version>3.3.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>org.mywork</groupId>
+    <groupIgid>org.mywork</groupIgid>
     <artifactId>stitch-back</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>stitch-back</name>
@@ -32,10 +32,13 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+<<<<<<< HEAD
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+=======
+>>>>>>> 1933334939ac4b7a886e1e0104675b60e38c2132
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
