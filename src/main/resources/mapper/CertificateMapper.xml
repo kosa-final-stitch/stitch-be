@@ -2,7 +2,7 @@
 담당자: 김호영
 시작 일자: 2024.09.29
 설명 : 수료과목 인증 Mapper XML
-2024.09.29 김호영 | 수료 과목 인증 insert, select 쿼리 생성.
+2024.09.29 김호영 | 수료 과목 인증 insert, select, update 쿼리 생성.
 -->
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
@@ -63,5 +63,13 @@
         JOIN member m ON c.member_id = m.member_id  <!-- member 테이블과 조인 -->
         ORDER BY c.completion_date DESC
     </select>
+
+
+    <!-- 수료 인증 상태 업데이트 -->
+    <update id="updateCertificateStatus" parameterType="map">
+        UPDATE certificate
+        SET status = #{status}
+        WHERE certificate_id = #{certificateId}
+    </update>
 
 </mapper>

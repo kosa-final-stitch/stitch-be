@@ -3,7 +3,7 @@
 시작 일자: 2024.09.29
 설명 : 수료과목 인증 Service
 ---------------------
-2024.09.29 김호영 | 수료 과목 인증 조회 등록 Service 생성.
+2024.09.29 김호영 | 수료 과목 인증 조회 등록 수정 Service 생성.
 */
 
 package org.mywork.stitchbe.service;
@@ -46,5 +46,9 @@ public class CertificateService {
     // 모든 수료 항목 조회 (관리자용)
     public List<CertificateDTO> getAllCertificates() {
         return certificateMapper.selectAllCertificates();
+    }
+
+    public void updateCertificateStatus(Long certificateId, String status) {
+        certificateMapper.updateCertificateStatus(certificateId, status);
     }
 }

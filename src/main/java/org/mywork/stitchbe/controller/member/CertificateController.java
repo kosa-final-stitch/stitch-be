@@ -3,7 +3,7 @@
 시작 일자: 2024.09.29
 설명 : 수료과목 인증 관련 API 구현
 ---------------------
-2024.09.29 김호영 | 수료 과목 인증 조회 등록 API 생성.
+2024.09.29 김호영 | 수료 과목 인증 조회 등록 수정 API 생성.
 */
 
 package org.mywork.stitchbe.controller.member;
@@ -14,6 +14,7 @@ import org.mywork.stitchbe.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/certificate")
@@ -85,4 +87,23 @@ public class CertificateController {
         List<CertificateDTO> certificates = certificateService.getAllCertificates();
         return new ResponseEntity<>(certificates, HttpStatus.OK);
     }
+
+    // 수료 상태 변경 API (관리자만)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/updateStatus")
+    public ResponseEntity<String> updateCertificateStatus(
+            @RequestBody Map<String, Object> requestBody) {
+        try {
+            Long certificateId = Long.parseLong(requestBody.get("certificateId").toString());
+            String status = requestBody.get("status").toString();
+
+            // 수료 상태 변경 처리
+            certificateService.updateCertificateStatus(certificateId, status);
+            return new ResponseEntity<>("수료 상태가 성공적으로 변경되었습니다.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("수료 상태 변경에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 }

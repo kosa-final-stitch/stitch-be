@@ -3,7 +3,7 @@
 시작 일자: 2024.09.29
 설명 : 수료과목 인증 Mapper
 ---------------------
-2024.09.29 김호영 | 수료 과목 인증 insert, select Mapper 생성.
+2024.09.29 김호영 | 수료 과목 인증 insert, select update mapper 생성.
 */
 
 package org.mywork.stitchbe.mapper;
@@ -24,4 +24,6 @@ public interface CertificateMapper {
 
     // 모든 수료 항목 조회 (관리자용)
     List<CertificateDTO> selectAllCertificates();
+
+    void updateCertificateStatus(Long certificateId, String status);
 }
