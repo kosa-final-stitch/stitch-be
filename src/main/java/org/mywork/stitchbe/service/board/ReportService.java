@@ -14,7 +14,9 @@ import org.mywork.stitchbe.mapper.board.ReportMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ReportService {
@@ -55,13 +57,31 @@ public class ReportService {
     }
 
     // 신고된 게시물/댓글 내용 가져오기
-    public String getReportContent(Long reportId) {
+    public Map<String, Object> getReportContent(Long reportId) {
         ReportDto report = reportMapper.selectReportById(reportId);
         if ("POST".equals(report.getPostOrComment())) {
-            return reportMapper.getPostContent(report.getBoardId());
+            Map<String, Object> postContentMap = reportMapper.getPostContent(report.getBoardId());
+            System.out.println("Post Content Map: " + postContentMap);  // 디버깅용 로그
+            return postContentMap;
         } else if ("COMMENT".equals(report.getPostOrComment())) {
-            return reportMapper.getCommentContent(report.getCommentId());
+            String commentContent = reportMapper.getCommentContent(report.getCommentId());
+            System.out.println("Comment Content: " + commentContent);  // 디버깅용 로그
+            Map<String, Object> commentContentMap = new HashMap<>();
+            commentContentMap.put("content", commentContent);
+            commentContentMap.put("title", null);  // 댓글은 제목이 없으므로 null
+            return commentContentMap;
         }
         return null;
+    }
+
+
+
+    // 신고된 게시물의 제목 가져오기
+    public String getReportTitle(Long reportId) {
+        ReportDto report = reportMapper.selectReportById(reportId);
+        if ("POST".equals(report.getPostOrComment())) {
+            return reportMapper.getPostTitle(report.getBoardId());
+        }
+        return null; // 댓글에는 제목이 없으므로 null 반환
     }
 }

@@ -13,6 +13,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.mywork.stitchbe.dto.board.ReportDto;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface ReportMapper {
@@ -26,12 +27,20 @@ public interface ReportMapper {
     ReportDto selectReportById(Long reportId);
 
     // 게시글 내용 조회
-    String getPostContent(Long boardId);
+    Map<String, Object> getPostContent(Long boardId);
 
     // 댓글 내용 조회
     String getCommentContent(Long commentId);
 
+    
+    // 신고된 작성자
     String getPostWriter(Long boardId);
 
+    
+    // 신고된 댓글 작성자
     String getCommentWriter(Long commentId);
+    
+    
+    // 신고된 게시글 제목
+    String getPostTitle(Long boardId);
 }
