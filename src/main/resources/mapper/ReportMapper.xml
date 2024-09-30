@@ -54,4 +54,24 @@
 <!--        WHERE report_id = #{reportId}-->
 <!--    </delete>-->
 
+
+    <!-- 호영 -->
+    <!-- 신고 데이터 조회 -->
+    <select id="selectReports" resultType="org.mywork.stitchbe.dto.board.ReportDto">
+        SELECT r.report_id AS reportId,
+        r.member_id AS memberId,
+        m.nickname AS nickname,
+        r.post_or_comment AS postOrComment,
+        r.board_table AS boardTable,
+        r.board_id AS boardId,
+        r.comment_id AS commentId,
+        r.type AS type,
+        r.reason AS reason,
+        r.content AS content,
+        r.regdate AS regdate
+        FROM report r
+        JOIN member m ON r.member_id = m.member_id
+        ORDER BY r.regdate DESC
+    </select>
+
 </mapper>
