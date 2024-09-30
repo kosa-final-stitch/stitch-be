@@ -1,0 +1,75 @@
+<!--
+담당자: 김호영
+시작 일자: 2024.09.29
+설명 : 수료과목 인증 Mapper XML
+2024.09.29 김호영 | 수료 과목 인증 insert, select, update 쿼리 생성.
+-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.mywork.stitchbe.mapper.CertificateMapper">
+    <!-- 수료증 등록 -->
+    <insert id="insertCertificate" parameterType="org.mywork.stitchbe.dto.CertificateDTO">
+        INSERT INTO certificate (
+        member_id,
+        course_id,
+        completion_date,
+        status,
+        filename
+        ) VALUES (
+        #{memberId},
+        #{courseId},
+        #{completionDate},
+        #{status},
+        #{filename}
+        )
+    </insert>
+
+    <!-- 로그인된 사용자의 수료 항목 조회 (조인) -->
+    <select id="selectCertificatesByMemberId" resultType="org.mywork.stitchbe.dto.CertificateDTO">
+        SELECT
+        c.certificate_id AS certificateId,
+        c.member_id AS memberId,
+        m.nickname AS nickname,  <!-- 닉네임 추가 -->
+        co.course_id AS courseId,
+        co.course_name AS courseName,
+        a.academy_name AS academyName,
+        c.completion_date AS completionDate,
+        c.status,
+        c.filename
+        FROM certificate c
+        JOIN course co ON c.course_id = co.course_id
+        JOIN academy a ON co.academy_id = a.academy_id
+        JOIN member m ON c.member_id = m.member_id  <!-- member 테이블과 조인 -->
+        WHERE c.member_id = #{memberId}
+    </select>
+
+    <!-- 관리자용 수료 항목 전체 조회 (조인) -->
+    <select id="selectAllCertificates" resultType="org.mywork.stitchbe.dto.CertificateDTO">
+        SELECT
+        c.certificate_id AS certificateId,
+        c.member_id AS memberId,
+        m.nickname AS nickname,  <!-- 닉네임 추가 -->
+        co.course_id AS courseId,
+        co.course_name AS courseName,
+        a.academy_name AS academyName,
+        c.completion_date AS completionDate,
+        c.status,
+        c.filename
+        FROM certificate c
+        JOIN course co ON c.course_id = co.course_id
+        JOIN academy a ON co.academy_id = a.academy_id
+        JOIN member m ON c.member_id = m.member_id  <!-- member 테이블과 조인 -->
+        ORDER BY c.completion_date DESC
+    </select>
+
+
+    <!-- 수료 인증 상태 업데이트 -->
+    <update id="updateCertificateStatus" parameterType="map">
+        UPDATE certificate
+        SET status = #{status}
+        WHERE certificate_id = #{certificateId}
+    </update>
+
+</mapper>
