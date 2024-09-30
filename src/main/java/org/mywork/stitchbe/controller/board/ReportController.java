@@ -12,12 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/member/report")
 public class ReportController {
-<<<<<<< HEAD
+
     private final ReportService reportService;
-=======
-    private final
-    ReportService reportService;
->>>>>>> 1933334939ac4b7a886e1e0104675b60e38c2132
+
 
     @Autowired
     public ReportController(ReportService reportService) {
@@ -27,7 +24,6 @@ public class ReportController {
     // 신고 등록 API
     @PostMapping
     public ResponseEntity<?> createReport(@RequestBody ReportDto reportDto) {
-<<<<<<< HEAD
 
         System.out.println("Received Report Data: " + reportDto);
 
@@ -42,9 +38,5 @@ public class ReportController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("신고 처리 중 오류가 발생했습니다.");
         }
-=======
-        reportService.createReport(reportDto);
-        return ResponseEntity.ok("신고가 접수되었습니다.");
->>>>>>> 1933334939ac4b7a886e1e0104675b60e38c2132
     }
 }
