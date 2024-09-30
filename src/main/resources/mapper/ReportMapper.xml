@@ -31,8 +31,7 @@
                 #{boardId}
             </when>
             <otherwise>
-                -- If boardId is null, provide a default value or handle the error
-                1
+                NULL
             </otherwise>
         </choose>,
         <choose>
@@ -70,11 +69,27 @@
         JOIN
         member m ON r.member_id = m.member_id
         LEFT JOIN
-        community b ON r.post_or_comment = 'post' AND b.board_id = r.board_id
+        community b ON UPPER(r.post_or_comment) = 'POST' AND b.board_id = r.board_id
         LEFT JOIN
-        community_comment c ON r.post_or_comment = 'comment' AND c.comment_id = r.comment_id
+        community_comment c ON UPPER(r.post_or_comment) = 'COMMENT' AND c.comment_id = r.comment_id
         ORDER BY
         r.regdate DESC
+    </select>
+
+    <!-- 특정 신고 조회 by reportId -->
+    <select id="selectReportById" parameterType="long" resultType="org.mywork.stitchbe.dto.board.ReportDto">
+        SELECT
+        report_id AS reportId,
+        member_id AS memberId,
+        post_or_comment AS postOrComment,
+        board_id AS boardId,
+        comment_id AS commentId,
+        type AS type,
+        reason AS reason,
+        content AS content,
+        regdate AS regdate
+        FROM report
+        WHERE report_id = #{reportId}
     </select>
 
     <!-- 게시글 작성자 정보 조회 -->
@@ -93,9 +108,9 @@
         WHERE c.comment_id = #{commentId}
     </select>
 
-    <!-- 게시글 내용 조회 -->
-    <select id="getPostContent" resultType="String">
-        SELECT b.content AS content
+    <!-- 게시글 내용 및 제목 조회 -->
+    <select id="getPostContent" resultType="map">
+        SELECT b.content, b.title
         FROM community b
         WHERE b.board_id = #{boardId}
     </select>

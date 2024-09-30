@@ -19,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/member/report")
@@ -61,10 +62,10 @@ public class ReportController {
     // 신고된 게시물/댓글 내용 조회
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{reportId}/content")
-    public ResponseEntity<String> getReportContent(@PathVariable Long reportId) {
+    public ResponseEntity<Map<String, Object>> getReportContent(@PathVariable Long reportId) {
         try {
-            String content = reportService.getReportContent(reportId);
-            return ResponseEntity.ok(content);
+            Map<String, Object> contentMap = reportService.getReportContent(reportId);
+            return ResponseEntity.ok(contentMap);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
