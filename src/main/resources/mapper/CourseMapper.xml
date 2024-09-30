@@ -118,7 +118,8 @@
             <when test="status == 'completed'">
                 c.end_date DESC
             </when>
-        </choose>
+        </choose>,
+        c.course_id ASC    -- 세 번째 정렬 기준: 고유한 필드 (course_id)로 추가 정렬
         OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     </select>
 
