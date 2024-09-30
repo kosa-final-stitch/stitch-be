@@ -1,6 +1,7 @@
 /*
  2024.9.17. 박요한 | getTopRatedCourses 추가
- */
+ 2024.9.29. 박요한 | getPagedCoursesWithRating 추가
+*/
 
 package org.mywork.stitchbe.controller.member;
 
@@ -12,10 +13,7 @@ import org.mywork.stitchbe.dto.ReviewDTO;
 import org.mywork.stitchbe.dto.home.CourseReviewDTO;
 import org.mywork.stitchbe.service.CourseService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api") // 강의와 관련된 API는 /api/courses 경로 사용
@@ -59,6 +57,19 @@ public class CoursesController {
     }
 
 
+    // 박요한
+    // 리팩토링: 전체 강의 목록 + 페이지네이션, 정렬
+    @GetMapping("/courses")
+    public ResponseEntity<List<CourseDTO>> getPagedCoursesWithRating(
+            @RequestParam(defaultValue = "1") int pageNumber,  // 기본값: 1
+            @RequestParam(defaultValue = "12") int pageSize    // 기본값: 12
+    ) {
+        // 서비스에서 페이지네이션 처리된 데이터 가져오기
+        List<CourseDTO> courses = courseService.getPagedCoursesWithRating(pageNumber, pageSize);
+
+        // 결과를 ResponseEntity로 반환
+        return ResponseEntity.ok(courses);
+    }
 
     // 홈: 평점이 높은 교육 과정을 반환하는 API 엔드포인트
     @GetMapping("/courses/top")

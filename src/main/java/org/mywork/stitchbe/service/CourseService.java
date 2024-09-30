@@ -1,6 +1,7 @@
 /*
  2024.9.17. 박요한 | getTopRatedCourses 추가
- */
+ 2024.9.29. 박요한 | getPagedCoursesWithRating 추가
+*/
 
 package org.mywork.stitchbe.service;
 
@@ -92,6 +93,15 @@ public class CourseService {
         return averageRatings;
     }
 
+    // 박요한
+    // 리팩토링: 전체 강의 목록 + 페이지네이션, 정렬
+    public List<CourseDTO> getPagedCoursesWithRating(int pageNumber, int pageSize) {
+        // Offset 계산: (페이지 번호 - 1) * 페이지 크기
+        int offset = (pageNumber - 1) * pageSize;
+
+        // Mapper 호출하여 데이터 가져오기
+        return courseMapper.getPagedCoursesWithRating(offset, pageSize);
+    }
 
     // 홈: 평점이 높은 교육 과정을 가져오는 메서드
     public List<CourseReviewDTO> getTopRatedCourses() {

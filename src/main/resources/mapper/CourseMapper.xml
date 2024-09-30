@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
  2024.9.17 박요한 | getTopRatedCourses 추가
+ 2024.9.29 박요한 | getPagedCoursesWithRating 추가
 -->
 
 <!DOCTYPE mapper
@@ -68,6 +69,38 @@
     WHERE c.academy_id = #{academyId}
     GROUP BY c.course_id
 </select>
+
+    <!-- 박요한 -->
+    <!-- 리팩토링: 전체 강의 목록 + 페이지네이션, 정렬 -->
+    <select id="getPagedCoursesWithRating" resultType="org.mywork.stitchbe.dto.CourseDTO">
+        SELECT
+            c.course_id AS courseId,
+            c.course_name AS courseName,
+            c.SESSION_NUMBER AS sessionNumber,
+            TO_CHAR(c.start_date, 'YYYY. MM. DD') AS startDate,
+            TO_CHAR(c.end_date, 'YYYY. MM. DD') AS endDate,
+            c.academy_id AS academyId,
+            a.ACADEMY_NAME as academyName,
+
+            -- 전체 평점 합 / 전체 리뷰 수
+            SUM(r.education_rating + r.instructor_rating + r.facility_rating +
+                r.atmosphere_rating + r.management_rating + r.later_rating) /
+            (COUNT(r.review_id) * 6) AS averageRating
+
+        FROM course c
+                 LEFT JOIN review r ON c.course_id = r.course_id
+                 LEFT JOIN academy a ON c.academy_id = a.academy_id
+        GROUP BY
+            c.course_id,
+            c.course_name,
+            c.session_number,
+            c.start_date,
+            c.end_date,
+            c.academy_id,
+            a.ACADEMY_NAME
+        ORDER BY averageRating DESC NULLS LAST
+        OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    </select>
 
 
     <!-- 홈: 강의와 리뷰 데이터를 조인해서 6개 항목별 평균 평점을 가져오는 쿼리 -->
