@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
  2024.9.17 박요한 | getTopRatedCourses 추가
- 2024.9.29 박요한 | getPagedCoursesWithRating 추가
+ 2024.9.29 박요한 | getPagedCoursesWithStatusAndRating, getTotalCourseCount 추가
 -->
 
 <!DOCTYPE mapper
@@ -71,37 +71,74 @@
 </select>
 
     <!-- 박요한 -->
-    <!-- 리팩토링: 전체 강의 목록 + 페이지네이션, 정렬 -->
-    <select id="getPagedCoursesWithRating" resultType="org.mywork.stitchbe.dto.CourseDTO">
+    <!-- 리팩토링: 전체 강의 목록 + 페이지네이션, 정렬 + 진행 구분 -->
+    <select id="getPagedCoursesWithStatusAndRating" resultType="org.mywork.stitchbe.dto.CourseDTO">
         SELECT
-            c.course_id AS courseId,
-            c.course_name AS courseName,
-            c.SESSION_NUMBER AS sessionNumber,
-            TO_CHAR(c.start_date, 'YYYY. MM. DD') AS startDate,
-            TO_CHAR(c.end_date, 'YYYY. MM. DD') AS endDate,
-            c.academy_id AS academyId,
-            a.ACADEMY_NAME as academyName,
+        c.course_id AS course_id,            -- alias 명시
+        c.course_name AS course_name,
+        c.session_number AS session_number,
+        c.title_link AS title_link,
+        c.start_date AS start_date,
+        c.end_date AS end_date,
+        c.academy_id AS academy_id,
+        a.academy_name AS academy_name,
 
-            -- 전체 평점 합 / 전체 리뷰 수
-            SUM(r.education_rating + r.instructor_rating + r.facility_rating +
-                r.atmosphere_rating + r.management_rating + r.later_rating) /
-            (COUNT(r.review_id) * 6) AS averageRating
+        -- 전체 평점 합 / 전체 리뷰 수 계산 후 alias 적용
+        SUM(r.education_rating + r.instructor_rating + r.facility_rating +
+        r.atmosphere_rating + r.management_rating + r.later_rating) /
+        (COUNT(r.review_id) * 6) AS average_rating
 
         FROM course c
-                 LEFT JOIN review r ON c.course_id = r.course_id
-                 LEFT JOIN academy a ON c.academy_id = a.academy_id
+        LEFT JOIN review r ON c.course_id = r.course_id
+        LEFT JOIN academy a ON c.academy_id = a.academy_id
+        WHERE
+        <choose>
+            <when test="status == 'upcoming'">
+                c.start_date &gt; SYSDATE -- 이스케이프 문자 부등호
+            </when>
+            <when test="status == 'current'">
+                c.start_date &lt;= SYSDATE AND c.end_date &gt;= SYSDATE
+            </when>
+            <when test="status == 'completed'">
+                c.end_date &lt; SYSDATE
+            </when>
+        </choose>
         GROUP BY
-            c.course_id,
-            c.course_name,
-            c.session_number,
-            c.start_date,
-            c.end_date,
-            c.academy_id,
-            a.ACADEMY_NAME
-        ORDER BY averageRating DESC NULLS LAST
+        c.course_id, c.course_name, c.session_number, c.title_link,
+        c.start_date, c.end_date, c.academy_id, a.academy_name
+        ORDER BY average_rating DESC NULLS LAST,
+        <choose>
+            <!-- 상태별로 두 번째 정렬 기준 적용 -->
+            <when test="status == 'upcoming'">
+                c.start_date ASC
+            </when>
+            <when test="status == 'current'">
+                c.end_date ASC
+            </when>
+            <when test="status == 'completed'">
+                c.end_date DESC
+            </when>
+        </choose>
         OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     </select>
 
+    <!-- 총 데이터 개수를 구하는 쿼리 -->
+    <select id="getTotalCourseCount" resultType="int">
+        SELECT COUNT(*)
+        FROM course c
+        WHERE
+        <choose>
+            <when test="status == 'upcoming'">
+                c.start_date &gt; SYSDATE -- 이스케이프 문자 부등호
+            </when>
+            <when test="status == 'current'">
+                c.start_date &lt;= SYSDATE AND c.end_date &gt;= SYSDATE
+            </when>
+            <when test="status == 'completed'">
+                c.end_date &lt; SYSDATE
+            </when>
+        </choose>
+    </select>
 
     <!-- 홈: 강의와 리뷰 데이터를 조인해서 6개 항목별 평균 평점을 가져오는 쿼리 -->
     <select id="getTopRatedCourses" resultType="org.mywork.stitchbe.dto.home.CourseReviewDTO">

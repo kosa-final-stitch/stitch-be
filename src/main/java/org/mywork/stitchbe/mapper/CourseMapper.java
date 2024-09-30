@@ -1,6 +1,6 @@
 /*
  2024.9.17. 박요한 | getTopRatedCourses 추가
- 2024.9.29 박요한 | getPagedCoursesWithRating 추가
+ 2024.9.29 박요한 | getPagedCoursesWithStatusAndRating, getTotalCourseCount 추가
 */
 
 package org.mywork.stitchbe.mapper;
@@ -33,8 +33,15 @@ public interface CourseMapper {
 	List<CourseReviewDTO> getCoursesByAcademyId(Long academyId);
 
     // 박요한
-    // 리팩토링: 전체 강의 목록 + 페이지네이션, 정렬
-    List<CourseDTO> getPagedCoursesWithRating(@Param("offset") int offset, @Param("pageSize") int pageSize);
+    // 리팩토링: 전체 강의 목록 + 페이지네이션, 정렬 + 진행 구분
+    List<CourseDTO> getPagedCoursesWithStatusAndRating(
+            @Param("status") String status,     // 상태 (upcoming, ongoing, completed)
+            @Param("offset") int offset,        // 페이지네이션을 위한 offset
+            @Param("pageSize") int pageSize     // 페이지 크기
+    );
+
+    // 총 데이터 개수를 구하는 메서드
+    int getTotalCourseCount(@Param("status") String status);
 
     // 홈: 고평점 강의 정보
     List<CourseReviewDTO> getTopRatedCourses();
