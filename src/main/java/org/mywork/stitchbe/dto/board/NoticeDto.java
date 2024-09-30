@@ -24,6 +24,7 @@ public class NoticeDto {
     private Date editdate;
     private String status;
     private String adminName;
+    private Boolean isPinned;
 
 }
 
