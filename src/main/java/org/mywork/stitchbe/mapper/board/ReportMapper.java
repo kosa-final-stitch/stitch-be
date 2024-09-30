@@ -1,9 +1,10 @@
 /*
- 담당자:
- 시작 일자: 2024.09.24
+ 담당자:김호영
+ 시작 일자: 2024.09.29
  설명 : 신고 구현 개발
  ---------------------
  2024.09.29 김호영 | 신고목록 조회 기능 추가.
+ 2024.09.30 김호영 | 신고한 게시물, 댓글 내용 및 작성자 정보 API 구현.
  */
 
 package org.mywork.stitchbe.mapper.board;
@@ -21,13 +22,16 @@ public interface ReportMapper {
     // 신고 목록 조회 (호영)
     List<ReportDto> selectReports(); // 추가된 신고 목록 조회 메서드
 
-//
-//    // 특정 신고 데이터 조회 (필요 시)
-//    ReportDto selectReportById(Long reportId);
-//
-//    // 신고 데이터 업데이트 (필요 시)
-//    void updateReport(ReportDto reportDto);
-//
-//    // 신고 데이터 삭제 (필요 시)
-//    void deleteReport(Long reportId);
+    // 신고 세부 정보 조회
+    ReportDto selectReportById(Long reportId);
+
+    // 게시글 내용 조회
+    String getPostContent(Long boardId);
+
+    // 댓글 내용 조회
+    String getCommentContent(Long commentId);
+
+    String getPostWriter(Long boardId);
+
+    String getCommentWriter(Long commentId);
 }

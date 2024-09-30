@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.mywork.stitchbe.mapper.board.CommunityMapper">
+
     <!-- 게시글 목록 조회 -->
     <select id="getAllPosts" resultType="org.mywork.stitchbe.dto.board.CommunityDto">
-    SELECT
+        SELECT
         c.board_id AS boardId,
         c.member_id AS memberId,
         c.title,
@@ -15,19 +16,19 @@
         c.editdate,
         c.use_yn AS useYn,
         m.nickname
-    FROM community c
-             JOIN member m ON c.member_id = m.member_id
-    ORDER BY
+        FROM community c
+        JOIN member m ON c.member_id = m.member_id
+        ORDER BY
         <choose>
             <when test="sortBy == 'date'">c.regdate DESC</when> <!-- 작성일 기준 -->
             <when test="sortBy == 'views'">c.views DESC</when> <!-- 조회수 기준 -->
             <otherwise>c.regdate DESC</otherwise> <!-- 기본값은 최신순 정렬 -->
         </choose>
-</select>
+    </select>
 
-   <!-- 특정 사용자의 게시글 목록 조회(유은) -->
-<select id="getPostsByUserId" resultType="org.mywork.stitchbe.dto.board.CommunityDto">
-    SELECT
+    <!-- 특정 사용자의 게시글 목록 조회 -->
+    <select id="getPostsByUserId" resultType="org.mywork.stitchbe.dto.board.CommunityDto">
+        SELECT
         c.board_id AS boardId,
         c.member_id AS memberId,
         c.title,
@@ -39,12 +40,11 @@
         c.editdate,
         c.use_yn AS useYn,
         m.nickname
-    FROM community c
-    JOIN member m ON c.member_id = m.member_id
-    WHERE c.member_id = #{userId}  <!-- 특정 사용자 게시글 필터링 -->
-    ORDER BY c.regdate DESC
-</select>
-
+        FROM community c
+        JOIN member m ON c.member_id = m.member_id
+        WHERE c.member_id = #{userId}  <!-- 특정 사용자 게시글 필터링 -->
+        ORDER BY c.regdate DESC
+    </select>
 
     <!-- 게시글 생성 -->
     <insert id="createPost" parameterType="org.mywork.stitchbe.dto.board.CommunityDto">
@@ -56,13 +56,22 @@
         #{tag,jdbcType=VARCHAR}, SYSDATE, 0, 'Y', #{nickname})
     </insert>
 
-    <!-- 게시글 조회 -->
+    <!-- 게시글 조회 (호영 수정 AS ID) -->
     <select id="getPostById" parameterType="long" resultType="org.mywork.stitchbe.dto.board.CommunityDto">
-        SELECT board_id, member_id, title, content, category, tag, regdate, views, use_yn, nickname
+        SELECT
+        board_id AS boardId,
+        member_id AS memberId,
+        title,
+        content,
+        category,
+        tag,
+        regdate,
+        views,
+        use_yn AS useYn,
+        nickname
         FROM community
         WHERE board_id = #{boardId}
     </select>
-
 
     <!-- 게시글 수정 -->
     <update id="updatePost" parameterType="org.mywork.stitchbe.dto.board.CommunityDto">
@@ -76,9 +85,9 @@
         DELETE FROM community WHERE board_id = #{boardId}
     </delete>
 
-    <!--조회수-->
+    <!-- 조회수 증가 -->
     <update id="incrementViewCount">
-        UPDATE COMMUNITY
+        UPDATE community
         SET views = views + 1
         WHERE board_id = #{boardId}
     </update>
