@@ -1,9 +1,19 @@
+/*
+ 담당자:
+ 시작 일자: 2024.09.24
+ 설명 : 신고 구현 개발
+ ---------------------
+ 2024.09.29 김호영 | 신고목록 조회 기능 추가.
+ */
+
 package org.mywork.stitchbe.service.board;
 
 import org.mywork.stitchbe.dto.board.ReportDto;
 import org.mywork.stitchbe.mapper.board.ReportMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ReportService {
@@ -28,5 +38,11 @@ public class ReportService {
 
         // 신고 데이터 저장
         reportMapper.insertReport(reportDto);
+    }
+
+
+    // 신고 목록 조회 (호영)
+    public List<ReportDto> getReports() {
+        return reportMapper.selectReports();
     }
 }
