@@ -3,6 +3,7 @@ package org.mywork.stitchbe.dto;
 import java.util.Date;
 
 public class ReviewDTO {
+	private Long academyId;             // 학원 ID
     private Long reviewId;             // 리뷰 ID
     private Long memberId;             // 회원 ID
     private Long courseId;             // 강좌 ID
@@ -25,11 +26,21 @@ public class ReviewDTO {
     private Date editDate;        // 리뷰 수정일
 
     // Getters and Setters
+   
+
+    public Long getAcademyId() {
+		return academyId;
+	}
+
+	public void setAcademyId(Long academyId) {
+		this.academyId = academyId;
+	}
+
     public Long getReviewId() {
         return reviewId;
     }
 
-    public void setReviewId(Long reviewId) {
+	public void setReviewId(Long reviewId) {
         this.reviewId = reviewId;
     }
 

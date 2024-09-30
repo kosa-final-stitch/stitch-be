@@ -66,13 +66,6 @@ public class AcademyController {
         academyService.saveCourseReview(courseId, review);
         return ResponseEntity.ok("리뷰가 성공적으로 저장되었습니다.");
     }
-
-    // 학원의 별점 및 레이더 차트 데이터 가져오기
-//    @GetMapping("/academy/{academyId}/rating")
-//    public ResponseEntity<Map<String, Integer>> getAcademyRating(@PathVariable Long academyId) {
-//        Map<String, Integer> ratingData = academyService.getAcademyRating(academyId);
-//        return ResponseEntity.ok(ratingData);
-//    }
     
     // 학원 ID에 따른 평균 별점 반환
     @GetMapping("/academy/{academyId}/rating")
@@ -81,9 +74,15 @@ public class AcademyController {
         return ResponseEntity.ok(averageRating);
     }
 
-     
+    // 학원에 대한 모든 리뷰 항목 가져오기
+    @GetMapping("/reviews/all/{academyId}")
+    public ResponseEntity<List<ReviewDTO>> getAllCourseReviews(@PathVariable Long academyId) {
+        List<ReviewDTO> reviews = academyService.getAllCourseReviews(academyId);
+        return ResponseEntity.ok(reviews);
+    }
+    
+    
     //요한
-   
     // 홈: 고평점 학원 목록 반환
     @GetMapping("/top")
     public ResponseEntity<List<AcademyReviewDTO>> getTopRatedAcademies() {

@@ -36,13 +36,6 @@ public class ReviewController {
 		this.memberService = memberService;
 	}
 
-	// 리뷰 데이터를 저장하는 엔드포인트
-	// @PostMapping
-//	public String saveReviews(@RequestBody List<ReviewDTO> reviews) {
-//		reviewService.saveReviews(reviews);
-//		return "리뷰가 성공적으로 저장되었습니다.";
-//	}
-
 	@PostMapping
 	public ResponseEntity<String> saveReview(@RequestBody List<ReviewDTO> reviews) {
 		System.out.println("리뷰컨트롤러 호출");
