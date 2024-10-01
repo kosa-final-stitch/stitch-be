@@ -1,12 +1,14 @@
 package org.mywork.stitchbe.controller.member;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.mywork.stitchbe.Util.JwtUtil;
 import org.mywork.stitchbe.dto.AddMemberRequest;
 import org.mywork.stitchbe.dto.LoginRequest;
 import org.mywork.stitchbe.dto.MemberDto;
+import org.mywork.stitchbe.dto.board.CommunityDto;
 import org.mywork.stitchbe.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -128,14 +131,10 @@ public class MemberController {
       }
    }
    
-//   유은 작성 코드
+//   유은 작성 코드 (member 로그인후 확인가능)
+   
 
    // 특정 회원 정보 조회 API
-//   @GetMapping("/info/{memberId}")
-//   public MemberDto getMemberInfo(@PathVariable Long memberId) {
-//      return memberService.getMemberInfo(memberId); // MemberService를 통해 회원 정보 가져옴
-//   }
-   
    @GetMapping("/member/info")
    public ResponseEntity<MemberDto> getCurrentMemberInfo() {
        // 현재 인증된 사용자 가져오기
@@ -152,6 +151,7 @@ public class MemberController {
            return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body(null);
        }
    }//getCurrentMemberInfo
+   
    
    // 회원 정보 업데이트
    @PutMapping("/member/info")

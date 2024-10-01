@@ -1,7 +1,10 @@
 package org.mywork.stitchbe.service;
 
+import java.util.List;
+
 import org.mywork.stitchbe.dto.AddMemberRequest;
 import org.mywork.stitchbe.dto.MemberDto;
+import org.mywork.stitchbe.dto.board.CommunityDto;
 import org.mywork.stitchbe.mapper.MemberMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -108,5 +111,6 @@ public class MemberService {
 	public Long findMemberIdByEmail(String email) {
 		return memberMapper.findMemberIdByEmail(email);
 	}
+
 
 }

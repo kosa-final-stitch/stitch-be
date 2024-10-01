@@ -1,6 +1,7 @@
 package org.mywork.stitchbe.controller.board;
 
 import org.mywork.stitchbe.dto.MemberDto;
+import org.mywork.stitchbe.dto.ReviewDTO;
 import org.mywork.stitchbe.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.mywork.stitchbe.dto.board.CommunityDto;
 import org.mywork.stitchbe.service.board.CommunityService;
 import java.util.List;
@@ -132,16 +136,17 @@ public class CommunityController {
         }
     }
     
- // 특정 사용자의 게시글 목록 조회(유은)
-    @GetMapping("/board/community/{userId}")
-    public ResponseEntity<List<CommunityDto>> getPostsByUserId(@PathVariable Long userId) {
-        List<CommunityDto> posts = communityService.getPostsByUserId(userId);
+ // 로그인한 사용자의  게시글 목록 조회(유은)
+    @GetMapping("/board/community/{memberId}")
+    public ResponseEntity<List<CommunityDto>> getPostsByUserId(@PathVariable Long memberId) {
+    	System.out.println("(마페)게시글 목록조회 컨트롤러");
+        List<CommunityDto> posts = communityService.getPostsByUserId(memberId);
         if (posts.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(posts);
     }
+   
 
-    
     
 }
