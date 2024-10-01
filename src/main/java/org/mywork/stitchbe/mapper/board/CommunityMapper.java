@@ -15,5 +15,5 @@ public interface CommunityMapper {
     void deletePost(Long boardId);
     void incrementViewCount(@Param("boardId") Long boardId);
     // 특정 사용자의 게시글 목록 조회(유은)
-	List<CommunityDto> getPostsByUserId(Long userId);
+	List<CommunityDto> findPostsByMemberId(@Param("memberId") Long memberId);
 }
