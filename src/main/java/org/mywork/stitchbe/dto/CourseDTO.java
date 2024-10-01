@@ -14,4 +14,7 @@ public class CourseDTO {
 	private Date end_date;
 	private int session_number;
 
+	 // 학원 이름 필드 추가
+    private String academy_name;
+	
 }

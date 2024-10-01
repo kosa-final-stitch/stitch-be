@@ -59,14 +59,15 @@ public class ReviewController {
 //	@GetMapping
 //	public List<ReviewDTO> getAllReviews() {
 //		return reviewService.getAllReviews();
-//	}
+//	}0
 
+	
 	// 로그인한 사용자의 모든 리뷰를 가져오는 엔드포인트
-	@GetMapping("/myreviews")
+	@GetMapping("/myreviews/{memberId}")
 	public ResponseEntity<List<ReviewDTO>> getUserReviews() {
 		// 현재 인증된 사용자 가져오기
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		System.out.println("현재 인증된 사용자 리뷰가져오기: " + authentication);
+		 System.out.println("(리뷰컨)현재 인증된 사용자 리뷰 가져오기: " + authentication);
 
 		if (authentication != null && authentication.isAuthenticated()) {
 			String email = authentication.getName(); // 사용자의 이메일을 가져옴
@@ -74,11 +75,11 @@ public class ReviewController {
 			// 이메일로 사용자 정보 조회
 			MemberDto member = memberService.getMemberInfoByEmail(email);
 			if (member != null) {
-				Long userId = member.getMemberId(); // 사용자 ID 가져옴
-				System.out.println("my reviews에서 가져온 사용자 아이디 : "+userId);
+				Long memberId = member.getMemberId(); // 사용자 ID 가져옴
+				System.out.println("my reviews에서 가져온 사용자 아이디 : "+memberId);
 
 				// 해당 사용자의 리뷰 목록을 조회
-				List<ReviewDTO> reviews = reviewService.getReviewsByUserId(userId);
+				List<ReviewDTO> reviews = reviewService.getReviewsByUserId(memberId);
 
 							return ResponseEntity.ok(reviews);
 			} else {
