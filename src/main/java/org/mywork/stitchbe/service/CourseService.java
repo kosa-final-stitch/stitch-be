@@ -1,10 +1,13 @@
 /*
  2024.9.17. 박요한 | getTopRatedCourses 추가
- */
+ 2024.9.29. 박요한 | getPagedCoursesWithStatusAndRating 추가
+*/
 
 package org.mywork.stitchbe.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mywork.stitchbe.dto.CourseDTO;
 import org.mywork.stitchbe.dto.ReviewDTO;
@@ -81,7 +84,7 @@ public class CourseService {
 			totalManagement += course.getManagementRating();
 			totalLater += course.getLaterRating();
 		}
- 
+
 		// 평균 계산
 		CourseReviewDTO averageRatings = new CourseReviewDTO();
 		averageRatings.setEducationRating(totalEducation / totalCourses);
@@ -94,9 +97,30 @@ public class CourseService {
 		return averageRatings;
 	}
 
-	// 홈: 평점이 높은 교육 과정을 가져오는 메서드
-	public List<CourseReviewDTO> getTopRatedCourses() {
-		return courseMapper.getTopRatedCourses();
-	}
+    // 박요한
+    // 리팩토링: 전체 강의 목록 + 페이지네이션, 정렬 + 진행 구분
+    public Map<String, Object> getPagedCoursesWithStatusAndRating(String status, int pageNumber, int pageSize) {
+        Map<String, Object> result = new HashMap<>();
+
+        // 전체 데이터 개수에서 총 페이지 수 계산
+        int totalCount = courseMapper.getTotalCourseCount(status);
+        int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+
+        // 페이징 처리된 데이터 가져오기
+        int offset = (pageNumber - 1) * pageSize;
+        List<CourseDTO> courses = courseMapper.getPagedCoursesWithStatusAndRating(status, offset, pageSize);
+
+        // 결과 맵에 담아서 반환
+        result.put("courses", courses);
+        result.put("totalPages", totalPages);
+        result.put("totalCount", totalCount);  // 총 데이터 개수도 필요시 반환 가능
+
+        return result;
+    }
+
+    // 홈: 평점이 높은 교육 과정을 가져오는 메서드
+    public List<CourseReviewDTO> getTopRatedCourses() {
+        return courseMapper.getTopRatedCourses();
+    }
 
 }
