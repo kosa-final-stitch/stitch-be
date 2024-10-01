@@ -46,12 +46,6 @@
 		WHERE course_id = #{courseId}
 	</select>
 
-	<!-- 모든 리뷰를 가져오는 메서드 -->
-	<select id="getAllReviews"
-		resultType="org.mywork.stitchbe.dto.ReviewDTO">
-		SELECT * FROM REVIEW
-	</select>
-
 	<!-- 로그인한 사용자의 리뷰를 가져오는 메서드 -->
 	<select id="getReviewsByUserId"
 		resultType="org.mywork.stitchbe.dto.ReviewDTO">
