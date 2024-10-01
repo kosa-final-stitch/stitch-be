@@ -70,18 +70,13 @@ public class CommunityService {
 		communityMapper.incrementViewCount(boardId);
 	}
 
-	// 특정 사용자의 게시글 목록 조회(유은)
-	public List<CommunityDto> getPostsByUserId(Long userId) {
-		logger.info("Fetching posts for user with ID: {}", userId);
-		List<CommunityDto> posts = null;
-		try {
-			posts = communityMapper.getPostsByUserId(userId);
-			logger.info("Fetched posts for user: {}", posts);
-		} catch (Exception e) {
-			logger.error("Error fetching posts for user ID: {}", e.getMessage(), e);
-		}
-		return posts;
-	}
+
+    public List<CommunityDto> getPostsByUserId(Long memberId) {
+    	System.out.println("마페 게시글 서비스");
+        return communityMapper.findPostsByMemberId(memberId);
+    }
+
+
 
 	// 관리자 전용 게시글 숨김 (호영)
 	public void changePostStatus(Long boardId, String useYn) {

@@ -3,6 +3,7 @@ package org.mywork.stitchbe.dto;
 import java.util.Date;
 
 public class ReviewDTO {
+	private Long academyId;             // 학원 ID
     private Long reviewId;             // 리뷰 ID
     private Long memberId;             // 회원 ID
     private Long courseId;             // 강좌 ID
@@ -24,15 +25,30 @@ public class ReviewDTO {
     private Date regDate;         // 리뷰 작성일
     private Date editDate;        // 리뷰 수정일
 
+    private String courseName;  // 코스 이름 추가
+    private String academyName; // 학원 이름 추가
+
+
     // 추가: 닉네임 필드
     private String nickname;           // 회원 닉네임
 
+
     // Getters and Setters
+   
+
+    public Long getAcademyId() {
+		return academyId;
+	}
+
+	public void setAcademyId(Long academyId) {
+		this.academyId = academyId;
+	}
+
     public Long getReviewId() {
         return reviewId;
     }
 
-    public void setReviewId(Long reviewId) {
+	public void setReviewId(Long reviewId) {
         this.reviewId = reviewId;
     }
 
@@ -181,6 +197,23 @@ public class ReviewDTO {
         this.editDate = editDate;
     }
 
+
+	public String getCourseName() {
+		return courseName;
+	}
+
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
+	}
+
+	public String getAcademyName() {
+		return academyName;
+	}
+
+	public void setAcademyName(String academyName) {
+		this.academyName = academyName;
+	}
+
     // 추가된 닉네임
     public String getNickname() {
         return nickname;
@@ -189,4 +222,5 @@ public class ReviewDTO {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
+
 }
