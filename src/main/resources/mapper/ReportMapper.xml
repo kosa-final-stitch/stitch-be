@@ -1,64 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+ 담당자 : 김호영
+ 시작 일자: 2024.09.24
+ 설명 : 신고 DTO 구현 개발
+
+ 2024.09.29 김호영 | 신고자 NickName 객체 추가.
+ 2024.09.30 김호영 | 신고한 게시물, 댓글 내용 및 작성자 정보 API 구현.
+-->
 
 <mapper namespace="org.mywork.stitchbe.mapper.board.ReportMapper">
-
     <!-- 신고 데이터 삽입 -->
     <insert id="insertReport" parameterType="org.mywork.stitchbe.dto.board.ReportDto">
         INSERT INTO report (
-            member_id,
-            post_or_comment,
-            board_table,
-            board_id,
-            comment_id,
-            type,
-            reason,
-            content,
-            regdate
+        member_id,
+        post_or_comment,
+        board_table,
+        board_id,
+        comment_id,
+        type,
+        reason,
+        content,
+        regdate
         ) VALUES (
-                     #{memberId},
-                     #{postOrComment},
-                     #{boardTable},
-                     #{boardId},
-                     #{commentId},
-                     #{type},
-                     #{reason},
-                     #{content},
-                     SYSDATE
-                 )
+        #{memberId},
+        #{postOrComment},
+        #{boardTable},
+        <choose>
+            <when test="boardId != null">
+                #{boardId}
+            </when>
+            <otherwise>
+                NULL
+            </otherwise>
+        </choose>,
+        <choose>
+            <when test="commentId != null">
+                #{commentId, jdbcType=NUMERIC}
+            </when>
+            <otherwise>
+                NULL
+            </otherwise>
+        </choose>,
+        #{type},
+        #{reason},
+        #{content},
+        SYSDATE
+        )
     </insert>
 
-<!--    &lt;!&ndash; 특정 신고 데이터 조회 (필요 시) &ndash;&gt;-->
-<!--    <select id="selectReportById" parameterType="Long" resultType="org.mywork.stitchbe.dto.board.ReportDto">-->
-<!--        SELECT *-->
-<!--        FROM report-->
-<!--        WHERE report_id = #{reportId}-->
-<!--    </select>-->
-
-<!--    &lt;!&ndash; 신고 데이터 업데이트 (필요 시) &ndash;&gt;-->
-<!--    <update id="updateReport" parameterType="org.mywork.stitchbe.dto.board.ReportDto">-->
-<!--        UPDATE report-->
-<!--        SET-->
-<!--            type = #{type},-->
-<!--            reason = #{reason},-->
-<!--            content = #{content},-->
-<!--            regdate = SYSDATE-->
-<!--        WHERE report_id = #{reportId}-->
-<!--    </update>-->
-
-<!--    &lt;!&ndash; 신고 데이터 삭제 (필요 시) &ndash;&gt;-->
-<!--    <delete id="deleteReport" parameterType="Long">-->
-<!--        DELETE FROM report-->
-<!--        WHERE report_id = #{reportId}-->
-<!--    </delete>-->
-
-
-    <!-- 호영 -->
-    <!-- 신고 데이터 조회 -->
+    <!-- 신고 목록 조회 -->
     <select id="selectReports" resultType="org.mywork.stitchbe.dto.board.ReportDto">
-        SELECT r.report_id AS reportId,
+        SELECT
+        r.report_id AS reportId,
         r.member_id AS memberId,
         m.nickname AS nickname,
         r.post_or_comment AS postOrComment,
@@ -68,10 +62,63 @@
         r.type AS type,
         r.reason AS reason,
         r.content AS content,
-        r.regdate AS regdate
-        FROM report r
-        JOIN member m ON r.member_id = m.member_id
-        ORDER BY r.regdate DESC
+        r.regdate AS regdate,
+        COALESCE(b.content, c.content) AS postContent
+        FROM
+        report r
+        JOIN
+        member m ON r.member_id = m.member_id
+        LEFT JOIN
+        community b ON UPPER(r.post_or_comment) = 'POST' AND b.board_id = r.board_id
+        LEFT JOIN
+        community_comment c ON UPPER(r.post_or_comment) = 'COMMENT' AND c.comment_id = r.comment_id
+        ORDER BY
+        r.regdate DESC
     </select>
 
+    <!-- 특정 신고 조회 by reportId -->
+    <select id="selectReportById" parameterType="long" resultType="org.mywork.stitchbe.dto.board.ReportDto">
+        SELECT
+        report_id AS reportId,
+        member_id AS memberId,
+        post_or_comment AS postOrComment,
+        board_id AS boardId,
+        comment_id AS commentId,
+        type AS type,
+        reason AS reason,
+        content AS content,
+        regdate AS regdate
+        FROM report
+        WHERE report_id = #{reportId}
+    </select>
+
+    <!-- 게시글 작성자 정보 조회 -->
+    <select id="getPostWriter" resultType="String">
+        SELECT m.nickname AS nickname
+        FROM community b
+        JOIN member m ON b.member_id = m.member_id
+        WHERE b.board_id = #{boardId}
+    </select>
+
+    <!-- 댓글 작성자 정보 조회 -->
+    <select id="getCommentWriter" resultType="String">
+        SELECT m.nickname AS nickname
+        FROM community_comment c
+        JOIN member m ON c.member_id = m.member_id
+        WHERE c.comment_id = #{commentId}
+    </select>
+
+    <!-- 게시글 내용 및 제목 조회 -->
+    <select id="getPostContent" resultType="map">
+        SELECT b.content, b.title
+        FROM community b
+        WHERE b.board_id = #{boardId}
+    </select>
+
+    <!-- 댓글 내용 조회 -->
+    <select id="getCommentContent" resultType="String">
+        SELECT c.content AS content
+        FROM community_comment c
+        WHERE c.comment_id = #{commentId}
+    </select>
 </mapper>
