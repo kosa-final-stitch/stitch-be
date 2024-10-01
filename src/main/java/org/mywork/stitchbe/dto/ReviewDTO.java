@@ -24,6 +24,9 @@ public class ReviewDTO {
     private Date regDate;         // 리뷰 작성일
     private Date editDate;        // 리뷰 수정일
 
+    // 추가: 닉네임 필드
+    private String nickname;           // 회원 닉네임
+
     // Getters and Setters
     public Long getReviewId() {
         return reviewId;
@@ -176,5 +179,14 @@ public class ReviewDTO {
 
     public void setEditDate(Date editDate) {
         this.editDate = editDate;
+    }
+
+    // 추가된 닉네임
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
