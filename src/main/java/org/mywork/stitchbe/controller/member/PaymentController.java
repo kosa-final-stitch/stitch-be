@@ -5,6 +5,7 @@
 _____________________
 2024.9.24 박요한 | 생성.
 2024.9.25 김호영 | 결제 정보 확인 구현.
+2024.10.1 박요한 | 마이페이지 내역 조회.
 */
 
 package org.mywork.stitchbe.controller.member;
@@ -52,6 +53,16 @@ public class PaymentController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("결제 처리 중 오류 발생");
         }
+    }
+
+    // 회원의 결제 정보 조회
+    @GetMapping("/member/payments")
+    public ResponseEntity<List<PaymentDTO>> getPaymentsByMemberId(Authentication authentication) {
+        String email = authentication.getName();
+        Long memberId = memberService.findMemberIdByEmail(email);
+
+        List<PaymentDTO> payments = paymentService.getPaymentsByMemberId(memberId);
+        return ResponseEntity.ok(payments);
     }
 
     // 전체 결제 정보 조회 (관리자용)
