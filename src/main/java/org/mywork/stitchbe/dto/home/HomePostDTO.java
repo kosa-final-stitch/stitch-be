@@ -4,6 +4,7 @@
 설명 : 홈페이지 용 게시글 dto.
 ---------------------
 2024.09.18 박요한 | dto 생성.
+2024.09.26 박요한 | 필드명 수정.
 */
 
 package org.mywork.stitchbe.dto.home;
@@ -11,7 +12,7 @@ import lombok.Data;
 
 @Data
 public class HomePostDTO {
-    private Long postId;   // 게시글 ID
+    private Long boardId;   // 게시글 ID
     private String title;  // 게시글 제목
     private int views;     // 조회수
 }

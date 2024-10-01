@@ -1,7 +1,10 @@
 package org.mywork.stitchbe.service;
 
+import java.util.List;
+
 import org.mywork.stitchbe.dto.AddMemberRequest;
 import org.mywork.stitchbe.dto.MemberDto;
+import org.mywork.stitchbe.dto.board.CommunityDto;
 import org.mywork.stitchbe.mapper.MemberMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -115,7 +118,6 @@ public class MemberService {
 	}
 
 	// 호영 작성 코드
-
 	// 모든 회원 조회 (호영)
 	public List<MemberDto> getAllMembers() {
 		return memberMapper.getAllMembers();
