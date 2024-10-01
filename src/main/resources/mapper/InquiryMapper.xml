@@ -5,6 +5,7 @@
  설명 : 문의사항 mapper.
  _____________________
  2024.9.22 박요한 | 생성.
+ 2024.9.24 김호영 | 문의사항 조회, 답변등록.
 -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -43,5 +44,34 @@
 
 </select>
     
+
+
+    <!-- 호영 작성 -->
+
+    <!-- 문의 사항 답변 등록 -->
+    <update id="updateInquiryAnswer">
+        UPDATE inquiry
+        SET admin_id = #{adminId}, answer = #{answer}, ansdate = SYSDATE, status = 'answered'
+        WHERE inquiry_id = #{inquiryId}
+    </update>
+
+    <!-- 모든 문의사항 조회 -->
+    <select id="findAllInquiries" resultType="org.mywork.stitchbe.dto.InquiryDTO">
+        SELECT i.inquiry_id AS inquiryId,
+        i.member_id AS memberId,
+        i.category,
+        i.title,
+        i.content,
+        i.answer,
+        i.status,
+        i.regdate AS regDate,
+        i.ansdate AS ansDate,
+        m.nickname AS memberName,
+        a.nickname AS adminName
+        FROM inquiry i
+        LEFT JOIN member m ON i.member_id = m.member_id
+        LEFT JOIN member a ON i.admin_id = a.member_id
+    </select>
+
 
 </mapper>

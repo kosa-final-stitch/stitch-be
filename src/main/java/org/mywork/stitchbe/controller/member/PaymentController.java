@@ -4,6 +4,7 @@
 설명 : 결제 controller.
 _____________________
 2024.9.24 박요한 | 생성.
+2024.9.25 김호영 | 결제 정보 확인 구현.
 */
 
 package org.mywork.stitchbe.controller.member;
@@ -14,11 +15,10 @@ import org.mywork.stitchbe.service.PaymentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -53,6 +53,26 @@ public class PaymentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("결제 처리 중 오류 발생");
         }
     }
+
+    // 전체 결제 정보 조회 (관리자용)
+    @GetMapping("/payments")
+    public ResponseEntity<List<PaymentDTO>> getAllPayments() {
+        List<PaymentDTO> payments = paymentService.getAllPayments();
+        return ResponseEntity.ok(payments);
+    }
+
+
+        @PostMapping("/update-payment-status")
+        public ResponseEntity<String> updatePaymentStatus(@RequestBody PaymentDTO paymentDto) {
+            try {
+                paymentService.updatePaymentStatus(paymentDto.getPaymentId(), paymentDto.getStatus());
+                return ResponseEntity.ok("Payment status updated successfully.");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating payment status.");
+            }
+        }
+
+
 
 }
 

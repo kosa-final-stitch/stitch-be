@@ -4,6 +4,7 @@
 설명 : 문의사항 service.
 _____________________
 2024.9.23 박요한 | 생성.
+2024.9.24 김호영 | 문의사항 조회 답변 등록.
 */
 
 package org.mywork.stitchbe.service;
@@ -15,6 +16,8 @@ import java.util.List;
 import org.mywork.stitchbe.dto.InquiryDTO;
 import org.mywork.stitchbe.mapper.InquiryMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor // Lombok을 사용하여 의존성 자동 주입
@@ -31,10 +34,26 @@ public class InquiryService {
         }
     }
 
+
     // 로그인한 사용자의 문의 목록 조회(유은)
 	public List<InquiryDTO> getInquiryBymemberId(Long memberId) {
 	   	System.out.println("마페 문의 서비스");
 		return  inquiryMapper.getInquiryBymemberId(memberId);
 	}
 
+
+    // 모든 사용자의 문의사항 조회
+    public List<InquiryDTO> getAllInquiries() {
+        return inquiryMapper.findAllInquiries();  // 모든 문의사항 조회
+    }
+    
+    // 문의사항 답변 등록 (호영)
+    public void submitAnswer(Long inquiryId, Long adminId, String answer) {
+        try {
+            // 답변 등록 로직
+            inquiryMapper.updateInquiryAnswer(inquiryId, adminId, answer);
+        } catch (Exception e) {
+            throw  new RuntimeException("답변 등록 실패.", e);
+        }
+    }
 }

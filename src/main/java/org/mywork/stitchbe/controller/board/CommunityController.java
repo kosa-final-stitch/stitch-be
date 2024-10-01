@@ -6,6 +6,7 @@ import org.mywork.stitchbe.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,7 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.mywork.stitchbe.dto.board.CommunityDto;
 import org.mywork.stitchbe.service.board.CommunityService;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,6 +148,17 @@ public class CommunityController {
         return ResponseEntity.ok(posts);
     }
    
+
+    // 관리자 전용 게시글 비공개 (호영)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/admin/board/status/{boardId}")
+    public ResponseEntity<Void> adminHidePost(@PathVariable Long boardId, @RequestBody Map<String, String> request) {
+        String useYn = request.get("useYn");  // 요청 본문에서 useYn 값을 가져옴
+        communityService.changePostStatus(boardId, useYn);  // 서비스로 전달
+        return ResponseEntity.ok().build();
+    }
+
+
 
     
 }

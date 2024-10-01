@@ -37,27 +37,28 @@ public class CourseService {
 		return courseMapper.getCourseByCourseId(courseId);
 	}
 
-	// 학원 ID와 코스 ID에 따라 코스 상세 정보를 가져오는 메서드
-	public CourseDTO getCourseById(Long academyId, Long courseId) {
-		return courseMapper.getCourseById(academyId, courseId);
-	}
 
-	// 강의 ID에 따른 리뷰 목록을 가져오는 메서드
-	public List<ReviewDTO> getReviewsByCourseId(Long courseId) {
-		List<ReviewDTO> reviews = courseMapper.getReviewsByCourseId(courseId);
-		System.out.println(" 특정 강의에 리뷰리스트 : " + reviews);
-		for (ReviewDTO review : reviews) {
-			System.out.println(
-					"리뷰 작성자: " + review.getMemberId() 
-					+ " 코스리뷰 getAtmosphere : " + review.getAtmosphere()
-					+ " 코스리뷰 getAtmosphereRating : " + review.getAtmosphereRating() 
-					+ " 코스리뷰 getManagementRating : " + review.getManagementRating() 
-					+ " 코스리뷰 getCourseId : " + review.getCourseId()
-					+ " 코스리뷰 getReviewId : " + review.getReviewId() 
-					+ " 코스리뷰 getRegDate : " + review.getRegDate());
-		}
-		return reviews; // 매퍼를 통해 리뷰 데이터를 가져옴
-	}
+    // 학원 ID와 코스 ID에 따라 코스 상세 정보를 가져오는 메서드
+    public CourseDTO getCourseById(Long academyId, Long courseId) {
+        return courseMapper.getCourseById(academyId, courseId);
+    }
+
+    // 강의 ID에 따른 리뷰 목록을 가져오는 메서드
+    public List<ReviewDTO> getReviewsByCourseId(Long courseId) {
+        List<ReviewDTO> reviews = courseMapper.getReviewsByCourseId(courseId);
+        System.out.println(" 특정 강의에 리뷰리스트 : "+reviews);
+        for (ReviewDTO review : reviews) {
+            System.out.println("리뷰 작성자: " + review.getMemberId()
+                    +" 코스리뷰 getAtmosphere : " + review.getAtmosphere()
+                    +" 코스리뷰 getAtmosphereRating : "+ review.getAtmosphereRating()
+                    +" 코스리뷰 getManagementRating : "	 + review.getManagementRating()
+                    +" 코스리뷰 getCourseId : "	 + review.getCourseId()
+                    +" 코스리뷰 getReviewId : " + review.getReviewId()
+                    +" 코스리뷰 getRegDate : "	 + review.getRegDate());
+        }
+        return reviews; // 매퍼를 통해 리뷰 데이터를 가져옴
+    }
+
 
 	// 학원에 속한 모든 강의의 항목별 평균 평점 계산
 	public CourseReviewDTO getAcademyCoursesAverageRating(Long academyId) {
@@ -80,7 +81,7 @@ public class CourseService {
 			totalManagement += course.getManagementRating();
 			totalLater += course.getLaterRating();
 		}
-
+ 
 		// 평균 계산
 		CourseReviewDTO averageRatings = new CourseReviewDTO();
 		averageRatings.setEducationRating(totalEducation / totalCourses);
