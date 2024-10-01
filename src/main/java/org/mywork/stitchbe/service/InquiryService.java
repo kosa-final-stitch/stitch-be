@@ -10,6 +10,9 @@ _____________________
 package org.mywork.stitchbe.service;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.mywork.stitchbe.dto.InquiryDTO;
 import org.mywork.stitchbe.mapper.InquiryMapper;
 import org.springframework.stereotype.Service;
@@ -31,10 +34,19 @@ public class InquiryService {
         }
     }
 
+
+    // 로그인한 사용자의 문의 목록 조회(유은)
+	public List<InquiryDTO> getInquiryBymemberId(Long memberId) {
+	   	System.out.println("마페 문의 서비스");
+		return  inquiryMapper.getInquiryBymemberId(memberId);
+	}
+
+
     // 모든 사용자의 문의사항 조회
     public List<InquiryDTO> getAllInquiries() {
         return inquiryMapper.findAllInquiries();  // 모든 문의사항 조회
     }
+    
     // 문의사항 답변 등록 (호영)
     public void submitAnswer(Long inquiryId, Long adminId, String answer) {
         try {

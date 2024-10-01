@@ -32,16 +32,18 @@ public interface AcademyMapper {
 
     // 강의 리뷰 삽입
     void insertCourseReview(@Param("courseId") Long courseId, @Param("review") ReviewDTO review);
-
-    // 학원 별점 및 레이더 차트 데이터 조회
-//    Map<String, Integer> findAcademyRating(@Param("academyId") Long academyId);
     
     // 학원 ID로 평균 별점 조회 (정수로 반환)
 	Integer findAcademyAverageRating(Long academyId);
+	
+	//학원의 리뷰 전체 
+    List<ReviewDTO> getAllCourseReviews(@Param("academyId") Long academyId);
     
     //요한
     //홈: 고평점 학원 정보
     List<AcademyReviewDTO> getTopRatedAcademies();
+
+
 
 
 }

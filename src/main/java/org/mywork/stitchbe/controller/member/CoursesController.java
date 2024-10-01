@@ -59,7 +59,6 @@ public class CoursesController {
     }
 
 
-
     // 홈: 평점이 높은 교육 과정을 반환하는 API 엔드포인트
     @GetMapping("/courses/top")
     public ResponseEntity<List<CourseReviewDTO>> getTopRatedCourses() {
