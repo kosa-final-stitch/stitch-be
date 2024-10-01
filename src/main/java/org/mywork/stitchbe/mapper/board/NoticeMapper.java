@@ -4,6 +4,7 @@
  설명 : admin 공지사항 페이지 기능 구현 개발
  ---------------------
  2024.09.24 김호영 | 공지사항 작성 백엔드 연결.
+ 2024.10.01 김호영 | 공지사항 공개, 비공개 구현.
  */
 
 
@@ -21,4 +22,5 @@ public interface NoticeMapper {
     void updateNotice(NoticeDto noticeDto);
     void deleteNotice(Long noticeId);
     void updateNoticeStatus(NoticeDto noticeDto);
+    List<NoticeDto> getPublicNotices();
 }
