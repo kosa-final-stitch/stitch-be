@@ -6,6 +6,7 @@
  _____________________
  2024.9.24 박요한 | 생성.
  2024.9.25 김호영 | 결제 정보 확인 구현.
+ 2024.10.1 박요한 | 마이페이지 내역 조회.
 -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -17,6 +18,25 @@
         VALUES
             (#{memberId}, #{amount}, #{method}, #{category}, #{status}, SYSDATE)
     </insert>
+
+    <!-- 회원의 결제 내역 조회 -->
+    <select id="getPaymentsByMemberId" parameterType="Long" resultType="org.mywork.stitchbe.dto.PaymentDTO">
+        SELECT
+            p.payment_id AS paymentId,
+            p.member_id AS memberId,
+            p.amount AS amount,
+            p.method AS method,
+            p.category AS category,
+            p.status AS status,
+            p.paydate AS payDate,
+            p.editdate AS editDate,
+            m.name AS memberName
+        FROM payment p
+            JOIN member m ON p.member_id = m.member_id
+        WHERE p.member_id = #{memberId}
+            AND p.category = 'donation'  <!-- 후원 카테고리만 가져옴 -->
+        ORDER BY p.paydate DESC
+    </select>
 
 
     <!-- 호영 -->
