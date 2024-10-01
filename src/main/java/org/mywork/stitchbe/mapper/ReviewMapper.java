@@ -26,4 +26,7 @@ public interface ReviewMapper {
 
 	// 특정 인간에 대한 리뷰를 가져오는 메서드
 	public List<ReviewDTO> getReviewsByUserId(Long userId);
+
+	// 리뷰 삭제 메서드
+	void deleteReview(Long reviewId);
 }

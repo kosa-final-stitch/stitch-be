@@ -4,6 +4,7 @@
  설명 : admin 공지사항 페이지 기능 구현 개발
  ---------------------
  2024.09.24 김호영 | 공지사항 작성 백엔드 연결.
+ 2024.10.01 김호영 | 공지사항 공개, 비공개 구현.
  */
 
 package org.mywork.stitchbe.controller.board;
@@ -11,6 +12,7 @@ package org.mywork.stitchbe.controller.board;
 import org.mywork.stitchbe.dto.board.NoticeDto;
 import org.mywork.stitchbe.service.board.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +67,11 @@ public class NoticeController {
     // 공지사항 상태 변경 (공개/비공개)
     @PutMapping("/{noticeId}/status")
     public ResponseEntity<String> updateNoticeStatus(@PathVariable Long noticeId, @RequestBody String status) {
-        noticeService.updateNoticeStatus(noticeId, status);
-        return ResponseEntity.ok("공지사항 상태가 변경되었습니다.");
+        try {
+            noticeService.updateNoticeStatus(noticeId, status);
+            return ResponseEntity.ok("공지사항 상태가 변경되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("공지사항 상태 변경 중 오류가 발생했습니다.");
+        }
     }
 }
