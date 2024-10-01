@@ -48,9 +48,19 @@
 
     <!-- 강의 ID로 강의 조회 -->
     <select id="getCourseByCourseId" resultType="org.mywork.stitchbe.dto.CourseDTO">
-        SELECT * 
-        FROM course
-        WHERE course_id = #{courseId}
+     SELECT
+            c.course_id,
+            c.academy_id,
+            c.course_name,
+            c.title_link,
+            c.lector,
+            c.start_date,
+            c.end_date,
+            c.session_number,
+            a.academy_name
+        FROM course c
+        LEFT JOIN academy a ON c.academy_id = a.academy_id
+        WHERE c.course_id = #{courseId}
     </select>
 
 <!-- 학원에 속한 모든 강의를 가져오는 SQL -->

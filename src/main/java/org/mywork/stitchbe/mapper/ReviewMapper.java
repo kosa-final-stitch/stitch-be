@@ -25,5 +25,5 @@ public interface ReviewMapper {
 	List<ReviewLikesDTO> getTopLikedReviews();
 
 	// 특정 인간에 대한 리뷰를 가져오는 메서드
-	public List<ReviewDTO> getReviewsByUserId(Long userId);
+	public List<ReviewDTO> getReviewsByUserId(Long memberId);
 }

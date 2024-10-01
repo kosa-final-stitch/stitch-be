@@ -24,7 +24,9 @@ public class ReviewDTO {
     private String employmentStatus;   // 취업 여부 ('Y' = 취업, 'N' = 미취업)
     private Date regDate;         // 리뷰 작성일
     private Date editDate;        // 리뷰 수정일
-
+ 
+    private String courseName;  // 코스 이름 추가
+    private String academyName; // 학원 이름 추가
     // Getters and Setters
    
 
@@ -188,4 +190,22 @@ public class ReviewDTO {
     public void setEditDate(Date editDate) {
         this.editDate = editDate;
     }
+
+	public String getCourseName() {
+		return courseName;
+	}
+
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
+	}
+
+	public String getAcademyName() {
+		return academyName;
+	}
+
+	public void setAcademyName(String academyName) {
+		this.academyName = academyName;
+	}
+
+    
 }
