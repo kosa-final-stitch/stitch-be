@@ -9,6 +9,9 @@ _____________________
 package org.mywork.stitchbe.service;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.mywork.stitchbe.dto.InquiryDTO;
 import org.mywork.stitchbe.mapper.InquiryMapper;
 import org.springframework.stereotype.Service;
@@ -27,5 +30,11 @@ public class InquiryService {
             throw new RuntimeException("문의 등록에 실패했습니다.", e);
         }
     }
+
+    // 로그인한 사용자의 문의 목록 조회(유은)
+	public List<InquiryDTO> getInquiryBymemberId(Long memberId) {
+	   	System.out.println("마페 문의 서비스");
+		return  inquiryMapper.getInquiryBymemberId(memberId);
+	}
 
 }
