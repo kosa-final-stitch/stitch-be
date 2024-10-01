@@ -13,6 +13,9 @@ target/
 .springBeans
 .sts4-cache
 
+### Java Class Files ###
+*.class
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
