@@ -14,7 +14,7 @@
         c.views,
         c.regdate,
         c.editdate,
-        c.use_yn AS useYn,
+        c.use_yn AS use_yn,
         m.nickname
         FROM community c
         JOIN member m ON c.member_id = m.member_id
@@ -84,6 +84,15 @@
     <delete id="deletePost" parameterType="long">
         DELETE FROM community WHERE board_id = #{boardId}
     </delete>
+
+    <!-- 관리자 전용 게시글 숨김 호영-->
+    <update id="updatePostStatus">
+        UPDATE community
+        SET use_yn = #{useYn}
+        WHERE board_id = #{boardId}
+    </update>
+
+
 
     <!-- 조회수 증가 -->
     <update id="incrementViewCount">
