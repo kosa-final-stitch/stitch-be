@@ -1,5 +1,6 @@
 /*
- 2024.9.17. 박요한 | getTopLikedReviews 추가
+ 2024.09.17. 박요한 | getTopLikedReviews 추가
+ 2024.10.01. 김호영 | 모든 리뷰데이터 조회, 삭제 API 추가
 */
 
 package org.mywork.stitchbe.controller.member;
@@ -15,12 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -55,13 +51,19 @@ public class ReviewController {
 		return reviewService.getReviewsByCourseId(courseId);
 	}
 
-	// 모든 리뷰를 가져오는 엔드포인트 (선택적)
-//	@GetMapping
-//	public List<ReviewDTO> getAllReviews() {
-//		return reviewService.getAllReviews();
-//	}0
 
-	
+	// 모든 리뷰를 가져오는 엔드포인트 (호영)
+	@GetMapping("/all")
+	public ResponseEntity<List<ReviewDTO>> getAllReviews() {
+		try {
+			List<ReviewDTO> reviews = reviewService.getAllReviews();
+			return ResponseEntity.ok(reviews);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+
 	// 로그인한 사용자의 모든 리뷰를 가져오는 엔드포인트
 	@GetMapping("/myreviews/{memberId}")
 	public ResponseEntity<List<ReviewDTO>> getUserReviews() {
@@ -95,5 +97,16 @@ public class ReviewController {
 	public ResponseEntity<List<ReviewLikesDTO>> getTopLikedReviews() {
 		List<ReviewLikesDTO> topLikedReviews = reviewService.getTopLikedReviews();
 		return ResponseEntity.ok(topLikedReviews);
+	}
+
+	// 리뷰 삭제 API
+	@DeleteMapping("/{reviewId}")
+	public ResponseEntity<String> deleteReview(@PathVariable Long reviewId) {
+		try {
+			reviewService.deleteReview(reviewId); // 리뷰 삭제 서비스 호출
+			return ResponseEntity.ok("리뷰가 삭제되었습니다.");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 삭제 중 오류가 발생했습니다.");
+		}
 	}
 }

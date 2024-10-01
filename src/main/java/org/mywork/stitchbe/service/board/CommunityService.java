@@ -78,4 +78,9 @@ public class CommunityService {
 
 
 
+	// 관리자 전용 게시글 숨김 (호영)
+	public void changePostStatus(Long boardId, String useYn) {
+		communityMapper.updatePostStatus(boardId, useYn);
+	}
+
 }

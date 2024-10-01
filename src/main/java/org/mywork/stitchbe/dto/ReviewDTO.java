@@ -24,9 +24,15 @@ public class ReviewDTO {
     private String employmentStatus;   // 취업 여부 ('Y' = 취업, 'N' = 미취업)
     private Date regDate;         // 리뷰 작성일
     private Date editDate;        // 리뷰 수정일
- 
+
     private String courseName;  // 코스 이름 추가
     private String academyName; // 학원 이름 추가
+
+
+    // 추가: 닉네임 필드
+    private String nickname;           // 회원 닉네임
+
+
     // Getters and Setters
    
 
@@ -191,6 +197,7 @@ public class ReviewDTO {
         this.editDate = editDate;
     }
 
+
 	public String getCourseName() {
 		return courseName;
 	}
@@ -207,5 +214,13 @@ public class ReviewDTO {
 		this.academyName = academyName;
 	}
 
-    
+    // 추가된 닉네임
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
 }

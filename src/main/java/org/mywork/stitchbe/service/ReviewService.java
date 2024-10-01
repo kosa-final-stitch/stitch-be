@@ -1,5 +1,6 @@
 /*
- 2024.9.17. 박요한 | getTopLikedReviews 추가
+ 2024.09.17. 박요한 | getTopLikedReviews 추가
+ 2024.10.01. 김호영 | 모든 리뷰데이터 조회, 삭제 API 추가
 */
 
 package org.mywork.stitchbe.service;
@@ -59,4 +60,14 @@ public class ReviewService {
 	public List<ReviewLikesDTO> getTopLikedReviews() {
 		return reviewMapper.getTopLikedReviews();  // ReviewMapper의 쿼리 호출
 	}
+
+
+	// 모든 리뷰 가져오는 서비스 메서드
+	public List<ReviewDTO> getAllReviews() {
+		return reviewMapper.getAllReviews();
+	}
+	// 리뷰 삭제 서비스 메서드
+	public void deleteReview(Long reviewId) {
+        reviewMapper.deleteReview(reviewId);
+    }
 }

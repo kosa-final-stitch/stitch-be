@@ -24,6 +24,9 @@ public interface ReviewMapper {
 	// 홈: 상위 좋아요 리뷰를 가져오는 메서드
 	List<ReviewLikesDTO> getTopLikedReviews();
 
-	// 특정 인간에 대한 리뷰를 가져오는 메서드
+	// 로그인 한사용자의 대한 리뷰를 가져오는 메서드(유은)
 	public List<ReviewDTO> getReviewsByUserId(Long memberId);
+
+	// 리뷰 삭제 메서드
+	void deleteReview(Long reviewId);
 }
