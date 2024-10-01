@@ -9,13 +9,18 @@ _____________________
 
 package org.mywork.stitchbe.controller.member;
 
+import java.util.List;
+
 import org.mywork.stitchbe.dto.InquiryDTO;
+import org.mywork.stitchbe.dto.board.CommunityDto;
 import org.mywork.stitchbe.service.InquiryService;
 import org.mywork.stitchbe.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,6 +53,19 @@ public class InquiryController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("문의 등록에 실패했습니다.");
     }
     }
+    
+    // 로그인한 사용자의 문의 목록 조회(유은)
+    @GetMapping("/{memberId}")
+    public ResponseEntity<List<InquiryDTO>> getInquiryByUserId(@PathVariable Long memberId) {
+    	System.out.println("(마페)문의 목록조회 컨트롤러");
+        List<InquiryDTO> inquiry = inquiryService.getInquiryBymemberId(memberId);
+        if (inquiry.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(inquiry);
+    }
+   
+    
 }
 
 
