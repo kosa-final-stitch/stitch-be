@@ -62,6 +62,17 @@ public class PaymentController {
     }
 
 
+        @PostMapping("/update-payment-status")
+        public ResponseEntity<String> updatePaymentStatus(@RequestBody PaymentDTO paymentDto) {
+            try {
+                paymentService.updatePaymentStatus(paymentDto.getPaymentId(), paymentDto.getStatus());
+                return ResponseEntity.ok("Payment status updated successfully.");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating payment status.");
+            }
+        }
+
+
 
 }
 
