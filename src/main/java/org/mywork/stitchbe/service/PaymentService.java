@@ -5,6 +5,7 @@
 _____________________
 2024.9.24 박요한 | 생성.
 2024.9.25 김호영 | 결제 정보 확인 구현.
+2024.10.1 박요한 | 마이페이지 내역 조회.
 */
 
 package org.mywork.stitchbe.service;
@@ -21,6 +22,7 @@ import java.util.List;
 public class PaymentService {
     private final PaymentMapper paymentMapper;
 
+    // 결제 완료 정보 등록
     public void processPayment(PaymentDTO paymentDTO) {
         // 결제 정보 유효성 검사
         if (paymentDTO.getAmount() <= 0) {
@@ -30,10 +32,17 @@ public class PaymentService {
         // 결제 정보 DB에 저장
         paymentMapper.insertPayment(paymentDTO);
     }
+
+    // 회원의 결제 정보 조회
+    public List<PaymentDTO> getPaymentsByMemberId(Long memberId) {
+        return paymentMapper.getPaymentsByMemberId(memberId);
+    }
+
     // 모든 결제 정보 조회 (관리자용)
     public List<PaymentDTO> getAllPayments() {
         return paymentMapper.getAllPayments();
     }
+
     // 결제 상태 업데이트
     public void updatePaymentStatus(Long paymentId, String status) {
         paymentMapper.updatePaymentStatus(paymentId, status);
