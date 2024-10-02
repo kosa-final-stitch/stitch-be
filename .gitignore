@@ -34,3 +34,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Logs ###
+*.log
+
+### Environment Files ###
+*.env
+application.properties
+application.yml
