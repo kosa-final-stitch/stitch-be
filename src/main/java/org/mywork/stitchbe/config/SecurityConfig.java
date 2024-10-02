@@ -2,6 +2,9 @@ package org.mywork.stitchbe.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.mywork.stitchbe.Util.JwtAuthenticationFilter;
 import org.mywork.stitchbe.Util.JwtUtil;
 import org.mywork.stitchbe.service.MemberDetailsService;
@@ -15,9 +18,19 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -54,48 +67,116 @@ public class SecurityConfig{
                 .cors(withDefaults())  // CORS 설정 추가
                 .csrf(AbstractHttpConfigurer::disable)  // CSRF 비활성화
                 .authorizeHttpRequests(authorize -> authorize //각 url 패턴에 대해 접근 권한 설정
-                        // 로그인, 회원가입 페이지는 모든 사용자 접근 허용
-                        .requestMatchers("/api/login", "/api/signup","/api/validate-email",
-                                "/api/validate-nickname", "/api/board/community/all", "/api/academies/**", "/api/courses/**",
-                                "/api/member/reviews/top", "/api/home/**", "/api/search/**"," /api/comments/**", "api/payment/**").permitAll()
-                        // ROLE_ADMIN 권한을 가진 사용자만 admin 경로에 접근 허용
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        // ROLE_USER 권한을 가진 사용자만 member 경로에 접근 허용
-                        .requestMatchers("/api/member/**").hasAnyRole("USER","ADMIN") //(관리자 권한 추가 호영수정)
-                        .requestMatchers("/api/member/community/**").permitAll()
-                        // 리뷰 작성은 인증된 사용자만 가능하도록 설정(유은)
+                                // 로그인, 회원가입 페이지는 모든 사용자 접근 허용
+                                .requestMatchers("/api/login", "/api/signup","/api/validate-email",
+                                        "/api/validate-nickname", "/api/board/community/all", "/api/academies/**", "/api/courses/**",
+                                        "/api/member/reviews/top", "/api/home/**",
+                                        "/api/search/**"," /api/comments/**", "api/payment/**", "/api/oauth2/login").permitAll()
+                                // ROLE_ADMIN 권한을 가진 사용자만 admin 경로에 접근 허용
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                // ROLE_USER 권한을 가진 사용자만 member 경로에 접근 허용
+                                .requestMatchers("/api/member/**").hasAnyRole("USER","ADMIN",  "OAUTH2_USER") //(관리자 권한 추가 호영수정)
+                                .requestMatchers("/api/member/community/**").permitAll()
+                                // 리뷰 작성은 인증된 사용자만 가능하도록 설정(유은)
 //                        .requestMatchers("/api/member/reviews/**").hasRole("USER")
 //                        // 리뷰 조회는 모든 사용자에게 허용(유은)
-                        .requestMatchers(HttpMethod.GET, "/api/member/reviews/**").permitAll()
-                        // 리뷰 작성은 인증된 사용자만 허용(유은)
-                        .requestMatchers(HttpMethod.POST, "/api/member/reviews/**").hasRole("USER")
+                                .requestMatchers(HttpMethod.GET, "/api/member/reviews/**").permitAll()
+                                // 리뷰 작성은 인증된 사용자만 허용(유은)
+                                .requestMatchers(HttpMethod.POST, "/api/member/reviews/**").hasRole("USER")
 //                         내 정보 받아오는건 인증된 사용자만 받아오도록
 //                        .requestMatchers("/api/member/info").authenticated()
-                        // 그 외 모든 요청은 인증된 사용자만 접근 가능
-                        .anyRequest().authenticated()
+                                // 그 외 모든 요청은 인증된 사용자만 접근 가능
+                                .anyRequest().authenticated()
                 )
                 // JWT 필터 추가
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 
-//                .formLogin(form -> form
-//                        .loginPage("/api/login")
-//                        .loginProcessingUrl("/api/login")
-//                        .usernameParameter("username")  // 이 값이 Vue에서 보내는 필드명과 일치해야 함
-//                        .passwordParameter("password")  // 마찬가지로 password도 일치해야 함
-//                        .defaultSuccessUrl("/api/home", true)
-//                        .failureUrl("/api/login?error=true")
-//                        .permitAll()
-//                )
 //                .sessionManagement(session -> session
 //                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // 필요 시 세션 생성
 //                        .maximumSessions(1)  // 하나의 세션만 유지
 //                )
+                // OAuth2 로그인 설정
+//                .oauth2Login(oauth2 -> oauth2
+//                        .loginPage("/api/oauth2/login")
+//                        .defaultSuccessUrl("/api/home", true)
+//                        .failureUrl("/api/oauth2/login?error=true")
+//                        .authorizationEndpoint(authorization -> authorization
+//                                .baseUri("/oauth2/authorization")  // OAuth2 인증 시작 경로 설정
+//                        )
+//                        .userInfoEndpoint(userInfo -> userInfo
+//                                .userService(new DefaultOAuth2UserService())  // 기본 제공 OAuth2UserService 사용
+//                        )
+//                        .successHandler((request, response, authentication) -> {
+//                            OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+//                            // 구글로부터 받은 사용자 정보를 처리하는 로직을 여기에 작성
+//                            String email = oAuth2User.getAttribute("email");
+//
+//                            // 사용자 권한 처리
+//                            SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+//
+//                            // JWT 생성
+//                            String jwtToken = jwtUtil.generateToken(authentication);  // Authentication 객체 전달
+//
+//                            // JWT를 쿠키에 저장
+//                            Cookie jwtCookie = new Cookie("jwtToken", jwtToken);
+//                            jwtCookie.setHttpOnly(true);  // HttpOnly 속성 추가
+//                            jwtCookie.setMaxAge(60 * 60 * 10);  // 쿠키 유효 기간 10시간 설정
+//                            jwtCookie.setPath("/");
+//
+//                            // 쿠키를 응답에 추가
+//                            response.addCookie(jwtCookie);
+//
+//                            // 성공 후 리다이렉션
+//                            response.sendRedirect("/");
+//                        })
+//                )
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(this::handleOAuth2LoginSuccess) // 커스텀 성공 핸들러 설정
+                )
                 .logout(logout -> logout
                         .logoutUrl("/api/logout")
                         .logoutSuccessUrl("/api/login")
                 )
                 .userDetailsService(memberDetailsService);
         return http.build();
+    }
+
+    private void handleOAuth2LoginSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        // 사용자 정보 가져오기
+        OAuth2User user = (OAuth2User) authentication.getPrincipal();
+
+        String email = user.getAttribute("email");  // 이메일 정보 가져오기
+        String name = user.getAttribute("name");  // 이름 정보 가져오기
+
+        // OAuth2 사용자에게 ROLE_USER 권한을 추가
+        // OAuth2 사용자에게 ROLE_USER 권한을 추가하기 위해 authorities를 수정 가능한 리스트로 변환
+        Collection<? extends GrantedAuthority> currentAuthorities = authentication.getAuthorities();
+        List<GrantedAuthority> authorities = currentAuthorities.stream()
+                .collect(Collectors.toList());  // 수정 가능한 리스트로 변환
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));  // ROLE_USER 권한 추가
+
+        // 사용자 정보를 로그에 출력
+        System.out.println("User Email: " + email);
+        System.out.println("User Name: " + name);
+        authorities.forEach(authority -> System.out.println("Role: " + authority.getAuthority()));
+
+        // 권한 정보를 문자열로 변환
+        String roles = authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        // JWT 생성 - 권한 정보를 포함
+        String jwtToken = jwtUtil.generateToken(authentication);  // 기존 generateToken 사용
+
+        // JWT 토큰을 응답 헤더에 추가 (필요 시 사용)
+        response.addHeader("Authorization", "Bearer " + jwtToken);
+
+        // JWT를 프론트엔드로 전달 (쿼리 파라미터로 전달)
+        try {
+            response.sendRedirect("http://localhost:8081/?token=" + jwtToken + "&roles=" + roles);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
