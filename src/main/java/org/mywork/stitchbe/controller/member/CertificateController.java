@@ -12,6 +12,7 @@ package org.mywork.stitchbe.controller.member;
 import org.mywork.stitchbe.dto.CertificateDTO;
 import org.mywork.stitchbe.service.CertificateService;
 import org.mywork.stitchbe.service.MemberService;
+import org.mywork.stitchbe.service.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,36 +36,39 @@ public class CertificateController {
     @Autowired
     private MemberService memberService;  // MemberService 추가
 
+    @Autowired
+    private S3Service s3Service; // S3Service 추가
+
     // 수료인증 등록
-// 수료인증 등록
     @PostMapping("/register")
     public ResponseEntity<String> registerCertificate(
             @RequestParam("courseName") String courseName,
             @RequestParam("academyName") String academyName,
-            @RequestParam("sessionNumber") int sessionNumber,  // sessionNumber 추가
+            @RequestParam("sessionNumber") int sessionNumber,
             @RequestParam("completionDate") String completionDate,
             @RequestParam("status") String status,
             @RequestParam("file") MultipartFile file,
             Authentication authentication
     ) {
         try {
-            // 로그인된 사용자의 이메일을 통해 memberId 가져오기
             String email = authentication.getName();
             Long memberId = memberService.findMemberIdByEmail(email);
 
-            // completionDate를 String에서 Date로 변환
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date parsedCompletionDate = dateFormat.parse(completionDate);
 
-            // courseId를 courseName, academyName, sessionNumber로 찾아옴
             Long courseId = certificateService.findCourseIdByDetails(courseName, academyName, sessionNumber);
             if (courseId == null) {
                 return new ResponseEntity<>("해당 조건에 맞는 과정이 없습니다.", HttpStatus.BAD_REQUEST);
             }
 
-            // 서비스에 등록
+            // S3에 파일 업로드 후 URL 반환
+            String fileUrl = s3Service.uploadFile(file);
+
+            // 서비스에 수료인증 등록 (파일 URL을 함께 저장)
             certificateService.registerCertificate(courseName, academyName, parsedCompletionDate, status, file, memberId, courseId);
-            return new ResponseEntity<>("수료인증이 성공적으로 등록되었습니다.", HttpStatus.CREATED);
+
+            return new ResponseEntity<>(fileUrl, HttpStatus.CREATED);  // 파일 URL 반환
         } catch (Exception e) {
             return new ResponseEntity<>("수료인증 등록에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -110,6 +114,17 @@ public class CertificateController {
             return new ResponseEntity<>("수료 상태가 성공적으로 변경되었습니다.", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("수료 상태 변경에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 특정 파일에 대한 서명된 URL을 반환하는 API
+    @GetMapping("/signed-url")
+    public ResponseEntity<String> getSignedUrl(@RequestParam String filename) {
+        try {
+            String signedUrl = s3Service.generatePresignedUrl(filename);
+            return new ResponseEntity<>(signedUrl, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Signed URL 생성 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
