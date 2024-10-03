@@ -4,6 +4,7 @@
 설명 : 수료과목 인증 관련 API 구현
 ---------------------
 2024.09.29 김호영 | 수료 과목 인증 조회 등록 수정 API 생성.
+2024.10.03 김호영 | 교육명, 학원명, 회차 정보로 course_id 조회 구현
 */
 
 package org.mywork.stitchbe.controller.member;
@@ -35,15 +36,16 @@ public class CertificateController {
     private MemberService memberService;  // MemberService 추가
 
     // 수료인증 등록
+// 수료인증 등록
     @PostMapping("/register")
     public ResponseEntity<String> registerCertificate(
             @RequestParam("courseName") String courseName,
             @RequestParam("academyName") String academyName,
-            @RequestParam("completionDate") String completionDate,  // 문자열로 받음
+            @RequestParam("sessionNumber") int sessionNumber,  // sessionNumber 추가
+            @RequestParam("completionDate") String completionDate,
             @RequestParam("status") String status,
-            @RequestParam("file") MultipartFile file,  // 쉼표 추가
-            @RequestParam("courseId") Long courseId, // 추가: courseId 받아서 사용
-            Authentication authentication // 인증 객체를 통해 로그인된 사용자 정보 가져오기
+            @RequestParam("file") MultipartFile file,
+            Authentication authentication
     ) {
         try {
             // 로그인된 사용자의 이메일을 통해 memberId 가져오기
@@ -54,7 +56,13 @@ public class CertificateController {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date parsedCompletionDate = dateFormat.parse(completionDate);
 
-            // 서비스에 courseId와 memberId 추가하여 전달
+            // courseId를 courseName, academyName, sessionNumber로 찾아옴
+            Long courseId = certificateService.findCourseIdByDetails(courseName, academyName, sessionNumber);
+            if (courseId == null) {
+                return new ResponseEntity<>("해당 조건에 맞는 과정이 없습니다.", HttpStatus.BAD_REQUEST);
+            }
+
+            // 서비스에 등록
             certificateService.registerCertificate(courseName, academyName, parsedCompletionDate, status, file, memberId, courseId);
             return new ResponseEntity<>("수료인증이 성공적으로 등록되었습니다.", HttpStatus.CREATED);
         } catch (Exception e) {

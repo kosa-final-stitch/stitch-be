@@ -4,6 +4,7 @@
 설명 : 수료과목 인증 Service
 ---------------------
 2024.09.29 김호영 | 수료 과목 인증 조회 등록 수정 Service 생성.
+2024.10.03 김호영 | 교육명, 학원명, 회차 정보로 course_id 조회 구현
 */
 
 package org.mywork.stitchbe.service;
@@ -36,6 +37,11 @@ public class CertificateService {
         certificate.setCourseId(courseId); // 추가: 과정 ID 설정
 
         certificateMapper.insertCertificate(certificate);
+    }
+
+    // courseId를 courseName, academyName, sessionNumber로 찾기
+    public Long findCourseIdByDetails(String courseName, String academyName, int sessionNumber) {
+        return certificateMapper.findCourseIdByDetails(courseName, academyName, sessionNumber);
     }
 
     // 로그인된 사용자의 수료 항목 조회

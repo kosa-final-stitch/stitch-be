@@ -3,6 +3,7 @@
 시작 일자: 2024.09.29
 설명 : 수료과목 인증 Mapper XML
 2024.09.29 김호영 | 수료 과목 인증 insert, select, update 쿼리 생성.
+2024.10.03 김호영 | 교육명, 학원명, 회차 정보로 course_id 조회 구현
 -->
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
@@ -19,12 +20,22 @@
         filename
         ) VALUES (
         #{memberId},
-        #{courseId},
+        #{courseId},  <!-- 이미 course_id 가져온 값 사용 -->
         #{completionDate},
         #{status},
         #{filename}
         )
     </insert>
+
+    <!-- courseId 조회 -->
+    <select id="findCourseIdByDetails" resultType="java.lang.Long">
+        SELECT c.course_id
+        FROM course c
+        JOIN academy a ON c.academy_id = a.academy_id
+        WHERE c.course_name = #{courseName}
+        AND a.academy_name = #{academyName}
+        AND c.session_number = #{sessionNumber}
+    </select>
 
     <!-- 로그인된 사용자의 수료 항목 조회 (조인) -->
     <select id="selectCertificatesByMemberId" resultType="org.mywork.stitchbe.dto.CertificateDTO">
