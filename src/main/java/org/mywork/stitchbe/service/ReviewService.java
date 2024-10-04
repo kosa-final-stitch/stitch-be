@@ -54,8 +54,6 @@ public class ReviewService {
 	    return reviewMapper.getReviewsByUserId(memberId);
 	}
 
-
-
 	// 홈: 좋아요 수가 많은 상위 리뷰를 가져오는 서비스 메서드
 	public List<ReviewLikesDTO> getTopLikedReviews() {
 		return reviewMapper.getTopLikedReviews();  // ReviewMapper의 쿼리 호출
@@ -70,4 +68,17 @@ public class ReviewService {
 	public void deleteReview(Long reviewId) {
         reviewMapper.deleteReview(reviewId);
     }
+
+	
+	  // 특정 멤버가 작성한 특정 코스의 리뷰 상세 정보를 가져오는 API(1003) -마이페이지
+	public ReviewDTO getReviewDetailByMemberAndCourse(String memberEmail, Long academyId, Long courseId, Long reviewId) {
+		 return reviewMapper.findReviewByMemberAndCourse(memberEmail, academyId, courseId, reviewId);
+	}
+	
+	 // 특정 리뷰 조회 (1003) - 코스디테일 
+	public ReviewDTO getReviewDetail(Long academyId, Long courseId, Long reviewId) {
+		 return reviewMapper.findReviewByAcademyCourseAndReview(academyId, courseId, reviewId);
+	}
+
+
 }
