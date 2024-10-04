@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,6 +33,7 @@ public class ReviewController {
 		this.memberService = memberService;
 	}
 
+	// 특정 강의에 대한 리뷰 저장
 	@PostMapping
 	public ResponseEntity<String> saveReview(@RequestBody List<ReviewDTO> reviews) {
 		System.out.println("리뷰컨트롤러 호출");
@@ -63,6 +65,63 @@ public class ReviewController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
+	
+	 // 특정 리뷰 조회 (1003) - 코스디테일 
+    @GetMapping("/{academyId}/course/{courseId}/review/{reviewId}")
+    public ResponseEntity<ReviewDTO> getReviewDetail(
+        @PathVariable Long academyId, 
+        @PathVariable Long courseId, 
+        @PathVariable Long reviewId) {
+
+        ReviewDTO review = reviewService.getReviewDetail(academyId, courseId, reviewId);
+        if (review != null) {
+            return ResponseEntity.ok(review);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+	
+	  // 특정 멤버가 작성한 특정 코스의 리뷰 상세 정보를 가져오는 API(1003) -마이페이지
+    @GetMapping("/academy/{academyId}/course/{courseId}/review/{reviewId}")
+    public ResponseEntity<String> getReviewDetailByMemberAndCourse (
+            @PathVariable Long academyId, 
+            @PathVariable Long courseId, 
+            @PathVariable Long reviewId) {
+
+        try {
+            // 현재 세션에서 인증 정보 가져오기
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            // 인증 정보가 있는지 확인
+            if (authentication != null && authentication.isAuthenticated()) {
+                // 사용자 이름과 권한 확인
+                System.out.println("현재 인증된 사용자: " + authentication.getName());
+                System.out.println("사용자의 권한: " + authentication.getAuthorities());
+
+                // 인증 객체가 UserDetails 타입인지 확인하고, 사용자 세부 정보 출력
+                if (authentication.getPrincipal() instanceof User) {
+                    User user = (User) authentication.getPrincipal();
+                    System.out.println("사용자 이메일: " + user.getUsername());
+
+                    // 리뷰를 가져오는 비즈니스 로직 추가
+                    ReviewDTO review = reviewService.getReviewDetailByMemberAndCourse(user.getUsername(), academyId, courseId, reviewId);
+                    if (review != null) {
+                        return ResponseEntity.ok("리뷰 상세 정보: " + review.toString());
+                    } else {
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("리뷰를 찾을 수 없습니다.");
+                    }
+                }
+
+                return ResponseEntity.ok("세션에 인증된 사용자: " + authentication.getName());
+            } else {
+                System.out.println("세션에 인증된 사용자가 없습니다.");
+                return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body("인증되지 않음");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
 	// 로그인한 사용자의 모든 리뷰를 가져오는 엔드포인트
 	@GetMapping("/myreviews/{memberId}")
