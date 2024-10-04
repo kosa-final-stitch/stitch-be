@@ -43,4 +43,6 @@ public interface ReportMapper {
     
     // 신고된 게시글 제목
     String getPostTitle(Long boardId);
+
+    Long findBoardIdByCommentId(Long commentId);
 }

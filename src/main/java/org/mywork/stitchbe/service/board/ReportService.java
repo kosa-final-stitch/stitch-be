@@ -34,6 +34,12 @@ public class ReportService {
             System.out.println("게시글 신고 처리 로직 실행");
         } else if ("COMMENT".equals(reportDto.getPostOrComment())) {
             System.out.println("댓글 신고 처리 로직 실행");
+            // commentId로 게시글 ID를 조회하여 설정하는 로직 추가
+            if (reportDto.getBoardId() == null) {
+                Long boardId = reportMapper.findBoardIdByCommentId(reportDto.getCommentId());
+                reportDto.setBoardId(boardId);
+            }
+
         }
 
         // 신고 데이터 저장
