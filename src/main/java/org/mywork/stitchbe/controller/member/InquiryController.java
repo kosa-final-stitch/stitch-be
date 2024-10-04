@@ -89,8 +89,8 @@ public class InquiryController {
     // 로그인한 사용자의 문의 목록 조회(유은)
     @GetMapping("/{memberId}")
     public ResponseEntity<List<InquiryDTO>> getInquiryByUserId(@PathVariable Long memberId) {
-    	System.out.println("(마페)문의 목록조회 컨트롤러");
         List<InquiryDTO> inquiry = inquiryService.getInquiryBymemberId(memberId);
+        System.out.println("(마페)문의 목록조회 컨트롤러"+inquiry);
         if (inquiry.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -98,6 +98,22 @@ public class InquiryController {
     }
    
     
+ // 특정 문의 상세 조회 API(유은)
+    @GetMapping("/detail/{inquiryId}")
+    public ResponseEntity<InquiryDTO> getInquiryById(@PathVariable Long inquiryId) {
+    	System.out.println("(마페)문의상세 컨트롤러"+inquiryId);
+        try {
+            InquiryDTO inquiry = inquiryService.getInquiryById(inquiryId); // inquiryId로 문의 조회
+            if (inquiry != null) {
+                return ResponseEntity.ok(inquiry);
+            } else {
+                return ResponseEntity.notFound().build(); // 문의를 찾지 못한 경우
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // 에러 처리
+        }
+    }
+
 }
 
 

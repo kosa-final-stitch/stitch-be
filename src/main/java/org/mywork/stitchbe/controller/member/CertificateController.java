@@ -51,9 +51,11 @@ public class CertificateController {
             Authentication authentication
     ) {
         try {
+            // 로그인된 사용자의 이메일을 통해 memberId 가져오기
             String email = authentication.getName();
             Long memberId = memberService.findMemberIdByEmail(email);
 
+            // completionDate를 String에서 Date로 변환
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date parsedCompletionDate = dateFormat.parse(completionDate);
 
