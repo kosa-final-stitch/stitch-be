@@ -121,4 +121,11 @@
         FROM community_comment c
         WHERE c.comment_id = #{commentId}
     </select>
+
+    <!-- commentId로 boardId 찾는 쿼리 -->
+    <select id="findBoardIdByCommentId" resultType="java.lang.Long">
+        SELECT board_id
+        FROM community_comment
+        WHERE comment_id = #{commentId}
+    </select>
 </mapper>
