@@ -37,9 +37,17 @@ public class InquiryService {
 
     // 로그인한 사용자의 문의 목록 조회(유은)
 	public List<InquiryDTO> getInquiryBymemberId(Long memberId) {
-	   	System.out.println("마페 문의 서비스");
-		return  inquiryMapper.getInquiryBymemberId(memberId);
+		List<InquiryDTO> inquries = inquiryMapper.getInquiryBymemberId(memberId);	   	
+		return inquries;
+		  
 	}
+	
+
+    // 특정 문의 상세 조회 API(유은)
+	public InquiryDTO getInquiryById(Long inquiryId) {
+	 	System.out.println("마페 문의디테일 서비스");
+	    return inquiryMapper.findInquiryById(inquiryId); // MyBatis 매퍼에서 데이터 조회
+	    }
 
 
     // 모든 사용자의 문의사항 조회
@@ -56,4 +64,5 @@ public class InquiryService {
             throw  new RuntimeException("답변 등록 실패.", e);
         }
     }
+
 }

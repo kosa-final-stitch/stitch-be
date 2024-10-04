@@ -150,5 +150,60 @@
         DELETE FROM REVIEW WHERE REVIEW_ID = #{reviewId}
     </delete>
 
+<!--   // 특정 멤버가 작성한 특정 코스의 리뷰 상세 정보를 가져오는 API(1003) -->
+<select id="findReviewByMemberAndCourse" resultType="org.mywork.stitchbe.dto.home.ReviewLikesDTO">
+            SELECT
+            r.REVIEW_ID AS reviewId,
+            r.MEMBER_ID AS memberId,
+            r.COURSE_ID AS courseId,
+            r.EDUCATION AS education,
+            r.EDUCATION_RATING AS educationRating,
+            r.INSTRUCTOR AS instructor,
+            r.INSTRUCTOR_RATING AS instructorRating,
+            r.FACILITY AS facility,
+            r.FACILITY_RATING AS facilityRating,
+            r.ATMOSPHERE AS atmosphere,
+            r.ATMOSPHERE_RATING AS atmosphereRating,
+            r.MANAGEMENT AS management,
+            r.MANAGEMENT_RATING AS managementRating,
+            r.LATER AS later,
+            r.LATER_RATING AS laterRating,
+            r.REGDATE AS regDate,
+            r.EDITDATE AS editDate
+        FROM REVIEW r
+        JOIN MEMBER m ON r.MEMBER_ID = m.MEMBER_ID
+        LEFT JOIN COURSE c ON r.COURSE_ID = c.COURSE_ID
+        WHERE c.ACADEMY_ID = #{academyId}
+          AND r.COURSE_ID = #{courseId}
+          AND r.REVIEW_ID = #{reviewId}
+          AND m.EMAIL = #{memberEmail}
+</select>
 
+   <!-- 특정리뷰를 가져오는 메서드(로그인 후 확인가능) -->
+    <select id="findReviewByAcademyCourseAndReview" resultType="org.mywork.stitchbe.dto.ReviewDTO">
+        SELECT
+        r.REVIEW_ID AS reviewId,
+        r.MEMBER_ID AS memberId,
+        r.COURSE_ID AS courseId,
+        r.EDUCATION AS education,
+        r.EDUCATION_RATING AS educationRating,
+        r.INSTRUCTOR AS instructor,
+        r.INSTRUCTOR_RATING AS instructorRating,
+        r.FACILITY AS facility,
+        r.FACILITY_RATING AS facilityRating,
+        r.ATMOSPHERE AS atmosphere,
+        r.ATMOSPHERE_RATING AS atmosphereRating,
+        r.MANAGEMENT AS management,
+        r.MANAGEMENT_RATING AS managementRating,
+        r.LATER AS later,
+        r.LATER_RATING AS laterRating,
+        r.REGDATE AS regDate,
+        r.EDITDATE AS editDate
+    FROM REVIEW r
+    JOIN MEMBER m ON r.MEMBER_ID = m.MEMBER_ID
+    LEFT JOIN course a ON r.course_id = a.course_id
+WHERE a.academy_id = #{academyId}
+  AND r.course_id = #{courseId}
+  AND r.review_id = #{reviewId}
+	</select>
 </mapper>
