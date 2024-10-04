@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
  * @Author 박주희
  *
  * 2024.9.17.~24. 박요한 | "/api/courses/**", "/api/reviews/top", "/api/home/**", "/api/search/**", "api/payment/**" permitAll 추가
+ * 2024.10.4. 박요한 | "/api/member/reviews/**" 위치 이동.
  *  */
 
 @Configuration //spring에서 빈을 정의하고 설정할 수 있는 클래스임을 의미
@@ -72,6 +73,8 @@ public class SecurityConfig{
                                         "/api/validate-nickname", "/api/board/community/all", "/api/academies/**", "/api/courses/**",
                                         "/api/member/reviews/top", "/api/home/**",
                                         "/api/search/**"," /api/comments/**", "api/payment/**", "/api/oauth2/login").permitAll()
+                                // 리뷰 조회는 모든 사용자에게 허용(유은)(요한 재배치)
+                                .requestMatchers(HttpMethod.GET, "/api/member/reviews/**").permitAll()
                                 // ROLE_ADMIN 권한을 가진 사용자만 admin 경로에 접근 허용
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 // ROLE_USER 권한을 가진 사용자만 member 경로에 접근 허용
@@ -79,8 +82,6 @@ public class SecurityConfig{
                                 .requestMatchers("/api/member/community/**").permitAll()
                                 // 리뷰 작성은 인증된 사용자만 가능하도록 설정(유은)
 //                        .requestMatchers("/api/member/reviews/**").hasRole("USER")
-//                        // 리뷰 조회는 모든 사용자에게 허용(유은)
-                                .requestMatchers(HttpMethod.GET, "/api/member/reviews/**").permitAll()
                                 // 리뷰 작성은 인증된 사용자만 허용(유은)
                                 .requestMatchers(HttpMethod.POST, "/api/member/reviews/**").hasRole("USER")
 //                         내 정보 받아오는건 인증된 사용자만 받아오도록
