@@ -33,15 +33,45 @@
     
        <!-- 로그인한 사용자의 문의 목록 조회(유은) -->
 <select id="getInquiryBymemberId" resultType="org.mywork.stitchbe.dto.InquiryDTO">
- 		SELECT
-           i.category,i.title,i.regdate,i.ansdate
+ 	       SELECT
+           m.member_id,
+           i.inquiry_id AS inquiryId,
+           i.member_id AS memberId,
+           i.category,
+           i.title,
+           i.content,
+           i.answer,
+           i.status,
+           i.regdate AS regDate,
+           i.ansdate AS ansDate,
+           m.nickname AS memberName,
+           a.nickname AS adminName
         FROM
             inquiry i
         JOIN
             member m ON i.member_id = m.member_id
+             LEFT JOIN member a ON i.admin_id = a.member_id
         WHERE
             i.member_id = #{memberId}
+</select>
 
+    <!-- 특정 문의사항 조회(유은) -->
+<select id="findInquiryById" parameterType="long" resultType="org.mywork.stitchbe.dto.InquiryDTO">
+    SELECT i.inquiry_id AS inquiryId,
+           i.member_id AS memberId,
+           i.category,
+           i.title,
+           i.content,
+           i.answer,
+           i.status,
+           i.regdate AS regDate,
+           i.ansdate AS ansDate,
+           m.nickname AS memberName,
+           a.nickname AS adminName
+    FROM inquiry i
+    LEFT JOIN member m ON i.member_id = m.member_id
+    LEFT JOIN member a ON i.admin_id = a.member_id
+    WHERE i.inquiry_id = #{inquiryId}
 </select>
     
 

@@ -30,4 +30,9 @@ public interface InquiryMapper {
 
     // 문의 사항 답변 등록 (호영)
     void updateInquiryAnswer(Long inquiryId, Long adminId, String answer);
+
+    // 특정 문의 상세 조회 API(유은)
+	InquiryDTO findInquiryById(Long inquiryId);
+
+	
 }

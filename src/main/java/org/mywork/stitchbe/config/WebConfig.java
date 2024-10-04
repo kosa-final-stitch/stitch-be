@@ -18,7 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) { //클라이언트와 서버가 서로 다른 도메인에 있을 때, 클라이언트가 서버에 요청을 보낼 수 있도록 허용
         // CORS 설정
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8081", "http://192.168.210.215:8081/")  // Vue.js의 포트를 정확히 명시
+                .allowedOrigins("http://localhost:8081", "http://192.168.210.215:8081/", "http://192.168.220.13:8081")  // Vue.js의 포트를 정확히 명시
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
