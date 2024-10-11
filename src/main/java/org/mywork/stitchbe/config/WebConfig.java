@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
 
-    @Override
+    /*@Override
     public void addCorsMappings(CorsRegistry registry) { //클라이언트와 서버가 서로 다른 도메인에 있을 때, 클라이언트가 서버에 요청을 보낼 수 있도록 허용
         // CORS 설정
         registry.addMapping("/**")
@@ -25,6 +25,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowCredentials(true)
                 .maxAge(3600);
     }
+    */
 
 
     // 다른 MVC 설정 (예: 인터셉터 설정)도 여기에 추가 가능
